@@ -12,7 +12,7 @@ local spawnButton = {
     y = screen.height,
     width = 100,
     height = 50,
-    color = {1, 1, 0}
+    color = {1, 1, 0} -- set color to yellow
 }
 
 local emails = {}
@@ -30,13 +30,20 @@ end
 
 -- loads everything once when runningthis file
 function love.load()
-    spawnEmail("fill", screen.width + screen.width / 2, screen.height + screen.height / 2, 50, 50, {1, 1, 1})
+    --spawnEmail("fill", screen.width + screen.width / 2, screen.height + screen.height / 2, 50, 50, {1, 1, 1})
 end
 
 -- updates every frame
 -- do your math stuff here
 function love.update(dt)
-
+    if love.mouse.isDown(1) then
+        for _, email in ipairs(emails) do
+            if love.mouse.getX() > email.x and love.mouse.getX() < email.x + email.height and love.mouse.getY() > email.y and love.mouse.getY() < email.y + email.height then
+                email.x = love.mouse.getX() - (email.width / 2)
+                email.y = love.mouse.getY() - (email.height / 2)
+            end
+        end
+    end
 end
 
 -- similar to .update but this one is used to draw stuff onto the game screen
@@ -55,11 +62,11 @@ function love.draw()
 end
 
 function love.mousepressed(x, y, button, istouch)
+    -- checks if the left mouse button is pressed
     if button == 1 then
+        -- checks if the mouse is on the yellow spawn button
         if x > spawnButton.x and x < spawnButton.x + spawnButton.width and y > spawnButton.y and y < spawnButton.y + spawnButton.height then
-            local emailX = math.random(0, love.graphics.getWidth())
-            local emailY = math.random(0, love.graphics.getHeight())
-            spawnEmail("fill", emailX, emailY, 50, 50, {1, 1, 1})
+            spawnEmail("fill", screen.width + 300, screen.height, 50, 50, {1, 1, 1})
         end
     end
 end
