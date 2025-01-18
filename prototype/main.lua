@@ -36,7 +36,9 @@ end
 -- updates every frame
 -- do your math stuff here
 function love.update(dt)
+    -- check if left mouse button is down
     if love.mouse.isDown(1) then
+        -- just like in the draw function, iterates each email in emails table, checking that specific email's x and y with mouse's x and y position
         for _, email in ipairs(emails) do
             if love.mouse.getX() > email.x and love.mouse.getX() < email.x + email.height and love.mouse.getY() > email.y and love.mouse.getY() < email.y + email.height then
                 email.x = love.mouse.getX() - (email.width / 2)
