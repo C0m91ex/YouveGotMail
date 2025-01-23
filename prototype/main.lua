@@ -45,7 +45,6 @@ end
 
 -- Variables --
 local score = 0
-local CoolDownTimer = 0
 ---------------
 
 -- loads everything once when running this file
@@ -59,6 +58,7 @@ end
 
 -- updates every frame
 -- do your math stuff here
+local dtotal = 0
 function love.update(dt)
     -- check if left mouse button is down
     if love.mouse.isDown(1) then
@@ -73,17 +73,21 @@ function love.update(dt)
                 print("Email: "..currItem)
             end
 
-            -- Checks to see if a email is above the trash bin, if so, delete it
-            if email.x > trashBin.x and email.x < trashBin.x + trashBin.width and email.y > trashBin.y and email.y < trashBin.y + trashBin.height then
-                table.remove(emails, currItem)
-                score = score + 1
-                
-                for i = currItem, #emails do
-                    emails[i].y = emails[i].y - 70
-                    print(i)
+            dtotal = dtotal + dt
+            if dtotal >= 0.5 then
+                -- Checks to see if a email is above the trash bin, if so, delete it
+                if email.x > trashBin.x and email.x < trashBin.x + trashBin.width and email.y > trashBin.y and email.y < trashBin.y + trashBin.height then
+                    table.remove(emails, currItem)
+                    -- Moves emails up a position
+                    for i = currItem, #emails do
+                        emails[i].y = emails[i].y - 70
+                        print(i)
+                    end
+                    print("Email deleted")
+                    score = score + 1
                 end
-                print("Email deleted")
-                
+
+                dtotal = 0
             end
         end
     end
