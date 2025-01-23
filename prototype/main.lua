@@ -1,3 +1,5 @@
+-- Tables --
+
 local screen = {
     width = love.graphics.getWidth(),
     height = love.graphics.getHeight()
@@ -39,12 +41,19 @@ function spawnEmail(mode, x, y, width, height, color)
     table.insert(emails, email)
 end
 
--- loads everything once when runningthis file
+---------------
+
+-- Variables --
+local score = 0
+local CoolDownTimer = 0
+---------------
+
+-- loads everything once when running this file
 function love.load()
     temptY = 250
-    for x = 1, 3, 1 do
-        spawnEmail("fill", screen.width - 250, screen.height - temptY, 500, 50, {1, 1, 1})
-        temptY = temptY - 70
+    for x = 1, 5, 1 do
+        spawnEmail("fill", screen.width - 220, screen.height - temptY, 400, 50, {1, 1, 1})
+        temptY = temptY - 70 -- spawns the next email on the bottom of the other email
     end
 end
 
@@ -55,16 +64,26 @@ function love.update(dt)
     if love.mouse.isDown(1) then
         -- just like in the draw function, iterates each email in emails table, checking that specific email's x and y with mouse's x and y position
         -- this is for making the box draggable. it's not perfect but it gets the job done
-        for _, email in ipairs(emails) do
+        -- currItem: the index of the current item in the table
+        -- ipairs is a lua function that iterates over the elements of a table in numberical order
+        for currItem, email in ipairs(emails) do
             if love.mouse.getX() > email.x and love.mouse.getX() < email.x + email.width and love.mouse.getY() > email.y and love.mouse.getY() < email.y + email.height then
                 email.x = love.mouse.getX() - (email.width / 2)
                 email.y = love.mouse.getY() - (email.height / 2)
+                print("Email: "..currItem)
             end
 
             -- Checks to see if a email is above the trash bin, if so, delete it
             if email.x > trashBin.x and email.x < trashBin.x + trashBin.width and email.y > trashBin.y and email.y < trashBin.y + trashBin.height then
-                print("throw away email")
-                table.remove(emails, _)
+                table.remove(emails, currItem)
+                score = score + 1
+                
+                for i = currItem, #emails do
+                    emails[i].y = emails[i].y - 70
+                    print(i)
+                end
+                print("Email deleted")
+                
             end
         end
     end
@@ -79,7 +98,7 @@ function love.draw()
     -- draw spawned email
     -- iterates through the emails table 
     -- ipairs: lua function used to iterate in a numerical order for talbes with sequential interger keys
-    for _, email in ipairs(emails) do
+    for currItem, email in ipairs(emails) do
         love.graphics.setColor(email.color)
         love.graphics.rectangle(email.mode, email.x, email.y, email.width, email.height)
     end
@@ -88,6 +107,8 @@ function love.draw()
     love.graphics.setColor(spawnButton.color)
     love.graphics.rectangle(spawnButton.mode, spawnButton.x, spawnButton.y, spawnButton.width, spawnButton.height)
 
+    -- Score text
+    love.graphics.printf("Score: "..score, screen.width - 390, screen.height - 280, 120, "center")
 end
 
 
