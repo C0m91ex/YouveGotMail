@@ -9,16 +9,6 @@ screen.width = screen.width / 2
 screen.height = screen.height / 2
 
 
-local spawnButton = {
-    mode = "fill",
-    x = screen.width,
-    y = screen.height + 200,
-    width = 100,
-    height = 50,
-    color = {1, 1, 0} -- set color to yellow
-}
-
-
 local trashBin = {
     mode = "fill",
     x = screen.width - 380,
@@ -74,25 +64,34 @@ function love.update(dt)
                 print("Email: "..currItem)
             end
 
+            -- timer delay. Wait for .5 seconds before checking the next email is selected
             dtotal = dtotal + dt
             if dtotal >= 0.5 then
                 -- Checks to see if a email is above the trash bin, if so, delete it
                 if email.x > trashBin.x and email.x < trashBin.x + trashBin.width and email.y > trashBin.y and email.y < trashBin.y + trashBin.height then
-                    mouseDisable = true
+                    mouseDisable = true -- temporary disable any mouse input to give the game a chance eto update the emails positions
                     table.remove(emails, currItem)
                     -- Moves emails up a position
+
+                    -- cycles through the list, shifting each email upward
                     for i = currItem, #emails do
                         emails[i].y = emails[i].y - 70
                         print(i)
                     end
                     print("Email deleted")
+                    -- after deleting, shifting, gives the player a score
                     score = score + 1
                 end
 
+                -- resets timer
                 dtotal = 0
 
             end
         end
+    -- once the player lets go the left mouse button, enables mouse interaction
+    -- this prevents from "creating a chain reaction of email deletions"
+    -- I believe what was happening was the player was still holding left click down, and since it's deleting the first thing on
+    -- the list, it's doesn't know when to stop deleting
     elseif love.mouse.isDown(1) == false then
         mouseDisable = false
     end
@@ -112,21 +111,7 @@ function love.draw()
         love.graphics.rectangle(email.mode, email.x, email.y, email.width, email.height)
     end
 
-    -- draw spawn button
-    love.graphics.setColor(spawnButton.color)
-    love.graphics.rectangle(spawnButton.mode, spawnButton.x, spawnButton.y, spawnButton.width, spawnButton.height)
-
     -- Score text
+    love.graphics.setColor(1, 1, 1)
     love.graphics.printf("Score: "..score, screen.width - 390, screen.height - 280, 120, "center")
-end
-
-
-function love.mousepressed(x, y, button, istouch)
-    -- checks if the left mouse button is pressed
-    if button == 1 then
-        -- checks if the mouse is on the yellow spawn button
-        if x > spawnButton.x and x < spawnButton.x + spawnButton.width and y > spawnButton.y and y < spawnButton.y + spawnButton.height then
-            table.remove(emails, email)
-        end
-    end
 end
