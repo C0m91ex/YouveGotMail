@@ -45,14 +45,15 @@ end
 
 -- Variables --
 local score = 0
+local CoolDownTimer = 0
 ---------------
 
--- loads everything once when runningthis file
+-- loads everything once when running this file
 function love.load()
     temptY = 250
-    for x = 1, 3, 1 do
-        spawnEmail("fill", screen.width - 250, screen.height - temptY, 500, 50, {1, 1, 1})
-        temptY = temptY - 70
+    for x = 1, 5, 1 do
+        spawnEmail("fill", screen.width - 220, screen.height - temptY, 400, 50, {1, 1, 1})
+        temptY = temptY - 70 -- spawns the next email on the bottom of the other email
     end
 end
 
@@ -69,13 +70,20 @@ function love.update(dt)
             if love.mouse.getX() > email.x and love.mouse.getX() < email.x + email.width and love.mouse.getY() > email.y and love.mouse.getY() < email.y + email.height then
                 email.x = love.mouse.getX() - (email.width / 2)
                 email.y = love.mouse.getY() - (email.height / 2)
+                print("Email: "..currItem)
             end
 
             -- Checks to see if a email is above the trash bin, if so, delete it
             if email.x > trashBin.x and email.x < trashBin.x + trashBin.width and email.y > trashBin.y and email.y < trashBin.y + trashBin.height then
-                print("throw away email")
                 table.remove(emails, currItem)
                 score = score + 1
+                
+                for i = currItem, #emails do
+                    emails[i].y = emails[i].y - 70
+                    print(i)
+                end
+                print("Email deleted")
+                
             end
         end
     end
