@@ -1,3 +1,5 @@
+-- Tables --
+
 local screen = {
     width = love.graphics.getWidth(),
     height = love.graphics.getHeight()
@@ -39,6 +41,12 @@ function spawnEmail(mode, x, y, width, height, color)
     table.insert(emails, email)
 end
 
+---------------
+
+-- Variables --
+local score = 0
+---------------
+
 -- loads everything once when runningthis file
 function love.load()
     temptY = 250
@@ -67,6 +75,7 @@ function love.update(dt)
             if email.x > trashBin.x and email.x < trashBin.x + trashBin.width and email.y > trashBin.y and email.y < trashBin.y + trashBin.height then
                 print("throw away email")
                 table.remove(emails, currItem)
+                score = score + 1
             end
         end
     end
@@ -90,6 +99,8 @@ function love.draw()
     love.graphics.setColor(spawnButton.color)
     love.graphics.rectangle(spawnButton.mode, spawnButton.x, spawnButton.y, spawnButton.width, spawnButton.height)
 
+    -- Score text
+    love.graphics.printf("Score: "..score, screen.width - 390, screen.height - 280, 120, "center")
 end
 
 
