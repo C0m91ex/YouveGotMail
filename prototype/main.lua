@@ -59,9 +59,10 @@ end
 -- updates every frame
 -- do your math stuff here
 local dtotal = 0
+local mouseDisable = false
 function love.update(dt)
     -- check if left mouse button is down
-    if love.mouse.isDown(1) then
+    if love.mouse.isDown(1) and mouseDisable == false then
         -- just like in the draw function, iterates each email in emails table, checking that specific email's x and y with mouse's x and y position
         -- this is for making the box draggable. it's not perfect but it gets the job done
         -- currItem: the index of the current item in the table
@@ -77,6 +78,7 @@ function love.update(dt)
             if dtotal >= 0.5 then
                 -- Checks to see if a email is above the trash bin, if so, delete it
                 if email.x > trashBin.x and email.x < trashBin.x + trashBin.width and email.y > trashBin.y and email.y < trashBin.y + trashBin.height then
+                    mouseDisable = true
                     table.remove(emails, currItem)
                     -- Moves emails up a position
                     for i = currItem, #emails do
@@ -88,8 +90,11 @@ function love.update(dt)
                 end
 
                 dtotal = 0
+
             end
         end
+    elseif love.mouse.isDown(1) == false then
+        mouseDisable = false
     end
 end
 
