@@ -50,6 +50,8 @@ end
 -- do your math stuff here
 local dtotal = 0
 local mouseDisable = false
+local lastClickTime = 0
+local clickDelay = 0.3
 function love.update(dt)
     -- check if left mouse button is down
     if love.mouse.isDown(1) and mouseDisable == false then
@@ -57,12 +59,26 @@ function love.update(dt)
         -- this is for making the box draggable. it's not perfect but it gets the job done
         -- currItem: the index of the current item in the table
         -- ipairs is a lua function that iterates over the elements of a table in numberical order
+
+        -- Note for Jimmy: Work on this later
         for currItem, email in ipairs(emails) do
+            --[[
+            if love.mouse.getX() > email.x and love.mouse.getX() < email.x + email.width and love.mouse.getY() > email.y and love.mouse.getY() < email.y + email.height then
+                 local currentTime = love.timer.getTime()
+                if currentTime - lastClickTime < clickDelay then
+                    -- double clicked
+                    print("Double click")
+                end
+                
+
+                --lastClickTime = currentTime -- update last click time
+            ]]--
+
             if love.mouse.getX() > email.x and love.mouse.getX() < email.x + email.width and love.mouse.getY() > email.y and love.mouse.getY() < email.y + email.height then
                 email.x = love.mouse.getX() - (email.width / 2)
                 email.y = love.mouse.getY() - (email.height / 2)
                 print("Email: "..currItem)
-            end
+            end 
 
             -- timer delay. Wait for .5 seconds before checking the next email is selected
             dtotal = dtotal + dt
