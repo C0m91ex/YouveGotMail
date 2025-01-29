@@ -7,6 +7,9 @@ local screen = {
 screen.width = screen.width / 2
 screen.height = screen.height / 2
 
+-- Background Image --
+local myBackground = nil
+
 local trashBin = {
     mode = "fill",
     x = screen.width - 380,
@@ -40,8 +43,9 @@ local doubleClickDelay = 0.3 -- Max time between clicks for a double click
 
 -- Loads everything once when running this file
 function love.load()
+    myBackground = love.graphics.newImage('inbox-background.png') -- sets the background image for the inbox screen
     temptY = 250
-    for x = 1, 5, 1 do
+    for x = 1, 9, 1 do
         spawnEmail("fill", screen.width - 220, screen.height - temptY, 400, 50, {1, 1, 1})
         temptY = temptY - 70 -- spawns the next email on the bottom of the other email
     end
@@ -110,6 +114,8 @@ end
 
 -- Draws everything
 function love.draw()
+    love.graphics.draw(myBackground)
+
     if openedEmail then
         -- Draw the opened email screen
         love.graphics.setColor(1, 1, 1)
@@ -136,6 +142,8 @@ function love.draw()
     -- Draw score
     love.graphics.setColor(1, 1, 1)
     love.graphics.printf("Score: " .. score, screen.width - 390, screen.height - 280, 120, "center")
+
+    print("Hello")
 end
 
 -- Mouse released logic for handling the back button
