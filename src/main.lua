@@ -12,12 +12,14 @@ local myBackground = nil
 
 local trashBin = {
     mode = "fill",
-    x = screen.width - 380,
-    y = screen.height - 250,
+    x = screen.width,
+    y = screen.height,
     width = 100,
     height = 50,
     color = {1, 0, 0} -- set color to red
 }
+trashBin.x = (trashBin.x - trashBin.width / 2) - 300
+trashBin.y = (trashBin.y - trashBin.height / 2) - 225
 
 local emails = {}
 function spawnEmail(mode, x, y, width, height, color)
