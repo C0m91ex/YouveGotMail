@@ -144,8 +144,6 @@ function love.draw()
     -- Draw score
     love.graphics.setColor(1, 1, 1)
     love.graphics.printf("Score: " .. score, screen.width - 390, screen.height - 280, 120, "center")
-
-    print("Hello")
 end
 
 -- Mouse released logic for handling the back button
