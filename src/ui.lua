@@ -17,8 +17,9 @@ local function drawTrashBin()
 end
 
 local function drawScore(score)
-    love.graphics.setColor(1, 1, 1)
-    love.graphics.printf("Score: " .. score, trashBin.x, trashBin.y - 30, 120, "center")
+    love.graphics.setColor(0, 0, 0)  -- Black color
+    love.graphics.printf("Score: " .. score, trashBin.x, trashBin.y + 80, 120, "center")
+    love.graphics.setColor(1, 1, 1)  -- White color
 end
 
 local function drawOpenedEmail(email)
