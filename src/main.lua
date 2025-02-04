@@ -126,6 +126,8 @@ function love.draw()
         love.graphics.rectangle("fill", 10, 10, 100, 40)
         love.graphics.setColor(0, 0, 0)
         love.graphics.printf("Back", 10, 20, 100, "center")
+
+        
         return
     end
 
@@ -143,7 +145,7 @@ function love.draw()
     love.graphics.setColor(1, 1, 1)
     love.graphics.printf("Score: " .. score, screen.width - 390, screen.height - 280, 120, "center")
 
-    print("Hello")
+    --print("Hello")
 end
 
 -- Mouse released logic for handling the back button
@@ -155,3 +157,61 @@ function love.mousereleased(x, y, button)
         end
     end
 end
+
+local function splitCsvLine(line)
+	local values = {}
+    local emailPat = '{(.*)},"+(.-)"+,"+(.-)"+,"+(.-)"+,%[(.*)%]'
+    local quotePat = '%"(.-)%",'
+    local quoteMark = "\"\""
+    local flag = false;
+	-- for value in line:gmatch(quotePat) do -- Note: We won't match empty values.
+	-- 	-- Convert the value string to other Lua types in a "smart" way.
+	-- 	if     tonumber(value)  then  table.insert(values, tonumber(value)) -- Number.
+	-- 	elseif value == "true"  then  table.insert(values, true)            -- Boolean.
+	-- 	elseif value == "false" then  table.insert(values, false)           -- Boolean.
+	-- 	else                          table.insert(values, (string.gsub(value, quoteMark, "\"")))           -- String.
+	-- 	end
+	-- end
+    for v1, v2, v3, v4, v5 in line:gmatch(emailPat) do -- Note: We won't match empty values.
+		local t = {}
+        table.insert(t, v1) table.insert(t, v2) table.insert(t, (string.gsub(v3, quoteMark, "\""))) table.insert(t, (string.gsub(v4, quoteMark, "\""))) table.insert(t, v5)
+		table.insert(values, t)
+	end
+    --table.insert(values, (string.gsub(line, quoteMark, "test")))
+	return values
+end
+
+local function loadCsvFile(filename)
+	local csv = {}
+	for line in love.filesystem.lines(filename) do
+		table.insert(csv, splitCsvLine(line))
+	end
+	return csv
+end
+
+--[[ cool.csv:
+Foo,Bar
+true,false,11.8
+]]
+
+local csv = loadCsvFile("cool.csv")
+for row, values in ipairs(csv) do
+    for i, v in ipairs(values) do
+	    print("row="..i.." count="..#v.." values=", unpack(v))
+    end
+end
+
+local function printEmail(email)
+    for row, values in ipairs(email) do
+        print(unpack(values))
+        love.graphics.setColor(0, 0, 0)
+        love.graphics.printf("content", screen.width - 390, screen.height - 280, 120, "center")
+        for section, content in ipairs(values) do 
+            print(unpack(content))
+            love.graphics.setColor(0, 0, 0)
+            love.graphics.printf(unpack(content), screen.width - 390, screen.height - 280, 120, "center")
+        end
+    end
+end
+
+printEmail(csv)
