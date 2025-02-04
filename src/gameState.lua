@@ -31,9 +31,15 @@ function gameState.update(dt)
 end
 
 function gameState.handleMouseRelease(x, y, button)
-    if button == 1 and gameState.openedEmail then
-        if ui.isBackButtonClicked(x, y) then
-            gameState.openedEmail = nil
+    if button == 1 then
+        if gameState.openedEmail then
+            if ui.isBackButtonClicked(x, y) then
+                gameState.openedEmail = nil
+            end
+        end
+        
+        if ui.isShopButtonClicked(x, y) then
+            print("test")
         end
     end
 end

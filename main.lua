@@ -22,6 +22,7 @@ function love.draw()
         ui.drawOpenedEmail(gameState.getOpenedEmail())
     else
         ui.drawTrashBin()
+        ui.drawShopButton()
         email.drawEmails()
         ui.drawScore(gameState.getScore())
     end

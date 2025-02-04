@@ -1,6 +1,7 @@
 -- ui.lua --
 -- UI handling implemenation
 local trashBin = { x = love.graphics.getWidth() / 2 - 380, y = love.graphics.getHeight() / 2 - 250, width = 100, height = 50, color = {1, 0, 0} }
+local shopButton = { x = love.graphics.getWidth() / 2 - 380, y = love.graphics.getHeight() / 2 + 200, width = 100, height = 50, color = {0, 1, 1} }
 local background
 
 local function loadAssets()
@@ -14,6 +15,13 @@ end
 local function drawTrashBin()
     love.graphics.setColor(trashBin.color)
     love.graphics.rectangle("fill", trashBin.x, trashBin.y, trashBin.width, trashBin.height)
+end
+
+local function drawShopButton()
+    love.graphics.setColor(shopButton.color)
+    love.graphics.rectangle("fill", shopButton.x, shopButton.y, shopButton.width, shopButton.height)
+    love.graphics.setColor(0, 0, 0)
+    love.graphics.printf("Shop", shopButton.x - 10, shopButton.y + 15, 120, "center")
 end
 
 local function drawScore(score)
@@ -31,6 +39,15 @@ local function drawOpenedEmail(email)
     love.graphics.printf("Back", 10, 20, 100, "center")
 end
 
+local function drawShop()
+    love.graphics.setColor(166,129,76)
+    love.graphics.rectangle("fill", 0, 0, love.graphics.getWidth(), love.graphics.getHeight())
+end
+
+local function isShopButtonClicked(x, y)
+    return  x > shopButton.x and x < shopButton.x + shopButton.width and y > shopButton.y and y < shopButton.y + shopButton.height
+end
+
 local function isBackButtonClicked(x, y)
     return x > 10 and x < 110 and y > 10 and y < 50
 end
@@ -44,8 +61,11 @@ return {
     loadAssets = loadAssets,
     drawBackground = drawBackground,
     drawTrashBin = drawTrashBin,
+    drawShopButton = drawShopButton,
+    drawShop = drawShop,
     drawScore = drawScore,
     drawOpenedEmail = drawOpenedEmail,
     isBackButtonClicked = isBackButtonClicked,
-    isOverTrashBin = isOverTrashBin
+    isOverTrashBin = isOverTrashBin,
+    isShopButtonClicked = isBackButtonClicked
 }
