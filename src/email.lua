@@ -1,8 +1,17 @@
 -- email.lua --
 -- Implementation file for email class
 local ui = require("src.ui") 
+
+-- global vars
 local emails = {}
 local screen = { width = love.graphics.getWidth() / 2, height = love.graphics.getHeight() / 2 }
+local globalOffsetY = 0
+
+-- getLengthEmails()
+-- Getter function that returns length of emails table
+local function getLengthEmails()
+    return #emails
+end
 
 local function spawnEmail(mode, x, y, width, height, color)
     table.insert(emails, {
@@ -16,12 +25,18 @@ local function spawnEmail(mode, x, y, width, height, color)
     })
 end
 
+local function test(time)
+    --love.graphics.print("the time is:" .. time, 10, 200)
+    spawnEmail("fill", screen.width - 220, screen.height - globalOffsetY, 400, 50, {1, 1, 1})
+end
+
 local function spawnInitialEmails()
     local yOffset = 250
     for _ = 1, 9 do
         spawnEmail("fill", screen.width - 220, screen.height - yOffset, 400, 50, {1, 1, 1})
         yOffset = yOffset - 70
     end
+    globalOffsetY = yOffset
 end
 
 local function handleEmailSelection(mouseX, mouseY, gameState)
@@ -74,6 +89,9 @@ local function drawEmails()
 end
 
 return {
+    getLengthEmails = getLengthEmails,
+    spawnEmail = spawnEmail,
+    test = test,
     spawnInitialEmails = spawnInitialEmails,
     handleEmailSelection = handleEmailSelection,
     handleDragging = handleDragging,
