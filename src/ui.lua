@@ -40,9 +40,14 @@ local function drawOpenedEmail(email)
     love.graphics.setColor(1, 1, 1)
     love.graphics.rectangle("fill", 0, 0, love.graphics.getWidth(), love.graphics.getHeight())
 
+    local scaleX = 800/loginBackground:getWidth() 
+    local scaleY = 400/loginBackground:getHeight() 
+    love.graphics.draw(loginBackground, 0, 0, 0, scaleX, scaleY)
+
     love.graphics.setColor(0.5, 0.5, 0.5)
     love.graphics.rectangle("fill", 10, 10, 100, 40)
     love.graphics.setColor(0, 0, 0)
+    love.graphics.print("This is the placeholder for email text", 300, 300)
     love.graphics.printf("Back", 10, 20, 100, "center")
 end
 

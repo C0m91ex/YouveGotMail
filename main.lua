@@ -40,6 +40,7 @@ end
 function love.draw()
     -- Currently draws the inbox scene background
     -- !!! CHANGE TO START WITH LOGIN PAGE !!! --
+    --love.window.setMode(1140, 750)
     ui.drawBackground()
 
     -- Timer 

@@ -35,6 +35,7 @@ end
 local function timedEmailSpawn(period)
     spawnEmail("fill", screen.width - 220, screen.height - globalOffsetY, 400, 50, {1, 1, 1})
     spawnPeriod = period
+    globalOffsetY = globalOffsetY - 70
 end
 
 -- spawnInitialEmails()
@@ -42,7 +43,7 @@ end
 -- Only gets called once at gamestart
 local function spawnInitialEmails()
     local yOffset = 250
-    for _ = 1, 9 do
+    for _ = 1, 4 do
         spawnEmail("fill", screen.width - 220, screen.height - yOffset, 400, 50, {1, 1, 1})
         yOffset = yOffset - 70
     end
@@ -80,6 +81,7 @@ local function handleDragging(mouseX, mouseY, gameState)
         gameState.selectedEmail.y = mouseY - gameState.offsetY
 
         if ui.isOverTrashBin(gameState.selectedEmail) then
+            globalOffsetY = globalOffsetY + 70
             for i, email in ipairs(emails) do
                 if email == gameState.selectedEmail then
                     table.remove(emails, i)
