@@ -1,6 +1,7 @@
 -- email.lua --
 -- Implementation file for email class
-local ui = require("src.ui") 
+local ui = require("src.ui")
+local file = require("src.file")
 
 -- global vars
 local emails = {}
@@ -106,6 +107,19 @@ local function drawEmails()
     end
 end
 
+local function printEmail(email)
+    for row, values in ipairs(email) do
+        print(unpack(values))
+        love.graphics.setColor(0, 0, 0)
+        love.graphics.printf("content", screen.width - 390, screen.height - 280, 120, "center")
+        for section, content in ipairs(values) do 
+            print(unpack(content))
+            love.graphics.setColor(0, 0, 0)
+            love.graphics.printf(unpack(content), screen.width - 390, screen.height - 280, 120, "center")
+        end
+    end
+end
+
 return {
     getLengthEmails = getLengthEmails,
     spawnEmail = spawnEmail,
@@ -115,3 +129,4 @@ return {
     handleDragging = handleDragging,
     drawEmails = drawEmails
 }
+
