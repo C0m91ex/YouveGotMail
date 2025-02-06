@@ -7,6 +7,7 @@ local inboxBackground
 local loginBackground
 
 -- Table used as the bone structure for shop items
+-- Need to move this to shop.lua
 local shopItems ={}
 local function createShopItem(mode, x, y, width, height, color)
     table.insert(shopItems, {
@@ -98,6 +99,18 @@ local function isOverTrashBin(email)
     return email.x > trashBin.x and email.x < trashBin.x + trashBin.width and
            email.y > trashBin.y and email.y < trashBin.y + trashBin.height
 end
+--[[
+local function isShopItemclicked(x, y)
+    for _, shopItem in ipairs(shopItems) do
+        if x > shopItem.x and x < shopItem.x + shopItem.width and
+           y > shopItem.y and y < shopItem.y + shopItem.height then
+
+            shop.checkItemPrice()
+
+        end
+    end
+end
+]]--
 
 return {
     loadAssets = loadAssets,
@@ -110,4 +123,5 @@ return {
     createShopItem = createShopItem,
     drawShopItems = drawShopItems,
     shopItems = shopItems
+    --isShopItemclicked = isShopItemclicked
 }

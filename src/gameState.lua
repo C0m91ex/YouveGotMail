@@ -2,6 +2,7 @@
 -- Handles main gameState behaviors
 local email = require("src.email")
 local ui = require("src.ui")
+local shop = require("src.shop")
 
 -- global vars
 local gameState = {
@@ -21,8 +22,7 @@ local gameState = {
 function gameState.load()
     ui.loadAssets()
 
-    -- Make sure when increasing this variable to set up name and price for the added items to the shop *see below comments*
-    numberOfShopItems = 2
+    -- Make sure when increasing this variable to set up name and price for the added items to the shop *see shop.lua*
     for _ = 1, numberOfShopItems do
         -- createShopItem(mode, x, y, width, height, color)
         ui.createShopItem("fill", love.graphics.getWidth() / 2 - 380, love.graphics.getHeight() / 2 + gameState.shopOffsetY, 100, 50, {1, 0.5, 0})
@@ -32,12 +32,15 @@ function gameState.load()
     -- Shop item stuff 
     -- Will put all of this into a different lua file called "shop.lua"
     -- setting the name and price for item 1
+    --[[
     ui.shopItems[1].name = "item 1"
     ui.shopItems[1].price = 10
 
     -- setting the name and price for item 2
     ui.shopItems[2].name = "item 2"
     ui.shopItems[2].price = 20
+    ]]--
+    shop.setUpShop()
 
     email.spawnInitialEmails()
 end
@@ -60,10 +63,14 @@ end
 -- handleMouseRelease()
 -- Mouse click & release handler
 function gameState.handleMouseRelease(x, y, button)
-    if button == 1 and gameState.openedEmail then
-        if ui.isBackButtonClicked(x, y) then
-            gameState.openedEmail = nil
+    if button == 1 then
+        if gameState.openedEmail then
+            if ui.isBackButtonClicked(x, y) then
+                gameState.openedEmail = nil
+            end
         end
+
+       -- ui.isShopItemclicked(x, y)
     end
 end
 
