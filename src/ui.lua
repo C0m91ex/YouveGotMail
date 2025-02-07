@@ -28,9 +28,9 @@ end
 
 -- drawScore()
 -- Draws the score counter label
-local function drawScore(score)
+local function drawCurrency(currency)
     love.graphics.setColor(0, 0, 0)  -- Black color
-    love.graphics.printf("Score: " .. score, trashBin.x, trashBin.y + 80, 120, "center")
+    love.graphics.printf("Currency: " .. currency, trashBin.x, trashBin.y + 80, 120, "center")
     love.graphics.setColor(1, 1, 1)  -- White color
 end
 
@@ -68,7 +68,7 @@ return {
     loadAssets = loadAssets,
     drawBackground = drawBackground,
     drawTrashBin = drawTrashBin,
-    drawScore = drawScore,
+    drawCurrency = drawCurrency,
     drawOpenedEmail = drawOpenedEmail,
     isBackButtonClicked = isBackButtonClicked,
     isOverTrashBin = isOverTrashBin

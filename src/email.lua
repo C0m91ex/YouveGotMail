@@ -90,7 +90,7 @@ local function handleDragging(mouseX, mouseY, gameState)
                         emails[j].y = emails[j].y - 70
                     end
                     gameState.selectedEmail = nil
-                    gameState.score = gameState.score + 1
+                    gameState.currency = gameState.currency + 1
                     break
                 end
             end
