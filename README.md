@@ -9,7 +9,7 @@
 
 - Drag and drop gameplay -- drag emails into the trash bin to increase your score!
 - Like any great clicker game, you can purchase upgrades and power-ups to improve your efficiency from the in-game shop
-- Experience different endings with our storylet narrative design, opening different emails leads to new paths..
+- Experience different stories with our storylet narrative design, opening different emails leads to new paths..
 - Build connections with different people through emails and discover your own identity.
 
 You've Got Mail offes a unique gameplay experience combining 2 game genres: narrative & clicker games. 
