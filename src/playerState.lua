@@ -1,22 +1,31 @@
-playerVars = {}
+local playerVars = {mom = 1, dad = 0}
 
-local function getPlayerVars(...)
+local function getPlayerVarList()
+    return playerVars
+end
+
+local function getPlayerMultiVars(...)
+    local arg = {...}
     varTable = {}
-    for i,variable in ipairs(arg) do
-        varTable:insert(playerVars[variable])
+    for _, variable in pairs(arg) do
+        varTable[variable] = playerVars[variable]
     end
     return varTable
 end
 
-local function getPlayerVars()
-    return playerVars
+local function getPlayerSingleVar(variable)
+    return playerVars[variable]
 end
 
 local function setPlayerVar(variable, value)
     playerVars[variable] = value
 end
 
+
 return {
     playerVars,
-    getPlayerVars = getPlayerVars
+    getPlayerVarList = getPlayerVarList,
+    getPlayerMultiVars = getPlayerMultiVars,
+    getPlayerSingleVar = getPlayerSingleVar,
+    setPlayerVar = setPlayerVar
 }
