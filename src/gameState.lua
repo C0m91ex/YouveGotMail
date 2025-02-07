@@ -13,6 +13,7 @@ local gameState = {
     offsetY = 0,
     lastClickTime = 0,
     doubleClickDelay = 0.3,
+    shopButtonOpen = false
 }
 
 -- load()
@@ -51,12 +52,23 @@ function gameState.handleMouseRelease(x, y, button)
             end
         end
 
-       shop.isShopItemclicked(x, y, gameState)
+        if shop.isShopButtonClicked(x, y) then
+            if not gameState.shopButtonOpen then
+                gameState.shopButtonOpen = true
+            else
+                gameState.shopButtonOpen = false
+            end
+        end
+
+        if gameState.shopButtonOpen then
+            shop.isShopItemclicked(x, y, gameState)
+        end
     end
 end
 
 function gameState.isEmailOpened() return gameState.openedEmail end
 function gameState.getOpenedEmail() return gameState.openedEmail end
 function gameState.getCurrency() return gameState.currency end
+function gameState.isShopOpened() return gameState.shopButtonOpen end
 
 return gameState

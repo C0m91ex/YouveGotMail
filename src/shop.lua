@@ -5,8 +5,10 @@ local email = require("src.email")
 
 -- global vars
 local shop = {
-    shopOffsetY = 10,
+    shopOffsetY = -195,
 }
+
+local shopTitle = { x = love.graphics.getWidth() / 2 + 250, y = love.graphics.getHeight() / 2 - 250, width = 130, height = 40, color = {1, 0.5, 0} }
 -- Functions --
 
 -- Table used as the bone structure for shop items
@@ -30,8 +32,8 @@ local function setUpShop()
     -- Make sure when increasing this variable to set up name and price for the added items to the shop
     for _ = 1, numberOfShopItems do
         -- createShopItem(mode, x, y, width, height, color)
-        createShopItem("fill", love.graphics.getWidth() / 2 - 375, love.graphics.getHeight() / 2 + shop.shopOffsetY, 100, 70, {1, 0.5, 0})
-        shop.shopOffsetY = shop.shopOffsetY + 100
+        createShopItem("fill", love.graphics.getWidth() / 2 + 265, love.graphics.getHeight() / 2 + shop.shopOffsetY, 100, 70, {1, 0.5, 0})
+        shop.shopOffsetY = shop.shopOffsetY + 90
     end
 
     -- setting the name and price for item 1
@@ -46,15 +48,21 @@ local function setUpShop()
     shopItems[3].price = 30
 end
 
---drawShopItems()
--- draws all of the shop items buttons to the game
-local function drawShopItems()
-    -- draws the -- SHOP -- title
-    love.graphics.setColor(1, 0.5, 0)
-    love.graphics.rectangle("fill", love.graphics.getWidth() / 2 - 390, love.graphics.getHeight() / 2 - 50, 130, 40)
-    love.graphics.setColor(1, 1, 1)
-    love.graphics.printf("-- SHOP --", love.graphics.getWidth() / 2 - 385, love.graphics.getHeight() / 2 - 38, 120, "center")
+local function isShopButtonClicked(x, y)
+    return  x > shopTitle.x and x < shopTitle.x + shopTitle.width and
+            y > shopTitle.y and y < shopTitle.y + shopTitle.height
+end
 
+local function drawShopTitle()
+    love.graphics.setColor(shopTitle.color)
+    love.graphics.rectangle("fill", shopTitle.x,shopTitle.y, shopTitle.width, shopTitle.height)
+    love.graphics.setColor(1, 1, 1)
+    love.graphics.printf("-- SHOP --", love.graphics.getWidth() / 2 + 255, love.graphics.getHeight() / 2 - 238, 120, "center")
+end
+
+--drawShopItems()
+-- draws all of the shop items buttons when shop is opened
+    local function drawShopItems()
     -- draws out each item box
     for _, shopItem in ipairs(shopItems) do
         love.graphics.setColor(shopItem.color)
@@ -69,6 +77,7 @@ end
 local function itemEffects(item)
     if item == 1 then
         print("Item 1 effect.")
+        email.updateEmailValue()
     elseif item == 2 then
         print("Item 2 effect.")
     elseif item == 3 then
@@ -90,10 +99,13 @@ local function isShopItemclicked(x, y, gameState)
     end
 end
 
+
 return {
     createShopItem = createShopItem,
     setUpShop = setUpShop,
+    drawShopTitle = drawShopTitle,
     drawShopItems = drawShopItems,
-    isShopItemclicked = isShopItemclicked,
-    itemEffects = itemEffects
+    itemEffects = itemEffects,
+    isShopButtonClicked = isShopButtonClicked,
+    isShopItemclicked = isShopItemclicked
 }

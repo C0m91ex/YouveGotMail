@@ -32,13 +32,17 @@ local function spawnEmail(mode, x, y, width, height, color)
     })
 end
 
+local function updateEmailValue()
+    emailValue = emailValue + 1
+    print("Email value has been updated to "..emailValue..".")
+end
+
 -- timedEmailSpawn()
 -- Spawns an email 
 local function timedEmailSpawn(period)
     spawnEmail("fill", screen.width - 220, screen.height - globalOffsetY, 400, 50, {1, 1, 1})
     spawnPeriod = period
     globalOffsetY = globalOffsetY - 70
-    print("Email Value: "..emailValue)
 end
 
 -- spawnInitialEmails()
@@ -130,6 +134,6 @@ return {
     handleEmailSelection = handleEmailSelection,
     handleDragging = handleDragging,
     drawEmails = drawEmails,
-    emailValue = emailValue
+    updateEmailValue = updateEmailValue
 }
 

@@ -30,7 +30,7 @@ end
 -- Draws the score counter label
 local function drawCurrency(currency)
     love.graphics.setColor(0, 0, 0)  -- Black color
-    love.graphics.printf("Currency: " .. currency, trashBin.x, trashBin.y + 80, 120, "center")
+    love.graphics.printf("Currency: $" .. currency, trashBin.x, trashBin.y + 80, 120, "center")
     love.graphics.setColor(1, 1, 1)  -- White color
 end
 
