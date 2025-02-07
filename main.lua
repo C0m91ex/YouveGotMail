@@ -4,6 +4,7 @@ local gameState = require("src.gameState")
 local ui = require("src.ui")
 local email = require("src.email")
 local utils = require("src.utils")
+local shop = require("src.shop")
 
 -- global vars
 local start = love.timer.getTime()
@@ -55,7 +56,7 @@ function love.draw()
     else
         ui.drawTrashBin()
         email.drawEmails()
-        ui.drawShopItems()
+        shop.drawShopItems()
         ui.drawScore(gameState.getScore())
     end
 end

@@ -6,22 +6,6 @@ local trashBin = { x = love.graphics.getWidth() / 2 - 380, y = love.graphics.get
 local inboxBackground
 local loginBackground
 
--- Table used as the bone structure for shop items
--- Need to move this to shop.lua
-local shopItems ={}
-local function createShopItem(mode, x, y, width, height, color)
-    table.insert(shopItems, {
-        mode = mode,
-        x = x,
-        y = y,
-        width = width,
-        height = height,
-        color = color,
-        name = "",
-        price = 0
-    })
-end
-
 -- loadAssets()
 -- Loading function for loading in UI-related assets
 local function loadAssets()
@@ -40,26 +24,6 @@ end
 local function drawTrashBin()
     love.graphics.setColor(trashBin.color)
     love.graphics.rectangle("fill", trashBin.x, trashBin.y, trashBin.width, trashBin.height)
-end
-
---drawShopItems()
--- draws all of the shop items buttons to the game
-local function drawShopItems()
-    -- draws the -- SHOP -- title
-    love.graphics.setColor(1, 0.5, 0)
-    love.graphics.rectangle("fill", love.graphics.getWidth() / 2 - 400, love.graphics.getHeight() / 2 - 50, 150, 40)
-    love.graphics.setColor(1, 1, 1)
-    love.graphics.printf("-- SHOP --", love.graphics.getWidth() / 2 - 390, love.graphics.getHeight() / 2 - 38, 120, "center")
-
-    -- draws out each item box
-    for _, shopItem in ipairs(shopItems) do
-        love.graphics.setColor(shopItem.color)
-        love.graphics.rectangle(shopItem.mode, shopItem.x, shopItem.y, shopItem.width, shopItem.height)
-        love.graphics.setColor(0, 0, 0)
-        love.graphics.printf(shopItem.name, shopItem.x - 13, shopItem.y + 11, 120, "center")
-        love.graphics.setColor(0, 0, 0)
-        love.graphics.printf("Price: $"..shopItem.price, shopItem.x - 13, shopItem.y + 30, 120, "center")
-    end
 end
 
 -- drawScore()
@@ -99,18 +63,6 @@ local function isOverTrashBin(email)
     return email.x > trashBin.x and email.x < trashBin.x + trashBin.width and
            email.y > trashBin.y and email.y < trashBin.y + trashBin.height
 end
---[[
-local function isShopItemclicked(x, y)
-    for _, shopItem in ipairs(shopItems) do
-        if x > shopItem.x and x < shopItem.x + shopItem.width and
-           y > shopItem.y and y < shopItem.y + shopItem.height then
-
-            shop.checkItemPrice()
-
-        end
-    end
-end
-]]--
 
 return {
     loadAssets = loadAssets,
@@ -120,8 +72,4 @@ return {
     drawOpenedEmail = drawOpenedEmail,
     isBackButtonClicked = isBackButtonClicked,
     isOverTrashBin = isOverTrashBin,
-    createShopItem = createShopItem,
-    drawShopItems = drawShopItems,
-    shopItems = shopItems
-    --isShopItemclicked = isShopItemclicked
 }
