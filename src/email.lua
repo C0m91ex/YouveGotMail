@@ -8,6 +8,7 @@ local emails = {}
 local screen = { width = love.graphics.getWidth() / 2, height = love.graphics.getHeight() / 2 }
 local globalOffsetY = 0
 local spawnPeriod = 0
+local emailValue = 1
 
 -- Functions --
 
@@ -37,6 +38,7 @@ local function timedEmailSpawn(period)
     spawnEmail("fill", screen.width - 220, screen.height - globalOffsetY, 400, 50, {1, 1, 1})
     spawnPeriod = period
     globalOffsetY = globalOffsetY - 70
+    print("Email Value: "..emailValue)
 end
 
 -- spawnInitialEmails()
@@ -90,7 +92,7 @@ local function handleDragging(mouseX, mouseY, gameState)
                         emails[j].y = emails[j].y - 70
                     end
                     gameState.selectedEmail = nil
-                    gameState.currency = gameState.currency + 1
+                    gameState.currency = gameState.currency + emailValue
                     break
                 end
             end
@@ -127,6 +129,7 @@ return {
     spawnInitialEmails = spawnInitialEmails,
     handleEmailSelection = handleEmailSelection,
     handleDragging = handleDragging,
-    drawEmails = drawEmails
+    drawEmails = drawEmails,
+    emailValue = emailValue
 }
 

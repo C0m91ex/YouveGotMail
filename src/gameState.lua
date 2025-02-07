@@ -51,7 +51,7 @@ function gameState.handleMouseRelease(x, y, button)
             end
         end
 
-       shop.isShopItemclicked(x, y)
+       shop.isShopItemclicked(x, y, gameState)
     end
 end
 
