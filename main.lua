@@ -57,7 +57,7 @@ function love.draw()
         ui.drawTrashBin()
         email.drawEmails()
         shop.drawShopItems()
-        ui.drawScore(gameState.getScore())
+        ui.drawCurrency(gameState.getCurrency())
     end
 end
 

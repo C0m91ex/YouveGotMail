@@ -6,7 +6,7 @@ local shop = require("src.shop")
 
 -- global vars
 local gameState = {
-    score = 0,
+    currency = 0,
     selectedEmail = nil,
     openedEmail = nil,
     offsetX = 0,
@@ -57,6 +57,6 @@ end
 
 function gameState.isEmailOpened() return gameState.openedEmail end
 function gameState.getOpenedEmail() return gameState.openedEmail end
-function gameState.getScore() return gameState.score end
+function gameState.getCurrency() return gameState.currency end
 
 return gameState
