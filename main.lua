@@ -4,18 +4,27 @@ local gameState = require("src.gameState")
 local ui = require("src.ui")
 local email = require("src.email")
 local utils = require("src.utils")
+local file = require("src.file")
 local shop = require("src.shop")
+
 
 -- global vars
 local start = love.timer.getTime()
 local lastSecond = math.floor(start)
 local growthPeriod = 5
 local growthRate = 1 / growthPeriod
-
+local csv = {}
+ 
 -- load()
 -- Load function, calls load() from gameState.lua
 function love.load()
     gameState.load()
+    csv = file.loadCsvFile("data/Test CSV - Sheet1.csv")
+    for row, values in ipairs(csv) do
+        for i, v in ipairs(values) do
+            print("row="..i.." count="..#v.." values=", unpack(v))
+        end
+    end
 end
 
 -- update()
@@ -53,6 +62,7 @@ function love.draw()
 
     if gameState.isEmailOpened() then
         ui.drawOpenedEmail(gameState.getOpenedEmail())
+        file.printEmail(csv[3])
     else
         ui.drawTrashBin()
         email.drawEmails()
