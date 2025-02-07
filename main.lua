@@ -6,6 +6,7 @@ local email = require("src.email")
 local utils = require("src.utils")
 local file = require("src.file")
 local shop = require("src.shop")
+local playerState = require("src.playerState")
 
 
 -- global vars
@@ -25,6 +26,23 @@ function love.load()
             print("row="..i.." count="..#v.." values=", unpack(v))
         end
     end
+
+    -- print("expected: 1")
+    -- print(playerState.getPlayerSingleVar("mom")) --passes--
+    -- playerState.setPlayerVar("mom", 2)
+    -- print("expected: 2")
+    -- print(playerState.getPlayerSingleVar("mom")) --passes--
+    -- print("expected: 0")
+    -- print(playerState.getPlayerSingleVar("dad")) --passes--
+
+    for i, v in pairs(playerState.getPlayerMultiVars("dad")) do
+        print(i..'='..v)
+    end
+
+    -- for i, v in pairs(playerState.getPlayerVarList()) do
+    --     print(i..'='..v)
+    -- end
+    
 end
 
 -- update()
