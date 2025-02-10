@@ -57,7 +57,7 @@ local function drawShopTitle()
     love.graphics.setColor(shopTitle.color)
     love.graphics.rectangle("fill", shopTitle.x,shopTitle.y, shopTitle.width, shopTitle.height)
     love.graphics.setColor(1, 1, 1)
-    love.graphics.printf("-- SHOP --", love.graphics.getWidth() / 2 + 255, love.graphics.getHeight() / 2 - 238, 120, "center")
+    love.graphics.printf("-- SHOP --", shopTitle.x + 7, shopTitle.y + 11, 120, "center")
 end
 
 --drawShopItems()

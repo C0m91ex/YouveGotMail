@@ -9,14 +9,21 @@ local loginBackground
 -- loadAssets()
 -- Loading function for loading in UI-related assets
 local function loadAssets()
-    inboxBackground = love.graphics.newImage('assets/inbox-background.png')
+    inboxBackground = love.graphics.newImage('assets/inbox_background.png')
     loginBackground = love.graphics.newImage('assets/login-background.png')
 end
 
 -- drawBackground()
 -- Draws the given image as the game background. !!! CHANGE THIS LATER TO TAKE IN IMAGE AS ARGUMENT !!!
 local function drawBackground()
-    love.graphics.draw(inboxBackground)
+    -- scaling the inbox background size base off of window dimensions
+    local windowWidth, windowHeight = love.graphics.getDimensions()
+    local inboxBackgroundWidth, inboxBackgroundHeight = inboxBackground:getDimensions()
+
+    local inboxScaleX = windowWidth / inboxBackgroundWidth
+    local inboxScaleY = windowHeight / inboxBackgroundHeight
+
+    love.graphics.draw(inboxBackground, 0, 0, 0, inboxScaleX, inboxScaleY)
 end
 
 -- drawTrashBin()

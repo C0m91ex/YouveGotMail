@@ -19,6 +19,12 @@ local csv = {}
 -- load()
 -- Load function, calls load() from gameState.lua
 function love.load()
+    -- set window size and settings
+    love.window.setMode(800, 600, {
+        resizable = true,
+        fullscreen = false
+    }) -- set window to 800x600 pixels
+
     gameState.load()
     csv = file.loadCsvFile("data/Test CSV - Sheet1.csv")
     for row, values in ipairs(csv) do
