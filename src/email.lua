@@ -126,6 +126,20 @@ local function printEmail(email)
     end
 end
 
+local function printEmailContent(email)
+    for section, content in ipairs(email) do 
+        --print(unpack(content))
+        prereq, sender, subject, body, choices, ignored = unpack(content)
+        love.graphics.setColor(0, 0, 0)
+        love.graphics.printf(prereq, 50, 50, 120, "center")
+        love.graphics.printf(sender, 50, 100, 120, "center")
+        love.graphics.printf(subject, 50, 150, 120, "center")
+        love.graphics.printf(body, 50, 200, 120, "center")
+        love.graphics.printf(choices, 50, 250, 120, "center")
+        love.graphics.printf(ignored, 50, 300, 120, "center")
+    end
+end
+
 return {
     getLengthEmails = getLengthEmails,
     spawnEmail = spawnEmail,
@@ -134,6 +148,7 @@ return {
     handleEmailSelection = handleEmailSelection,
     handleDragging = handleDragging,
     drawEmails = drawEmails,
-    updateEmailValue = updateEmailValue
+    updateEmailValue = updateEmailValue,
+    printEmailContent = printEmailContent
 }
 

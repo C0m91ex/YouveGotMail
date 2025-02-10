@@ -20,7 +20,7 @@ local csv = {}
 -- Load function, calls load() from gameState.lua
 function love.load()
     gameState.load()
-    csv = file.loadCsvFile("data/Test CSV - Sheet1.csv")
+    csv = file.loadEmailFile("data/Test CSV - Formatted Emails (2).csv")
     for row, values in ipairs(csv) do
         for i, v in ipairs(values) do
             print("row="..i.." count="..#v.." values=", unpack(v))
@@ -35,9 +35,9 @@ function love.load()
     -- print("expected: 0")
     -- print(playerState.getPlayerSingleVar("dad")) --passes--
 
-    for i, v in pairs(playerState.getPlayerMultiVars("dad")) do
-        print(i..'='..v)
-    end
+    -- for i, v in pairs(playerState.getPlayerMultiVars("dad")) do
+    --     print(i..'='..v)
+    -- end
 
     -- for i, v in pairs(playerState.getPlayerVarList()) do
     --     print(i..'='..v)
@@ -80,7 +80,7 @@ function love.draw()
 
     if gameState.isEmailOpened() then
         ui.drawOpenedEmail(gameState.getOpenedEmail())
-        file.printEmail(csv[3])
+        email.printEmailContent(csv[4])
     else
         ui.drawTrashBin()
         email.drawEmails()
