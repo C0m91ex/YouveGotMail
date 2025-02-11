@@ -38,8 +38,6 @@ function playerCheck(testKey, testValue)
         elseif operator == "~" or operator == "~=" or operator == "!" or operator == "!=" then
             return tonumber(playerVars[testKey]) < value
         else
-            print(tonumber(playerVars[testKey]))
-            print(value)
             return tonumber(playerVars[testKey]) == value
         end
     else return false end

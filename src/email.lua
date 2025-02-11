@@ -2,6 +2,7 @@
 -- Implementation file for email class
 local ui = require("src.ui")
 local file = require("src.file")
+local playerState = require("src.playerState")
 
 -- global vars
 local defaultEmail = {
@@ -29,11 +30,22 @@ local function getLengthEmails()
     return #emails
 end
 
--- local function fillEmailPool()
---     for i, emailContent in ipairs(emailBase) do
---         local prereq = emailContent[1]
-        
--- end
+local function fillEmailPool()
+    print("fillEmailPool test")
+    for i, emailContent in ipairs(emailBase) do
+        local prereq = emailContent[1]
+        if next(prereq) == nil then continue
+        print(unpack(prereq))
+        local prereqCheckFlag = true
+        for key, value in pairs(prereq) do
+            if playerState.playerCheck(key, value) then prereqCheckFlag = false break end
+        end
+        if prereqCheckFlag then
+            table.insert(emailPool, emailContent)
+            table.remove(emailBase, i)
+        end
+    end
+end
 
 -- spawnEmail()
 -- Spawns an email with the given mode, x & y position, dimensions, and color
@@ -84,6 +96,7 @@ local function handleEmailSelection(mouseX, mouseY, gameState)
 
                 if love.timer.getTime() - gameState.lastClickTime < gameState.doubleClickDelay then
                     gameState.openedEmail = email
+                    fillEmailPool()
                     return
                 end
 
@@ -127,6 +140,8 @@ local function drawEmails()
     for _, email in ipairs(emails) do
         love.graphics.setColor(email.color)
         love.graphics.rectangle(email.mode, email.x, email.y, email.width, email.height)
+        love.graphics.setColor(0,0,0)
+        love.graphics.printf(email.content.subject, email.x, email.y, email.width, "center")
     end
 end
 
@@ -144,17 +159,29 @@ local function printEmail(email)
 end
 
 local function printEmailContent(email)
-    for section, content in ipairs(email) do 
-        --print(unpack(content))
-        prereq, sender, subject, body, choices, ignored = unpack(content)
-        love.graphics.setColor(0, 0, 0)
-        love.graphics.printf(prereq, 50, 50, 120, "center")
-        love.graphics.printf(sender, 50, 100, 120, "center")
-        love.graphics.printf(subject, 50, 150, 120, "center")
-        love.graphics.printf(body, 50, 200, 120, "center")
-        love.graphics.printf(choices, 50, 250, 120, "center")
-        love.graphics.printf(ignored, 50, 300, 120, "center")
-    end
+    -- for section, content in ipairs(email) do
+    --     prereq, sender, subject, body, choices, ignored = unpack(content)
+    --     love.graphics.setColor(0, 0, 0)
+    --     love.graphics.printf(unpack(prereq), 50, 50, 120, "center")
+    --     love.graphics.printf(sender, 50, 100, 120, "center")
+    --     love.graphics.printf(subject, 50, 150, 120, "center")
+    --     love.graphics.printf(body, 50, 200, 120, "center")
+    --     love.graphics.printf(unpack(choices), 50, 250, 120, "center")
+    --     love.graphics.printf(unpack(ignored), 50, 300, 120, "center")
+    -- end
+
+    prereq, sender, subject, body, choices, ignored = unpack(email)
+    love.graphics.setColor(0, 0, 0)
+    love.graphics.printf("prereq: ", 50, 50, 120, "center")
+    for k, v in pairs(prereq) do love.graphics.printf(k.." = "..v, 100, 50, 120, "center") end
+    love.graphics.printf(sender, 50, 100, 120, "center")
+    love.graphics.printf(subject, 50, 150, 120, "center")
+    love.graphics.printf(body, 50, 200, 120, "center")
+    love.graphics.printf("choices: ", 50, 250, 120, "center")
+    for k, v in pairs(choices) do love.graphics.printf(k.." = "..v, 100, 250, 120, "center") end
+    love.graphics.printf("ignored: ", 50, 300, 120, "center")
+    for k, v in pairs(ignored) do love.graphics.printf(k.." = "..v, 100, 300, 120, "center") end
+    
 end
 
 return {
@@ -166,6 +193,6 @@ return {
     handleDragging = handleDragging,
     drawEmails = drawEmails,
     updateEmailValue = updateEmailValue,
-    printEmailContent = printEmailContent
+    printEmailContent = printEmailContent,
+    fillEmailPool = fillEmailPool
 }
-

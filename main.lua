@@ -21,11 +21,11 @@ local csv = {}
 function love.load()
     gameState.load()
     csv = file.loadEmailFile("data/Test CSV - Formatted Emails (2).csv")
-    -- for row, values in ipairs(csv) do
-    --     for i, v in ipairs(values) do
-    --         print("row="..i.." count="..#v.." values=", unpack(v))
-    --     end
-    -- end
+    
+    for row, values in ipairs(csv) do
+        print("row="..row.." count="..#values.." values=", unpack(values))
+        print(unpack(values[1]))
+    end
 
     -- local testString = "{mom = 2, dad = 2, brother = 3, sister = <=4}"
     -- local testTable = {mom = 2, dad = 1}
@@ -114,7 +114,7 @@ function love.draw()
 
     if gameState.isEmailOpened() then
         ui.drawOpenedEmail(gameState.getOpenedEmail())
-        email.printEmailContent(csv[4])
+        email.printEmailContent(csv[1])
     else
         ui.drawTrashBin()
         email.drawEmails()

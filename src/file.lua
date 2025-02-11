@@ -1,5 +1,7 @@
 -- file.lua --
 -- implementation for incoming file management
+local utils = require("src.utils")
+
 local function csvLineToEmail(line)
 	local email = {}
 	local emailPat = '.*%(prereq: (.*)%).*,.*%(sender: (.*)%).*,.*%(subject: (.*)%).*,.*%(body: (.*)%).*,.*%(choices: (.*)%).*,.*%(ignored: (.*)%)'
@@ -14,17 +16,20 @@ local function csvLineToEmail(line)
 	-- 	else                          table.insert(values, (string.gsub(value, quoteMark, "\"")))           -- String.
 	-- 	end
 	-- end
-    for prereq, sender, subject, body, choices, ignored in line:gmatch(emailPat) do -- Note: We won't match empty values.
-		local tempTable = {}
-        table.insert(tempTable, prereq) table.insert(tempTable, sender) table.insert(tempTable, (string.gsub(subject, quoteMark, "\""))) table.insert(tempTable, (string.gsub(body, quoteMark, "\""))) table.insert(tempTable, choices) table.insert(tempTable, ignored)
-		table.insert(email, tempTable)
+    for prereqString, senderString, subjectString, bodyString, choicesString, ignoredString in line:gmatch(emailPat) do -- Note: We won't match empty values.
+        local prereq = {} utils.updateTableFromString(prereq, prereqString) table.insert(email, prereq)
+		table.insert(email, senderString)
+		table.insert(email, (string.gsub(subjectString, quoteMark, "\"")))
+		table.insert(email, (string.gsub(bodyString, quoteMark, "\"")))
+		local choices = {} utils.updateTableFromString(choices, choicesString) table.insert(email, choices)
+		local ignored = {} utils.updateTableFromString(ignored, ignoredString) table.insert(email, ignored)
 	end
     --table.insert(values, (string.gsub(line, quoteMark, "test")))
 	return email
 end
 
 local function loadEmailFile(filename)
-	print("test")
+	print("loadEmailFile test")
 	local emails = {}
 	for line in love.filesystem.lines(filename) do
 		table.insert(emails, csvLineToEmail(line))
