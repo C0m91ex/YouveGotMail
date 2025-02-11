@@ -5,10 +5,10 @@ local email = require("src.email")
 
 -- global vars
 local shop = {
-    shopOffsetY = -195,
+    shopOffsetY = -300,
 }
 
-local shopTitle = { x = love.graphics.getWidth() / 2 + 250, y = love.graphics.getHeight() / 2 - 250, width = 130, height = 40, color = {1, 0.5, 0} }
+local shopTitle = { x = love.graphics.getWidth() / 2 +995, y = love.graphics.getHeight() / 2 - 220, width = 130, height = 40, color = {1, 0.5, 0} }
 -- Functions --
 
 -- Table used as the bone structure for shop items
@@ -32,7 +32,7 @@ local function setUpShop()
     -- Make sure when increasing this variable to set up name and price for the added items to the shop
     for _ = 1, numberOfShopItems do
         -- createShopItem(mode, x, y, width, height, color)
-        createShopItem("fill", love.graphics.getWidth() / 2 + 265, love.graphics.getHeight() / 2 + shop.shopOffsetY, 100, 70, {1, 0.5, 0})
+        createShopItem("fill", love.graphics.getWidth() / 2 + 642, love.graphics.getHeight() / 2 + shop.shopOffsetY, 100, 70, {1, 0.5, 0})
         shop.shopOffsetY = shop.shopOffsetY + 90
     end
 

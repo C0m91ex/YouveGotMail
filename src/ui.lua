@@ -2,12 +2,26 @@
 -- UI handling implemenation
 
 -- global vars
-local trashBin = { x = love.graphics.getWidth() / 2 - 380, y = love.graphics.getHeight() / 2 - 250, width = 100, height = 50, color = {1, 0, 0} }
+local trashBin = { x = love.graphics.getWidth() / 2 - 360, y = love.graphics.getHeight() / 2 - 250, width = 157, height = 157, color = {1, 0, 0} }
 local inboxBackground
 local loginBackground
 local trashBinIcon
 
+local orignalWidth, originalHeight
+local scaleX, scaleY
+
 local windowWidth, windowHeight
+
+local function loadWindow()
+    orignalWidth, originalHeight = love.graphics.getDimensions()
+
+    scaleX, scaleY = 1, 1
+end
+
+function love.resize(newWidth, newHeight)
+    scaleX = newWidth / orignalWidth
+    scaleY = newHeight / originalHeight
+end
 
 -- loadAssets()
 -- Loading function for loading in UI-related assets
@@ -24,10 +38,10 @@ local function drawBackground()
     windowWidth, windowHeight = love.graphics.getDimensions()
     local inboxBackgroundWidth, inboxBackgroundHeight = inboxBackground:getDimensions()
 
-    local trashBinScaleX = windowWidth / inboxBackgroundWidth
-    local trashBinScaleY = windowHeight / inboxBackgroundHeight
+    local inboxScaleX = windowWidth / inboxBackgroundWidth
+    local inboxScaleY = windowHeight / inboxBackgroundHeight
 
-    love.graphics.draw(inboxBackground, 0, 0, 0, trashBinScaleX, trashBinScaleY)
+    love.graphics.draw(inboxBackground, 0, 0, 0, inboxScaleX, inboxScaleY)
 end
 
 -- drawTrashBin()
@@ -35,14 +49,14 @@ end
 local function drawTrashBin()
     --love.graphics.setColor(trashBin.color)
     --love.graphics.rectangle("fill", trashBin.x, trashBin.y, trashBin.width, trashBin.height)
-    love.graphics.draw(trashBinIcon, trashBin.x, trashBin.y, 0, 1, 1)
+    love.graphics.draw(trashBinIcon, trashBin.x, trashBin.y, 0, scaleX, scaleY)
 end
 
 -- drawScore()
 -- Draws the score counter label
 local function drawCurrency(currency)
     love.graphics.setColor(0, 0, 0)  -- Black color
-    love.graphics.printf("Currency: $" .. currency, trashBin.x, trashBin.y + 150, 120, "center")
+    love.graphics.printf("Currency: $" .. currency, trashBin.x, trashBin.y + 180, 120, "center")
     love.graphics.setColor(1, 1, 1)  -- White color
 end
 
@@ -52,8 +66,8 @@ local function drawOpenedEmail(email)
     love.graphics.setColor(1, 1, 1)
     love.graphics.rectangle("fill", 0, 0, love.graphics.getWidth(), love.graphics.getHeight())
 
-    local scaleX = 800/loginBackground:getWidth() 
-    local scaleY = 400/loginBackground:getHeight() 
+    --local scaleX = 800/loginBackground:getWidth() 
+    --local scaleY = 400/loginBackground:getHeight() 
     love.graphics.draw(loginBackground, 0, 0, 0, scaleX, scaleY)
 
     love.graphics.setColor(0.5, 0.5, 0.5)
@@ -77,6 +91,7 @@ local function isOverTrashBin(email)
 end
 
 return {
+    loadWindow = loadWindow,
     loadAssets = loadAssets,
     drawBackground = drawBackground,
     drawTrashBin = drawTrashBin,
