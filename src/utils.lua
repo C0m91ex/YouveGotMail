@@ -1,6 +1,7 @@
 -- utils.lua --
 -- Utility function implementation for UI element interaction
 local utils = {}
+local keyValuePat = "(%w+)%s?=%s?([+-<>~=!]*%d+)"
 
 -- isPointInRect()
 -- Checks to see if the given point exists inside the given rectangle
@@ -9,8 +10,9 @@ function utils.isPointInRect(px, py, rx, ry, rw, rh)
 end
 
 function utils.updateTableFromString(table, string)
-    print("updateTableFromString test")
-    string.gsub(string, "%p*(.+)%s=%s([+-]?%d+)%p*", function(key, value) table[key] = value end)
+    for key, value in string.gmatch(string, keyValuePat) do
+        table[key] = value
+    end
     return table
 end
 

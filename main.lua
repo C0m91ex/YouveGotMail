@@ -21,22 +21,45 @@ local csv = {}
 function love.load()
     gameState.load()
     csv = file.loadEmailFile("data/Test CSV - Formatted Emails (2).csv")
-    for row, values in ipairs(csv) do
-        for i, v in ipairs(values) do
-            print("row="..i.." count="..#v.." values=", unpack(v))
-        end
-    end
+    -- for row, values in ipairs(csv) do
+    --     for i, v in ipairs(values) do
+    --         print("row="..i.." count="..#v.." values=", unpack(v))
+    --     end
+    -- end
 
-    local testString = "{mom = 1}"
-    local testTable = {mom = 2}
-    for i, v in pairs (testTable) do
-        print(i.."="..v)
-    end
+    -- local testString = "{mom = 2, dad = 2, brother = 3, sister = <=4}"
+    -- local testTable = {mom = 2, dad = 1}
+    -- for i, v in pairs (testTable) do
+    --     print(i.."="..v)
+    -- end
     
-    utils.updateTableFromString(testTable, testString)
-    for i, v in pairs (testTable) do
-        print(i.."="..v)
-    end
+    -- utils.updateTableFromString(testTable, testString)
+    -- for i, v in pairs (testTable) do
+    --     print(i.."="..v)
+    -- end
+
+    -- print(playerState.getPlayerSingleVar("mom"))
+    -- utils.updateTableFromString(playerState.getPlayerVarList(), "mom = 2")
+    -- print(playerState.getPlayerSingleVar("mom"))
+    -- print("2<3 expected: "..tostring(2<3)..", actual: "..tostring(playerState.playerCheck("mom", "<3")))
+    -- print("2<=3 expected: "..tostring(2<=3)..", actual: "..tostring(playerState.playerCheck("mom", "<=3")))
+    -- print("2<1 expected: "..tostring(2<1)..", actual: "..tostring(playerState.playerCheck("mom", "<1")))
+    -- print("2<=1 expected: "..tostring(2<=1)..", actual: "..tostring(playerState.playerCheck("mom", "<=1")))
+    -- print("2<2 expected: "..tostring(2<2)..", actual: "..tostring(playerState.playerCheck("mom", "<2")))
+    -- print("2<=2 expected: "..tostring(2<=2)..", actual: "..tostring(playerState.playerCheck("mom", "<=2")))
+    -- print("2>2 expected: "..tostring(2>2)..", actual: "..tostring(playerState.playerCheck("mom", ">2")))
+    -- print("2>=2 expected: "..tostring(2>=2)..", actual: "..tostring(playerState.playerCheck("mom", ">=2")))
+    -- print("2!=3 expected: "..tostring(2~=3)..", actual: "..tostring(playerState.playerCheck("mom", "!=3")))
+    -- print("2!3 expected: "..tostring(2~=3)..", actual: "..tostring(playerState.playerCheck("mom", "!3")))
+    -- print("2~=3 expected: "..tostring(2~=3)..", actual: "..tostring(playerState.playerCheck("mom", "~=3")))
+    -- print("2~3 expected: "..tostring(2~=3)..", actual: "..tostring(playerState.playerCheck("mom", "~3")))
+    -- print("2=3 expected: "..tostring(2==3)..", actual: "..tostring(playerState.playerCheck("mom", "3")))
+    -- print("2!=2 expected: "..tostring(2~=2)..", actual: "..tostring(playerState.playerCheck("mom", "!=2")))
+    -- print("2!2 expected: "..tostring(2~=2)..", actual: "..tostring(playerState.playerCheck("mom", "!2")))
+    -- print("2~=2 expected: "..tostring(2~=2)..", actual: "..tostring(playerState.playerCheck("mom", "~=2")))
+    -- print("2~2 expected: "..tostring(2~=2)..", actual: "..tostring(playerState.playerCheck("mom", "~2")))
+    -- print("2=2 expected: "..tostring(2==2)..", actual: "..tostring(playerState.playerCheck("mom", "2")))
+
 
     -- print("expected: 1")
     -- print(playerState.getPlayerSingleVar("mom")) --passes--

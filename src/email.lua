@@ -4,9 +4,6 @@ local ui = require("src.ui")
 local file = require("src.file")
 
 -- global vars
-local prereqPat = '.*%(prereq: (.*)%).*,'
-local emailBase = file.loadEmailFile('data/Test CSV - Formatted Emails (2).csv')
-local emailPool = {}
 local defaultEmail = {
     prereq = {},
     sender = "spam@spam.spam",
@@ -15,6 +12,9 @@ local defaultEmail = {
     choices = {},
     ignored = {}
 }
+
+local emailBase = file.loadEmailFile('data/Test CSV - Formatted Emails (2).csv')
+local emailPool = {}
 local emails = {} --emails shown--
 local screen = { width = love.graphics.getWidth() / 2, height = love.graphics.getHeight() / 2 }
 local globalOffsetY = 0

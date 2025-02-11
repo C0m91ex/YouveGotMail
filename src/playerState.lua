@@ -21,11 +21,35 @@ local function setPlayerVar(variable, value)
     playerVars[variable] = value
 end
 
+function playerCheck(testKey, testValue)
+    print("playerCheck test")
+    if playerVars[testKey] then
+        local value = tonumber(string.match(testValue, "[+-]?%d+")) --thanks chatGPT
+        local operator = string.match(testValue, "[<>~!=]*")
+
+        if operator == "<" then
+            return tonumber(playerVars[testKey]) < value
+        elseif operator == "<=" then
+            return tonumber(playerVars[testKey]) <= value
+        elseif operator == ">" then
+            return tonumber(playerVars[testKey]) > value
+        elseif operator == ">=" then
+            return tonumber(playerVars[testKey]) >= value
+        elseif operator == "~" or operator == "~=" or operator == "!" or operator == "!=" then
+            return tonumber(playerVars[testKey]) < value
+        else
+            print(tonumber(playerVars[testKey]))
+            print(value)
+            return tonumber(playerVars[testKey]) == value
+        end
+    else return false end
+end
 
 return {
     playerVars,
     getPlayerVarList = getPlayerVarList,
     getPlayerMultiVars = getPlayerMultiVars,
     getPlayerSingleVar = getPlayerSingleVar,
-    setPlayerVar = setPlayerVar
+    setPlayerVar = setPlayerVar,
+    playerCheck = playerCheck
 }
