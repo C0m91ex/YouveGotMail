@@ -27,6 +27,17 @@ function love.load()
         end
     end
 
+    local testString = "{mom = 1}"
+    local testTable = {mom = 2}
+    for i, v in pairs (testTable) do
+        print(i.."="..v)
+    end
+    
+    utils.updateTableFromString(testTable, testString)
+    for i, v in pairs (testTable) do
+        print(i.."="..v)
+    end
+
     -- print("expected: 1")
     -- print(playerState.getPlayerSingleVar("mom")) --passes--
     -- playerState.setPlayerVar("mom", 2)

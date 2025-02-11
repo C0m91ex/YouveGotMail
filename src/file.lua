@@ -36,17 +36,10 @@ end
 Foo,Bar
 true,false,11.8
 ]]
--- local csv = loadCsvFile("cool.csv")
--- for row, values in ipairs(csv) do
---     for i, v in ipairs(values) do
--- 	    print("row="..i.." count="..#v.." values=", unpack(v))
---     end
--- end
 
 
 
 return {
-    
     csvLineToEmail = csvLineToEmail,
 	loadEmailFile = loadEmailFile
 }

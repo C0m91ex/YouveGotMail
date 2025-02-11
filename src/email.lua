@@ -4,7 +4,18 @@ local ui = require("src.ui")
 local file = require("src.file")
 
 -- global vars
-local emails = {}
+local prereqPat = '.*%(prereq: (.*)%).*,'
+local emailBase = file.loadEmailFile('data/Test CSV - Formatted Emails (2).csv')
+local emailPool = {}
+local defaultEmail = {
+    prereq = {},
+    sender = "spam@spam.spam",
+    subject = "Pelase clik thia linkl!!!",
+    body = "link hehe",
+    choices = {},
+    ignored = {}
+}
+local emails = {} --emails shown--
 local screen = { width = love.graphics.getWidth() / 2, height = love.graphics.getHeight() / 2 }
 local globalOffsetY = 0
 local spawnPeriod = 0
@@ -18,9 +29,15 @@ local function getLengthEmails()
     return #emails
 end
 
+-- local function fillEmailPool()
+--     for i, emailContent in ipairs(emailBase) do
+--         local prereq = emailContent[1]
+        
+-- end
+
 -- spawnEmail()
 -- Spawns an email with the given mode, x & y position, dimensions, and color
-local function spawnEmail(mode, x, y, width, height, color)
+local function spawnEmail(mode, x, y, width, height, color, content)
     table.insert(emails, {
         mode = mode,
         x = x,
@@ -28,7 +45,7 @@ local function spawnEmail(mode, x, y, width, height, color)
         width = width,
         height = height,
         color = color,
-        content = "Sample email content!"
+        content = content or defaultEmail
     })
 end
 
@@ -39,7 +56,7 @@ end
 
 -- timedEmailSpawn()
 -- Spawns an email 
-local function timedEmailSpawn(period)
+local function timedEmailSpawn(period, email)
     spawnEmail("fill", screen.width - 220, screen.height - globalOffsetY, 400, 50, {1, 1, 1})
     spawnPeriod = period
     globalOffsetY = globalOffsetY - 70
