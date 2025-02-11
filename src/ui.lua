@@ -5,39 +5,44 @@
 local trashBin = { x = love.graphics.getWidth() / 2 - 380, y = love.graphics.getHeight() / 2 - 250, width = 100, height = 50, color = {1, 0, 0} }
 local inboxBackground
 local loginBackground
+local trashBinIcon
+
+local windowWidth, windowHeight
 
 -- loadAssets()
 -- Loading function for loading in UI-related assets
 local function loadAssets()
     inboxBackground = love.graphics.newImage('assets/inbox_background.png')
     loginBackground = love.graphics.newImage('assets/login-background.png')
+    trashBinIcon = love.graphics.newImage('assets/Delete Button.png')
 end
 
 -- drawBackground()
 -- Draws the given image as the game background. !!! CHANGE THIS LATER TO TAKE IN IMAGE AS ARGUMENT !!!
 local function drawBackground()
     -- scaling the inbox background size base off of window dimensions
-    local windowWidth, windowHeight = love.graphics.getDimensions()
+    windowWidth, windowHeight = love.graphics.getDimensions()
     local inboxBackgroundWidth, inboxBackgroundHeight = inboxBackground:getDimensions()
 
-    local inboxScaleX = windowWidth / inboxBackgroundWidth
-    local inboxScaleY = windowHeight / inboxBackgroundHeight
+    local trashBinScaleX = windowWidth / inboxBackgroundWidth
+    local trashBinScaleY = windowHeight / inboxBackgroundHeight
 
-    love.graphics.draw(inboxBackground, 0, 0, 0, inboxScaleX, inboxScaleY)
+    love.graphics.draw(inboxBackground, 0, 0, 0, trashBinScaleX, trashBinScaleY)
 end
 
 -- drawTrashBin()
 -- Draws the trash bin icon to the game
 local function drawTrashBin()
-    love.graphics.setColor(trashBin.color)
-    love.graphics.rectangle("fill", trashBin.x, trashBin.y, trashBin.width, trashBin.height)
+    --love.graphics.setColor(trashBin.color)
+    --love.graphics.rectangle("fill", trashBin.x, trashBin.y, trashBin.width, trashBin.height)
+    love.graphics.draw(trashBinIcon, trashBin.x, trashBin.y, 0, 1, 1)
 end
 
 -- drawScore()
 -- Draws the score counter label
 local function drawCurrency(currency)
     love.graphics.setColor(0, 0, 0)  -- Black color
-    love.graphics.printf("Currency: $" .. currency, trashBin.x, trashBin.y + 80, 120, "center")
+    love.graphics.printf("Currency: $" .. currency, trashBin.x, trashBin.y + 150, 120, "center")
     love.graphics.setColor(1, 1, 1)  -- White color
 end
 

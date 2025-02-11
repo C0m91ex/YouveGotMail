@@ -80,8 +80,8 @@ function love.draw()
     -- Timer 
     love.graphics.setColor(0, 0, 0)  -- Black color
     local currentSecond = math.floor(love.timer.getTime())
-    love.graphics.print("Current second: " .. currentSecond, 10, 150)
-    love.graphics.print("Current # of emails: ".. email.getLengthEmails(), 10, 160)
+    love.graphics.print("Current second: " .. currentSecond, 10, 230)
+    love.graphics.print("Current # of emails: ".. email.getLengthEmails(), 10, 260)
     love.graphics.setColor(1, 1, 1)  -- White color
 
     if gameState.isEmailOpened() then
