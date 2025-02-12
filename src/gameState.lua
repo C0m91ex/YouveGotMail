@@ -20,6 +20,8 @@ local gameState = {
 -- Load function for the gameState, calls ui.loadAssets() & email.spawnInitialEmails()
 -- Handles loading UI assets and the initial email spawning
 function gameState.load()
+    ui.loadWindow()
+    
     ui.loadAssets()
     
     shop.setUpShop()

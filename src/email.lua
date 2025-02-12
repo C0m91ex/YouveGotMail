@@ -84,8 +84,9 @@ end
 
 -- timedEmailSpawn()
 -- Spawns an email 
-local function timedEmailSpawn(period, email)
-    spawnEmail("fill", screen.width - 220, screen.height - globalOffsetY, 400, 50, {1, 1, 1})
+
+local function timedEmailSpawn(period)
+    spawnEmail("fill", screen.width - 120, screen.height - globalOffsetY, 1080, 50, {1, 1, 1})
     spawnPeriod = period
     globalOffsetY = globalOffsetY - 70
 end
@@ -94,9 +95,9 @@ end
 -- Spawns the initial 9 emails for the gamestart setup
 -- Only gets called once at gamestart
 local function spawnInitialEmails()
-    local yOffset = 250
+local yOffset = 130
     for _ = 1, 4 do
-        spawnEmail("fill", screen.width - 220, screen.height - yOffset, 400, 50, {1, 1, 1})
+        spawnEmail("fill", screen.width - 120, screen.height - yOffset, 1080, 50, {1, 1, 1})
         yOffset = yOffset - 70
     end
     globalOffsetY = yOffset
