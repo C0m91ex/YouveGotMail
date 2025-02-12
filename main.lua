@@ -1,4 +1,4 @@
-. -- main.lua --
+-- main.lua --
 -- Main game function manager
 local gameState = require("src.gameState")
 local ui = require("src.ui")
