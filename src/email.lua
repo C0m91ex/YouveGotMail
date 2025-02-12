@@ -14,7 +14,7 @@ local defaultEmail = {
     ignored = {}
 }
 
-local emailBase = file.loadEmailFile('data/Test CSV - Formatted Emails (2).csv')
+local emailBase = file.loadEmailFile('data/EmailBase.csv')
 local emailPool = {}
 local emails = {} --emails shown--
 local screen = { width = love.graphics.getWidth() / 2, height = love.graphics.getHeight() / 2 }
@@ -177,6 +177,8 @@ local function printEmail(email)
 end
 
 local function printEmailContent(email)
+    local content = {}
+    content = email["content"]
     -- for section, content in ipairs(email) do
     --     prereq, sender, subject, body, choices, ignored = unpack(content)
     --     love.graphics.setColor(0, 0, 0)
@@ -190,14 +192,14 @@ local function printEmailContent(email)
 
     love.graphics.setColor(0, 0, 0)
     love.graphics.printf("prereq: ", 50, 50, 120, "center")
-    for k, v in pairs(email["prereq"]) do love.graphics.printf(k.." = "..v, 100, 50, 120, "center") end
-    love.graphics.printf(email["sender"], 50, 100, 120, "center")
-    love.graphics.printf(email["subject"], 50, 150, 120, "center")
-    love.graphics.printf(email["body"], 50, 200, 120, "center")
+    for k, v in pairs(content["prereq"]) do love.graphics.printf(k.." = "..v, 100, 50, 120, "center") end
+    love.graphics.printf(content["sender"], 50, 100, 120, "center")
+    love.graphics.printf(content["subject"], 50, 150, 120, "center")
+    love.graphics.printf(content["body"], 50, 200, 120, "center")
     love.graphics.printf("choices: ", 50, 250, 120, "center")
-    for k, v in pairs(email["choices"]) do love.graphics.printf(k.." = "..v, 100, 250, 120, "center") end
+    for k, v in pairs(content["choices"]) do love.graphics.printf(k.." = "..v, 100, 250, 120, "center") end
     love.graphics.printf("ignored: ", 50, 300, 120, "center")
-    for k, v in pairs(email["ignored"]) do love.graphics.printf(k.." = "..v, 100, 300, 120, "center") end
+    for k, v in pairs(content["ignored"]) do love.graphics.printf(k.." = "..v, 100, 300, 120, "center") end
     
 end
 

@@ -1,4 +1,0 @@
-"Prerequisites - Table of ""value"" = integers",Sender - String,Subject- String,Body - String,Choices - Table of choices,"Table of ""value"" = integers"
-(prereq: Test1),(sender: Test2),(subject: TEst3),(body: test4),(choices: test5),(ignored: )
-"(prereq: {table:1, otherthing:2})",(sender: vinh@pmail.com),(subject: hey buddy),"(body: Miss you lots, but not that much. Bye!)","(choices: {{{knowsVinh:1},Okay lol,{}}})",(ignored: )
-(prereq: {}),(sender: test@email.com),(subject: This is a test!),"(body: Do not be alarmed, instead be amazed.)",(choices: {}),(ignored: {})

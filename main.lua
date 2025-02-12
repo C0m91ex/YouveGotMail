@@ -112,7 +112,7 @@ function love.draw()
 
     if gameState.isEmailOpened() then
         ui.drawOpenedEmail(gameState.getOpenedEmail())
-        --email.printEmailContent(gameState.getOpenedEmail())
+        email.printEmailContent(gameState.getOpenedEmail())
     else
         ui.drawTrashBin()
         email.drawEmails()
