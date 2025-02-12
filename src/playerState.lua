@@ -40,7 +40,7 @@ function playerCheck(testKey, testValue)
         else
             return tonumber(playerVars[testKey]) == value
         end
-    else print("playerCheck false") return false end
+    else return false end
 end
 
 return {

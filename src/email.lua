@@ -37,9 +37,9 @@ local function fillEmailPool()
         local prereqCheckFlag = true
         -- print(next(prereq))
         if next(prereq) ~= nil then
-            -- for k,v in pairs(prereq) do
-            --     print(k.." = "..v)
-            -- end
+            for k,v in pairs(prereq) do
+                print(k.." = "..v)
+            end
             for key, value in pairs(prereq) do
                 if not playerState.playerCheck(key, value) then prereqCheckFlag = false break end
             end
@@ -157,7 +157,8 @@ local function drawEmails()
         love.graphics.setColor(email.color)
         love.graphics.rectangle(email.mode, email.x, email.y, email.width, email.height)
         love.graphics.setColor(0,0,0)
-        love.graphics.printf(email.content.subject, email.x, email.y, email.width, "center")
+        love.graphics.printf(email.content.sender, email.x, email.y, email.width, "center")
+        love.graphics.printf(email.content.subject, email.x, email.y+20, email.width, "center")
     end
 end
 
@@ -191,9 +192,9 @@ local function printEmailContent(email)
     love.graphics.setColor(0, 0, 0)
     love.graphics.printf("prereq: ", 50, 50, 120, "center")
     for k, v in pairs(content["prereq"]) do love.graphics.printf(k.." = "..v, 100, 50, 120, "center") end
-    love.graphics.printf(content["sender"], 50, 100, 120, "center")
-    love.graphics.printf(content["subject"], 50, 150, 120, "center")
-    love.graphics.printf(content["body"], 50, 200, 120, "center")
+    love.graphics.printf(content["sender"], 50, 100, 600, "left")
+    love.graphics.printf(content["subject"], 50, 150, 600, "left")
+    love.graphics.printf(content["body"], 50, 200, 600, "left")
     love.graphics.printf("choices: ", 50, 250, 120, "center")
     for k, v in pairs(content["choices"]) do love.graphics.printf(k.." = "..v, 100, 250, 120, "center") end
     love.graphics.printf("ignored: ", 50, 300, 120, "center")
