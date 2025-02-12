@@ -1,8 +1,10 @@
 -- file.lua --
 -- implementation for incoming file management
-local function splitCsvLine(line)
-	local values = {}
-	local emailPat = '.*%(prereq: (.*)%).*,.*%(sender: (.*)%).*,.*%(subject: (.*)%).*,.*%(body: (.*)%).*,.*%(choices: (.*)%)'
+local utils = require("src.utils")
+
+local function csvLineToEmail(line)
+	local email = {prereq = {}, sender = "", subject = "", body = "", choices = {}, ignored = {}}
+	local emailPat = '.*%(prereq: (.*)%).*,.*%(sender: (.*)%).*,.*%(subject: (.*)%).*,.*%(body: (.*)%).*,.*%(choices: (.*)%).*,.*%(ignored: (.*)%)'
     local quotePat = '%"(.-)%",'
     local quoteMark = "\"\""
     local flag = false;
@@ -14,50 +16,43 @@ local function splitCsvLine(line)
 	-- 	else                          table.insert(values, (string.gsub(value, quoteMark, "\"")))           -- String.
 	-- 	end
 	-- end
-    for v1, v2, v3, v4, v5 in line:gmatch(emailPat) do -- Note: We won't match empty values.
-		local t = {}
-        table.insert(t, v1) table.insert(t, v2) table.insert(t, (string.gsub(v3, quoteMark, "\""))) table.insert(t, (string.gsub(v4, quoteMark, "\""))) table.insert(t, v5)
-		table.insert(values, t)
+    for prereqString, senderString, subjectString, bodyString, choicesString, ignoredString in string.gmatch(line, emailPat) do -- Note: We won't match empty values.
+        utils.updateTableFromString(email["prereq"], prereqString)
+		email["sender"] = senderString
+		email["subject"] = string.gsub(subjectString, quoteMark, "\"")
+		email["body"] = string.gsub(bodyString, quoteMark, "\"")
+		utils.updateTableFromString(email["choices"], choicesString)
+		utils.updateTableFromString(email["ignored"], ignoredString)
 	end
+
+	--{mom = >=3, dad = >2, money>10}
+	--mom@mom.com
+	--Hey your dad needs some money
+	--Hey! It's been a while... love, mom
+	--{{{money>10},Sure thing mom,{money = -=10, mom = +=1, dad = +=1}},{{},Nope,{mom = -=1, dad = -=2}}}
+	--{mom -= 1, dad -=2 }
+
     --table.insert(values, (string.gsub(line, quoteMark, "test")))
-	return values
+	return email
 end
 
-local function loadCsvFile(filename)
-	local csv = {}
+local function loadEmailFile(filename)
+	print("loadEmailFile test")
+	local emails = {}
 	for line in love.filesystem.lines(filename) do
-		table.insert(csv, splitCsvLine(line))
+		table.insert(emails, csvLineToEmail(line))
 	end
-	return csv --table of tables of each line
+	return emails --table of tables of each line
 end
 
 --[[ cool.csv:
 Foo,Bar
 true,false,11.8
 ]]
--- local csv = loadCsvFile("cool.csv")
--- for row, values in ipairs(csv) do
---     for i, v in ipairs(values) do
--- 	    print("row="..i.." count="..#v.." values=", unpack(v))
---     end
--- end
 
-local function printEmail(email)
-		--print(unpack(email))
-        for section, content in ipairs(email) do 
-			--print(unpack(content))
-            prereq, sender, subject, body, choices = unpack(content)
-            love.graphics.setColor(0, 0, 0)
-			love.graphics.printf(prereq, 0, 50, 120, "center")
-			love.graphics.printf(sender, 0, 100, 120, "center")
-			love.graphics.printf(subject, 0, 150, 120, "center")
-			love.graphics.printf(body, 0, 200, 120, "center")
-			love.graphics.printf(choices, 0, 250, 120, "center")
-        end
-end
+
 
 return {
-    loadCsvFile = loadCsvFile,
-    splitCsvLine = splitCsvLine,
-	printEmail = printEmail
+    csvLineToEmail = csvLineToEmail,
+	loadEmailFile = loadEmailFile
 }

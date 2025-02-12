@@ -2,9 +2,21 @@
 -- Implementation file for email class
 local ui = require("src.ui")
 local file = require("src.file")
+local playerState = require("src.playerState")
 
 -- global vars
-local emails = {}
+local defaultEmail = {
+    prereq = {},
+    sender = "spam@spam.spam",
+    subject = "Pelase clik thia linkl!!!",
+    body = "link hehe",
+    choices = {},
+    ignored = {}
+}
+
+local emailBase = file.loadEmailFile('data/EmailBase.csv')
+local emailPool = {}
+local emails = {} --emails shown--
 local screen = { width = love.graphics.getWidth() / 2, height = love.graphics.getHeight() / 2 }
 local globalOffsetY = 0
 local spawnPeriod = 0
@@ -18,9 +30,42 @@ local function getLengthEmails()
     return #emails
 end
 
+local function fillEmailPool()
+    -- print("fillEmailPool test")
+    for i, emailContent in ipairs(emailBase) do
+        local prereq = emailContent["prereq"]
+        local prereqCheckFlag = true
+        -- print(next(prereq))
+        if next(prereq) ~= nil then
+            for k,v in pairs(prereq) do
+                print(k.." = "..v)
+            end
+            for key, value in pairs(prereq) do
+                if not playerState.playerCheck(key, value) then prereqCheckFlag = false break end
+            end
+        end
+        if prereqCheckFlag then
+            table.insert(emailPool, emailContent)
+            table.remove(emailBase, i)
+        end
+    end
+    -- for i,v in ipairs(emailPool) do
+    --     print(unpack(v))
+    -- end
+end
+
+local function getFromPool()
+    if next(emailPool) ~= nil then
+        return table.remove(emailPool)
+    else 
+        return defaultEmail 
+    end
+end
+
 -- spawnEmail()
 -- Spawns an email with the given mode, x & y position, dimensions, and color
-local function spawnEmail(mode, x, y, width, height, color)
+local function spawnEmail(mode, x, y, width, height, color, content)
+    fillEmailPool()
     table.insert(emails, {
         mode = mode,
         x = x,
@@ -28,7 +73,7 @@ local function spawnEmail(mode, x, y, width, height, color)
         width = width,
         height = height,
         color = color,
-        content = "Sample email content!"
+        content = getFromPool()
     })
 end
 
@@ -39,6 +84,7 @@ end
 
 -- timedEmailSpawn()
 -- Spawns an email 
+
 local function timedEmailSpawn(period)
     spawnEmail("fill", screen.width - 120, screen.height - globalOffsetY, 1080, 50, {1, 1, 1})
     spawnPeriod = period
@@ -67,6 +113,7 @@ local function handleEmailSelection(mouseX, mouseY, gameState)
 
                 if love.timer.getTime() - gameState.lastClickTime < gameState.doubleClickDelay then
                     gameState.openedEmail = email
+                    fillEmailPool()
                     return
                 end
 
@@ -110,6 +157,9 @@ local function drawEmails()
     for _, email in ipairs(emails) do
         love.graphics.setColor(email.color)
         love.graphics.rectangle(email.mode, email.x, email.y, email.width, email.height)
+        love.graphics.setColor(0,0,0)
+        love.graphics.printf(email.content.sender, email.x, email.y, email.width, "center")
+        love.graphics.printf(email.content.subject, email.x, email.y+20, email.width, "center")
     end
 end
 
@@ -126,6 +176,35 @@ local function printEmail(email)
     end
 end
 
+local function printEmailContent(email)
+    local content = {}
+    content = email["content"]
+    -- for section, content in ipairs(email) do
+    --     prereq, sender, subject, body, choices, ignored = unpack(content)
+    --     love.graphics.setColor(0, 0, 0)
+    --     love.graphics.printf(unpack(prereq), 50, 50, 120, "center")
+    --     love.graphics.printf(sender, 50, 100, 120, "center")
+    --     love.graphics.printf(subject, 50, 150, 120, "center")
+    --     love.graphics.printf(body, 50, 200, 120, "center")
+    --     love.graphics.printf(unpack(choices), 50, 250, 120, "center")
+    --     love.graphics.printf(unpack(ignored), 50, 300, 120, "center")
+
+
+    love.graphics.setColor(0, 0, 0)
+    love.graphics.printf("prereq: ", 50, 50, 120, "center")
+    for k, v in pairs(content["prereq"]) do love.graphics.printf(k.." = "..v, 100, 50, 120, "center") end
+    love.graphics.printf(content["sender"], 50, 100, 600, "left")
+    love.graphics.printf(content["subject"], 50, 150, 600, "left")
+    love.graphics.printf(content["body"], 50, 200, 600, "left")
+    love.graphics.printf("choices: ", 50, 250, 120, "center")
+    for k, v in pairs(content["choices"]) do love.graphics.printf(k.." = "..v, 100, 250, 120, "center") end
+    love.graphics.printf("ignored: ", 50, 300, 120, "center")
+    for k, v in pairs(content["ignored"]) do love.graphics.printf(k.." = "..v, 100, 300, 120, "center") end
+    
+end
+
+
+
 return {
     getLengthEmails = getLengthEmails,
     spawnEmail = spawnEmail,
@@ -134,6 +213,7 @@ return {
     handleEmailSelection = handleEmailSelection,
     handleDragging = handleDragging,
     drawEmails = drawEmails,
-    updateEmailValue = updateEmailValue
+    updateEmailValue = updateEmailValue,
+    printEmailContent = printEmailContent,
+    fillEmailPool = fillEmailPool
 }
-
