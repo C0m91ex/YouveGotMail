@@ -49,7 +49,7 @@ end
 -- Spawns the initial 9 emails for the gamestart setup
 -- Only gets called once at gamestart
 local function spawnInitialEmails()
-    local yOffset = 250
+    local yOffset = 180
     for _ = 1, 4 do
         spawnEmail("fill", screen.width - 220, screen.height - yOffset, 400, 50, {1, 1, 1})
         yOffset = yOffset - 70
