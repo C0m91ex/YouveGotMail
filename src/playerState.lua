@@ -1,4 +1,4 @@
-local playerVars = {mom = 1, dad = 0}
+local playerVars = {mom = 1, dad = 2, brother = 0}
 
 local function getPlayerVarList()
     return playerVars

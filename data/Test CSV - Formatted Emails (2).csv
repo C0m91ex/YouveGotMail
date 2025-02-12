@@ -1,1 +1,1 @@
-"(prereq: {mom = 1, dad = 2, brother = <3}),(sender: test@email.com)",(subject: This is a test!),"(body: Do not be alarmed, instead be amazed.)",(choices: {}),(ignored: {})
+"(prereq: {test = 1, anothertest = 2})","(sender: test@email.com)",(subject: This is a test!),"(body: Do not be alarmed, instead be amazed.)",(choices: {test = 1}),(ignored: {test = 1})

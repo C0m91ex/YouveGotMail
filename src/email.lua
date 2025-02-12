@@ -31,19 +31,34 @@ local function getLengthEmails()
 end
 
 local function fillEmailPool()
-    print("fillEmailPool test")
+    -- print("fillEmailPool test")
     for i, emailContent in ipairs(emailBase) do
-        local prereq = emailContent[1]
-        if next(prereq) == nil then continue
-        print(unpack(prereq))
+        local prereq = emailContent["prereq"]
         local prereqCheckFlag = true
-        for key, value in pairs(prereq) do
-            if playerState.playerCheck(key, value) then prereqCheckFlag = false break end
+        -- print(next(prereq))
+        if next(prereq) ~= nil then
+            -- for k,v in pairs(prereq) do
+            --     print(k.." = "..v)
+            -- end
+            for key, value in pairs(prereq) do
+                if not playerState.playerCheck(key, value) then prereqCheckFlag = false break end
+            end
         end
         if prereqCheckFlag then
             table.insert(emailPool, emailContent)
             table.remove(emailBase, i)
         end
+    end
+    -- for i,v in ipairs(emailPool) do
+    --     print(unpack(v))
+    -- end
+end
+
+local function getFromPool()
+    if next(emailPool) ~= nil then
+        return table.remove(emailPool)
+    else 
+        return defaultEmail 
     end
 end
 
@@ -59,6 +74,9 @@ local function spawnEmail(mode, x, y, width, height, color, content)
         color = color,
         content = content or defaultEmail
     })
+    fillEmailPool()
+    local test = getFromPool()
+    print(test["subject"])
 end
 
 local function updateEmailValue()
@@ -168,21 +186,22 @@ local function printEmailContent(email)
     --     love.graphics.printf(body, 50, 200, 120, "center")
     --     love.graphics.printf(unpack(choices), 50, 250, 120, "center")
     --     love.graphics.printf(unpack(ignored), 50, 300, 120, "center")
-    -- end
 
-    prereq, sender, subject, body, choices, ignored = unpack(email)
+
     love.graphics.setColor(0, 0, 0)
     love.graphics.printf("prereq: ", 50, 50, 120, "center")
-    for k, v in pairs(prereq) do love.graphics.printf(k.." = "..v, 100, 50, 120, "center") end
-    love.graphics.printf(sender, 50, 100, 120, "center")
-    love.graphics.printf(subject, 50, 150, 120, "center")
-    love.graphics.printf(body, 50, 200, 120, "center")
+    for k, v in pairs(email["prereq"]) do love.graphics.printf(k.." = "..v, 100, 50, 120, "center") end
+    love.graphics.printf(email["sender"], 50, 100, 120, "center")
+    love.graphics.printf(email["subject"], 50, 150, 120, "center")
+    love.graphics.printf(email["body"], 50, 200, 120, "center")
     love.graphics.printf("choices: ", 50, 250, 120, "center")
-    for k, v in pairs(choices) do love.graphics.printf(k.." = "..v, 100, 250, 120, "center") end
+    for k, v in pairs(email["choices"]) do love.graphics.printf(k.." = "..v, 100, 250, 120, "center") end
     love.graphics.printf("ignored: ", 50, 300, 120, "center")
-    for k, v in pairs(ignored) do love.graphics.printf(k.." = "..v, 100, 300, 120, "center") end
+    for k, v in pairs(email["ignored"]) do love.graphics.printf(k.." = "..v, 100, 300, 120, "center") end
     
 end
+
+
 
 return {
     getLengthEmails = getLengthEmails,

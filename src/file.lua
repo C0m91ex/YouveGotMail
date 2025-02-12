@@ -3,7 +3,7 @@
 local utils = require("src.utils")
 
 local function csvLineToEmail(line)
-	local email = {}
+	local email = {prereq = {}, sender = "", subject = "", body = "", choices = {}, ignored = {}}
 	local emailPat = '.*%(prereq: (.*)%).*,.*%(sender: (.*)%).*,.*%(subject: (.*)%).*,.*%(body: (.*)%).*,.*%(choices: (.*)%).*,.*%(ignored: (.*)%)'
     local quotePat = '%"(.-)%",'
     local quoteMark = "\"\""
@@ -16,14 +16,22 @@ local function csvLineToEmail(line)
 	-- 	else                          table.insert(values, (string.gsub(value, quoteMark, "\"")))           -- String.
 	-- 	end
 	-- end
-    for prereqString, senderString, subjectString, bodyString, choicesString, ignoredString in line:gmatch(emailPat) do -- Note: We won't match empty values.
-        local prereq = {} utils.updateTableFromString(prereq, prereqString) table.insert(email, prereq)
-		table.insert(email, senderString)
-		table.insert(email, (string.gsub(subjectString, quoteMark, "\"")))
-		table.insert(email, (string.gsub(bodyString, quoteMark, "\"")))
-		local choices = {} utils.updateTableFromString(choices, choicesString) table.insert(email, choices)
-		local ignored = {} utils.updateTableFromString(ignored, ignoredString) table.insert(email, ignored)
+    for prereqString, senderString, subjectString, bodyString, choicesString, ignoredString in string.gmatch(line, emailPat) do -- Note: We won't match empty values.
+        utils.updateTableFromString(email["prereq"], prereqString)
+		email["sender"] = senderString
+		email["subject"] = string.gsub(subjectString, quoteMark, "\"")
+		email["body"] = string.gsub(bodyString, quoteMark, "\"")
+		utils.updateTableFromString(email["choices"], choicesString)
+		utils.updateTableFromString(email["ignored"], ignoredString)
 	end
+
+	--{mom = >=3, dad = >2, money>10}
+	--mom@mom.com
+	--Hey your dad needs some money
+	--Hey! It's been a while... love, mom
+	--{{{money>10},Sure thing mom,{money = -=10, mom = +=1, dad = +=1}},{{},Nope,{mom = -=1, dad = -=2}}}
+	--{mom -= 1, dad -=2 }
+
     --table.insert(values, (string.gsub(line, quoteMark, "test")))
 	return email
 end
