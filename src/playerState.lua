@@ -1,4 +1,4 @@
-local playerVars = {mom = 1, dad = 2, brother = 0}
+local playerVars = {mom = 4, dad = 3}
 
 local function getPlayerVarList()
     return playerVars
@@ -40,7 +40,7 @@ function playerCheck(testKey, testValue)
         else
             return tonumber(playerVars[testKey]) == value
         end
-    else return false end
+    else print("playerCheck false") return false end
 end
 
 return {

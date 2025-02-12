@@ -65,6 +65,7 @@ end
 -- spawnEmail()
 -- Spawns an email with the given mode, x & y position, dimensions, and color
 local function spawnEmail(mode, x, y, width, height, color, content)
+    fillEmailPool()
     table.insert(emails, {
         mode = mode,
         x = x,
@@ -72,11 +73,8 @@ local function spawnEmail(mode, x, y, width, height, color, content)
         width = width,
         height = height,
         color = color,
-        content = content or defaultEmail
+        content = getFromPool()
     })
-    fillEmailPool()
-    local test = getFromPool()
-    print(test["subject"])
 end
 
 local function updateEmailValue()

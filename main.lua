@@ -20,7 +20,7 @@ local csv = {}
 -- Load function, calls load() from gameState.lua
 function love.load()
     gameState.load()
-    csv = file.loadEmailFile("data/Test CSV - Formatted Emails (2).csv")
+    csv = file.loadEmailFile("data/EmailBase.csv")
 
     -- for i, v in pairs (csv[1]) do
     --     print(i.."="..tostring(v))
