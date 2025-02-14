@@ -197,9 +197,17 @@ local function printEmailContent(email)
     love.graphics.printf(content["subject"], 50, 150, 600, "left")
     love.graphics.printf(content["body"], 50, 200, 600, "left")
     love.graphics.printf("choices: ", 50, 250, 120, "center")
-    --for k, v in pairs(content["choices"]) do love.graphics.printf(k.." = "..v, 100, 250, 120, "center") end
-    love.graphics.printf("ignored: ", 50, 300, 120, "center")
-    for k, v in pairs(content["ignored"]) do love.graphics.printf(k.." = "..v, 100, 300, 120, "center") end
+    for i, t in ipairs(content["choices"]) do
+        for k, v in pairs(t["cPrereqs"]) do
+            love.graphics.printf(k.." = "..v, 100*i, 250, 120, "center")
+        end
+        love.graphics.printf(t["cBody"], 100*i, 300, 120, "center")
+        for k, v in pairs(t["cChanges"]) do
+            love.graphics.printf(k.." = "..v, 100*i, 350, 120, "center")
+        end
+    end
+    love.graphics.printf("ignored: ", 50, 400, 120, "center")
+    for k, v in pairs(content["ignored"]) do love.graphics.printf(k.." = "..v, 100, 400, 120, "center") end
     
 end
 

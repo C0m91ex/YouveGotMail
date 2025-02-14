@@ -2,7 +2,7 @@
 -- Utility function implementation for UI element interaction
 local utils = {}
 local keyValuePat = "(%w+)%s?=%s?([+-<>~=!]*%d+)"
-local choicePat = '({%(cPrereqs:%s*.*%).*,.*%(cBody:%s*.*%).*,.*%(cChanges:%s*.*%)})'
+local choicePat = '{%(cPrereqs:%s-.-%).-,.-%(cBody:%s-.-%).-,.-%(cChanges:%s-.-%)}'
 local choicePartsPat = '.*%(cPrereqs:%s*(.*)%).*,.*%(cBody:%s*(.*)%).*,.*%(cChanges:%s*(.*)%)'
 
 -- isPointInRect()
@@ -19,7 +19,11 @@ function utils.updateTableFromString(table, string)
 end
 
 function utils.createChoiceTableFromString(choiceTable, string)
-    for choice in string.gmatch(string, choicePat) do
+    --print(string)
+    print("createChoiceTableFromString test")
+    for choice in string.gmatch(string, choicePat) do  
+        print(choice)
+        --print("createChoiceTableFromString new choice found")
         newChoice = {
             cPrereqs = {},
             cBody = "",
