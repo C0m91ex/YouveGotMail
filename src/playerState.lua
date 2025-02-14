@@ -43,11 +43,28 @@ function playerCheck(testKey, testValue)
     else return false end
 end
 
+function playerChange(changeKey, changeValue)
+    print("playerChange test")
+    local value = tonumber(string.match(testValue, "[+-]?%d+")) --thanks chatGPT
+    local operator = string.match(testValue, "[+-*=]*")
+
+    if operator == "+=" then
+        playerVars[changeKey] = (tonumber(playerVars[changeKey]) + tonumber(changeValue))
+    elseif operator == "-=" then
+        playerVars[changeKey] = (tonumber(playerVars[changeKey]) - tonumber(changeValue))
+    elseif operator == "*=" then
+        playerVars[changeKey] = (tonumber(playerVars[changeKey]) * tonumber(changeValue))
+    else
+        playerVars[changeKey] = tonumber(changeValue)
+    end
+end
+
 return {
     playerVars,
     getPlayerVarList = getPlayerVarList,
     getPlayerMultiVars = getPlayerMultiVars,
     getPlayerSingleVar = getPlayerSingleVar,
     setPlayerVar = setPlayerVar,
-    playerCheck = playerCheck
+    playerCheck = playerCheck,
+    playerChange = playerChange
 }

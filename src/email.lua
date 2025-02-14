@@ -197,12 +197,35 @@ local function printEmailContent(email)
     love.graphics.printf(content["subject"], 50, 150, 600, "left")
     love.graphics.printf(content["body"], 50, 200, 600, "left")
     love.graphics.printf("choices: ", 50, 250, 120, "center")
-    for k, v in pairs(content["choices"]) do love.graphics.printf(k.." = "..v, 100, 250, 120, "center") end
+    --for k, v in pairs(content["choices"]) do love.graphics.printf(k.." = "..v, 100, 250, 120, "center") end
     love.graphics.printf("ignored: ", 50, 300, 120, "center")
     for k, v in pairs(content["ignored"]) do love.graphics.printf(k.." = "..v, 100, 300, 120, "center") end
     
 end
 
+
+
+-- local function makeChoiceButton(x,y,width,height,choiceTable)
+--     return {
+--         x = x,
+--         y = y,
+--         width = width,
+--         height = height,
+--         choiceTable = choiceTable
+--     }
+-- end
+
+-- local function drawChoiceButton(choiceButton)
+--     local availableColor = love.math.colorFromBytes(255, 255, 255)
+--     local blockedColor = love.math.colorFromBytes(188, 188, 188)
+
+--     if playerState.playerCheck(choiceButton.choiceTable.)
+--     love.graphics.setColor(email.color)
+--     love.graphics.rectangle(email.mode, email.x, email.y, email.width, email.height)
+--     love.graphics.setColor(0,0,0)
+--     love.graphics.printf(email.content.sender, email.x, email.y, email.width, "center")
+--     love.graphics.printf(email.content.subject, email.x, email.y+20, email.width, "center")
+-- end
 
 
 return {
