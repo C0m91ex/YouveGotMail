@@ -2,6 +2,7 @@
 -- Implementation file for email class
 local ui = require("src.ui")
 local file = require("src.file")
+--local scaling = require("src.scaling")
 
 -- global vars
 local emails = {}
@@ -10,7 +11,14 @@ local globalOffsetY = 0
 local spawnPeriod = 0
 local emailValue = 1
 
+local scaleX, scaleY = 1, 1
+
 -- Functions --
+
+function love.resize(newWidth, newHeight)
+    scaleX = newWidth / orignalWidth
+    scaleY = newHeight / originalHeight
+end
 
 -- getLengthEmails()
 -- Getter function that returns length of emails table
@@ -28,6 +36,7 @@ local function spawnEmail(mode, x, y, width, height, color)
         width = width,
         height = height,
         color = color,
+        spawned = true,
         content = "Sample email content!"
     })
 end
@@ -57,13 +66,28 @@ local yOffset = 130
     globalOffsetY = yOffset
 end
 
+--[[
+local function updateEmailScaling(scaleX, scaleY)
+    for _, email in ipairs(emails) do
+        --print("ScaleX from email: "..scaleX)
+        --print("ScaleY from email: "..scaleY)
+        email.x = email.x * scaleX
+        email.y = email.y * scaleY
+        print("Email".._.." X: "..email.x)
+        print("Email".._.." Y: "..email.y)
+        email.width = email.width * scaleX
+        email.height = email.height * scaleY
+    end
+end
+]]--
+
 -- handleEmailSelection()
 -- Handler function for email selection & opening
 local function handleEmailSelection(mouseX, mouseY, gameState)
     if not gameState.selectedEmail then
         for _, email in ipairs(emails) do
-            if mouseX > email.x and mouseX < email.x + email.width and
-               mouseY > email.y and mouseY < email.y + email.height then
+            if mouseX > email.x * scaleX and mouseX < email.x * scaleX + email.width * scaleX and
+               mouseY > email.y * scaleY and mouseY < email.y * scaleY + email.height * scaleY then
 
                 if love.timer.getTime() - gameState.lastClickTime < gameState.doubleClickDelay then
                     gameState.openedEmail = email
@@ -109,7 +133,11 @@ end
 local function drawEmails()
     for _, email in ipairs(emails) do
         love.graphics.setColor(email.color)
-        love.graphics.rectangle(email.mode, email.x, email.y, email.width, email.height)
+        love.graphics.rectangle(email.mode, email.x * scaleX, email.y * scaleY, email.width * scaleX, email.height * scaleY)
+        love.graphics.setColor(0,0,0)
+        --love.graphics.printf(email.content.sender, email.x * emailScaleX, email.y * emailScaleY, email.width * emailScaleY, "center")
+        --love.graphics.printf(email.content.subject, email.x * emailScaleX, email.y+20 * emailScaleY, email.width * emailScaleY, "center")
+        love.graphics.printf("Test", email.x * scaleX, email.y * scaleY, email.width * scaleX, "center")
     end
 end
 
@@ -134,6 +162,7 @@ return {
     handleEmailSelection = handleEmailSelection,
     handleDragging = handleDragging,
     drawEmails = drawEmails,
-    updateEmailValue = updateEmailValue
+    updateEmailValue = updateEmailValue,
+    updateEmailScaling = updateEmailScaling
 }
 

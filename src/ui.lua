@@ -8,26 +8,18 @@ local loginBackground
 local trashBinIcon
 
 local orignalWidth, originalHeight
-local scaleX, scaleY
 
 local windowWidth, windowHeight
 
-local function loadWindow()
-    orignalWidth, originalHeight = love.graphics.getDimensions()
-
-    scaleX, scaleY = 1, 1
-end
-
-function love.resize(newWidth, newHeight)
-    scaleX = newWidth / orignalWidth
-    scaleY = newHeight / originalHeight
-end
+-- getScaleXY()
+-- update the scale of the emails when window gets resized
+--local function getScaleXY() return scaleX, scaleY end
 
 -- loadAssets()
 -- Loading function for loading in UI-related assets
 local function loadAssets()
     inboxBackground = love.graphics.newImage('assets/inbox_background.png')
-    loginBackground = love.graphics.newImage('assets/login-background.png')
+    loginBackground = love.graphics.newImage('assets/Login_Background.png')
     trashBinIcon = love.graphics.newImage('assets/Delete Button.png')
 end
 
@@ -99,4 +91,5 @@ return {
     drawOpenedEmail = drawOpenedEmail,
     isBackButtonClicked = isBackButtonClicked,
     isOverTrashBin = isOverTrashBin
+    --getScaleXY = getScaleXY
 }
