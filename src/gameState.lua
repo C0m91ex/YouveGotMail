@@ -51,6 +51,8 @@ function gameState.handleMouseRelease(x, y, button)
         if gameState.openedEmail then
             if ui.isBackButtonClicked(x, y) then
                 gameState.openedEmail = nil
+            else
+                email.isEmailChoiceClicked(x, y)
             end
         end
 
