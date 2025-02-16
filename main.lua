@@ -7,7 +7,7 @@ local utils = require("src.utils")
 local file = require("src.file")
 local shop = require("src.shop")
 local playerState = require("src.playerState")
-
+local login = require("src.login")
 
 -- global vars
 local start = love.timer.getTime()
@@ -19,6 +19,8 @@ local csv = {}
 -- load()
 -- Load function, calls load() from gameState.lua
 function love.load()
+    login.load()
+    login.start()  -- Block here until login is complete
     -- set window size and settings
     love.window.setMode(1600, 900, {
         resizable = true,
