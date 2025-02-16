@@ -256,14 +256,23 @@ end
 
 local function isEmailChoiceClicked(x, y)
     for _, choiceButton in ipairs(choiceButtons) do
+        local changes = choiceButton.choiceTable.cChanges
         if x > choiceButton.x and x < choiceButton.x + choiceButton.width and
            y > choiceButton.y and y < choiceButton.y + choiceButton.height then
-            print("choice pressed")
-
+            for key, value in pairs(changes) do
+                playerState.playerChange(key, value)
+                print("choice clicked "..key.." "..value)
+                for k, v in pairs(playerState.getPlayerVarList()) do
+                    print(k.." = "..v)
+                end
+            end
         end
     end
 end
 
+function choiceReset()
+    choiceButtons = {}
+end
 
 return {
     getLengthEmails = getLengthEmails,
@@ -276,5 +285,6 @@ return {
     updateEmailValue = updateEmailValue,
     printEmailContent = printEmailContent,
     fillEmailPool = fillEmailPool,
-    isEmailChoiceClicked = isEmailChoiceClicked
+    isEmailChoiceClicked = isEmailChoiceClicked,
+    choiceReset = choiceReset
 }
