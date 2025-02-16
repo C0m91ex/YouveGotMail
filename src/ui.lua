@@ -91,5 +91,4 @@ return {
     drawOpenedEmail = drawOpenedEmail,
     isBackButtonClicked = isBackButtonClicked,
     isOverTrashBin = isOverTrashBin
-    --getScaleXY = getScaleXY
 }

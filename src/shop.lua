@@ -2,13 +2,14 @@
 -- Shop implementation and management file
 local ui = require("src.ui")
 local email = require("src.email")
+local scaling = require("src.scaling")
 
 -- global vars
 local shop = {
     shopOffsetY = -300,
 }
 
-local shopTitle = { x = love.graphics.getWidth() / 2 +995, y = love.graphics.getHeight() / 2 - 220, width = 130, height = 40, color = {1, 0.5, 0} }
+local shopTitle = { x = love.graphics.getWidth() / 2 + 995, y = love.graphics.getHeight() / 2 - 220, width = 130, height = 40, color = {1, 0.5, 0} }
 -- Functions --
 
 -- Table used as the bone structure for shop items
@@ -32,7 +33,7 @@ local function setUpShop()
     -- Make sure when increasing this variable to set up name and price for the added items to the shop
     for _ = 1, numberOfShopItems do
         -- createShopItem(mode, x, y, width, height, color)
-        createShopItem("fill", love.graphics.getWidth() / 2 + 642, love.graphics.getHeight() / 2 + shop.shopOffsetY, 100, 70, {1, 0.5, 0})
+        createShopItem("fill", love.graphics.getWidth() / 2 + 611, love.graphics.getHeight() / 2 + shop.shopOffsetY, 100, 70, {1, 0.5, 0})
         shop.shopOffsetY = shop.shopOffsetY + 90
     end
 
@@ -49,15 +50,17 @@ local function setUpShop()
 end
 
 local function isShopButtonClicked(x, y)
-    return  x > shopTitle.x and x < shopTitle.x + shopTitle.width and
-            y > shopTitle.y and y < shopTitle.y + shopTitle.height
+    --scaleX, scaleY = scaling.getScale()
+    return  x > shopTitle.x * scaleX and x < shopTitle.x * scaleX + shopTitle.width * scaleX and
+            y > shopTitle.y * scaleY and y < shopTitle.y * scaleY + shopTitle.height * scaleY
 end
 
 local function drawShopTitle()
+    --scaleX, scaleY = scaling.getScale()
     love.graphics.setColor(shopTitle.color)
-    love.graphics.rectangle("fill", shopTitle.x,shopTitle.y, shopTitle.width, shopTitle.height)
+    love.graphics.rectangle("fill", shopTitle.x * scaleX, shopTitle.y * scaleY, shopTitle.width * scaleX, shopTitle.height * scaleY)
     love.graphics.setColor(1, 1, 1)
-    love.graphics.printf("-- SHOP --", shopTitle.x + 7, shopTitle.y + 11, 120, "center")
+    love.graphics.printf("-- SHOP --", shopTitle.x * scaleX + 7, shopTitle.y * scaleY + 11, 120 * scaleX, "center")
 end
 
 --drawShopItems()
@@ -66,11 +69,11 @@ end
     -- draws out each item box
     for _, shopItem in ipairs(shopItems) do
         love.graphics.setColor(shopItem.color)
-        love.graphics.rectangle(shopItem.mode, shopItem.x, shopItem.y, shopItem.width, shopItem.height)
+        love.graphics.rectangle(shopItem.mode, shopItem.x * scaleX, shopItem.y * scaleY, shopItem.width * scaleX, shopItem.height * scaleY)
         love.graphics.setColor(0, 0, 0)
-        love.graphics.printf(shopItem.name, shopItem.x - 13, shopItem.y + 11, 120, "center")
+        love.graphics.printf(shopItem.name, shopItem.x * scaleX - 13, shopItem.y * scaleY + 11, 120 * scaleX, "center")
         love.graphics.setColor(0, 0, 0)
-        love.graphics.printf("Price: $"..shopItem.price, shopItem.x - 13, shopItem.y + 50, 120, "center")
+        love.graphics.printf("Price: $"..shopItem.price, shopItem.x * scaleX - 13, shopItem.y * scaleY + 50, 120 * scaleX, "center")
     end
 end
 

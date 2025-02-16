@@ -1,26 +1,14 @@
-local email = require("src.email")
-
--- global vars
-local scaleX, scaleY
-
+-- gets the current width and height of the window as well as set the scale to 1 at default
 local function loadWindow()
     orignalWidth, originalHeight = love.graphics.getDimensions()
-
     scaleX, scaleY = 1, 1
 end
---[[
+
 function love.resize(newWidth, newHeight)
     scaleX = newWidth / orignalWidth
     scaleY = newHeight / originalHeight
-    print("newWidth: "..newWidth)
-    print("newHeight: "..newHeight)
-
-    print("scaleX: "..scaleX)
-    print("scaleY: "..scaleY)
-    
-    email.updateEmailScaling(scaleX, scaleY)
 end
-]]--
+
 return {
     loadWindow = loadWindow
 }
