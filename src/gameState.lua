@@ -53,7 +53,7 @@ function gameState.handleMouseRelease(x, y, button)
                 gameState.openedEmail = nil
                 email.choiceReset()
             else
-                email.isEmailChoiceClicked(x, y)
+                email.isEmailChoiceClicked(x, y, gameState)
             end
         end
 
