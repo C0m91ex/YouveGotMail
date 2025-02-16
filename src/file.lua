@@ -21,7 +21,7 @@ local function csvLineToEmail(line)
 		email["sender"] = senderString
 		email["subject"] = string.gsub(subjectString, quoteMark, "\"")
 		email["body"] = string.gsub(bodyString, quoteMark, "\"")
-		utils.updateTableFromString(email["choices"], choicesString)
+		utils.createChoiceTableFromString(email["choices"], choicesString)
 		utils.updateTableFromString(email["ignored"], ignoredString)
 	end
 
