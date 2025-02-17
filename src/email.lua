@@ -1,5 +1,6 @@
 -- email.lua --
 -- Implementation file for email class
+local scaling = require("src.scaling")
 local ui = require("src.ui")
 local file = require("src.file")
 local playerState = require("src.playerState")
@@ -22,6 +23,8 @@ local screen = { width = love.graphics.getWidth() / 2, height = love.graphics.ge
 local globalOffsetY = 0
 local spawnPeriod = 0
 local emailValue = 1
+
+local scaleX, scaleY = 1, 1
 
 -- Functions --
 
@@ -108,10 +111,12 @@ end
 -- handleEmailSelection()
 -- Handler function for email selection & opening
 local function handleEmailSelection(mouseX, mouseY, gameState)
+    scaleX = scaling.scaleX
+    scaleY = scaling.scaleY
     if not gameState.selectedEmail then
         for _, email in ipairs(emails) do
-            if mouseX > email.x and mouseX < email.x + email.width and
-               mouseY > email.y and mouseY < email.y + email.height then
+            if mouseX > email.x * scaleX and mouseX < email.x * scaleX + email.width * scaleX and
+               mouseY > email.y * scaleY and mouseY < email.y * scaleY + email.height * scaleY then
 
                 if love.timer.getTime() - gameState.lastClickTime < gameState.doubleClickDelay then
                     gameState.openedEmail = email
@@ -160,20 +165,24 @@ end
 -- drawEmails()
 -- Draw function for drawing emails to the screen (in their respective colors)
 local function drawEmails()
+    scaleX = scaling.scaleX
+    scaleY = scaling.scaleY
     for _, email in ipairs(emails) do
         love.graphics.setColor(email.color)
-        love.graphics.rectangle(email.mode, email.x, email.y, email.width, email.height)
+        love.graphics.rectangle(email.mode, email.x * scaleX, email.y * scaleY, email.width * scaleX, email.height * scaleY)
         love.graphics.setColor(0,0,0)
-        love.graphics.printf(email.content.sender, email.x, email.y, email.width, "center")
-        love.graphics.printf(email.content.subject, email.x, email.y+20, email.width, "center")
+        love.graphics.printf(email.content.sender, email.x * scaleX, email.y * scaleY, email.width * scaleX, "center")
+        love.graphics.printf(email.content.subject, email.x * scaleX, email.y * scaleY + 20, email.width * scaleX, "center")
     end
 end
 
 local function printEmail(email)
+    scaleX = scaling.scaleX
+    scaleY = scaling.scaleY
     for row, values in ipairs(email) do
         print(unpack(values))
         love.graphics.setColor(0, 0, 0)
-        love.graphics.printf("content", screen.width - 390, screen.height - 280, 120, "center")
+        love.graphics.printf("content", screen.width * scaleX - 390, screen.height * scaleY - 280, 120 * scaleX, "center")
         for section, content in ipairs(values) do 
             print(unpack(content))
             love.graphics.setColor(0, 0, 0)

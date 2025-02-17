@@ -3,6 +3,7 @@
 local email = require("src.email")
 local ui = require("src.ui")
 local shop = require("src.shop")
+local scaling = require("src.scaling")
 
 -- global vars
 local gameState = {
@@ -20,7 +21,7 @@ local gameState = {
 -- Load function for the gameState, calls ui.loadAssets() & email.spawnInitialEmails()
 -- Handles loading UI assets and the initial email spawning
 function gameState.load()
-    ui.loadWindow()
+    scaling.loadWindow()
     
     ui.loadAssets()
     
@@ -57,7 +58,7 @@ function gameState.handleMouseRelease(x, y, button)
             end
         end
 
-        if shop.isShopButtonClicked(x, y) then
+        if shop.isShopButtonClicked(x, y) and not gameState.openedEmail then
             if not gameState.shopButtonOpen then
                 gameState.shopButtonOpen = true
             else

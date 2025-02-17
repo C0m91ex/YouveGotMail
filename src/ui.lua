@@ -1,33 +1,27 @@
 -- ui.lua --
 -- UI handling implemenation
+local scaling = require("src.scaling")
 
 -- global vars
-local trashBin = { x = love.graphics.getWidth() / 2 - 360, y = love.graphics.getHeight() / 2 - 250, width = 157, height = 157, color = {1, 0, 0} }
+local trashBin = { x = love.graphics.getWidth() / 2 - 330, y = love.graphics.getHeight() / 2 - 250, width = 157, height = 157, color = {1, 0, 0} }
 local inboxBackground
 local loginBackground
 local trashBinIcon
 
-local orignalWidth, originalHeight
-local scaleX, scaleY
+--local orignalWidth, originalHeight
+--local windowWidth, windowHeight
 
-local windowWidth, windowHeight
+local scaleX, scaleY = 1, 1
 
-local function loadWindow()
-    orignalWidth, originalHeight = love.graphics.getDimensions()
-
-    scaleX, scaleY = 1, 1
-end
-
-function love.resize(newWidth, newHeight)
-    scaleX = newWidth / orignalWidth
-    scaleY = newHeight / originalHeight
-end
+-- getScaleXY()
+-- update the scale of the emails when window gets resized
+--local function getScaleXY() return scaleX, scaleY end
 
 -- loadAssets()
 -- Loading function for loading in UI-related assets
 local function loadAssets()
     inboxBackground = love.graphics.newImage('assets/inbox_background.png')
-    loginBackground = love.graphics.newImage('assets/login-background.png')
+    loginBackground = love.graphics.newImage('assets/Login_Background.png')
     trashBinIcon = love.graphics.newImage('assets/Delete Button.png')
 end
 
@@ -56,19 +50,22 @@ end
 -- Draws the score counter label
 local function drawCurrency(currency)
     love.graphics.setColor(0, 0, 0)  -- Black color
-    love.graphics.printf("Currency: $" .. currency, trashBin.x, trashBin.y + 180, 120, "center")
+    love.graphics.printf("Currency: $" .. currency, trashBin.x + 10, trashBin.y + 180, 120, "center")
     love.graphics.setColor(1, 1, 1)  -- White color
 end
 
 -- drawOpenedEmail()
 -- Brings open the 'opened email' if an email is double clicked
 local function drawOpenedEmail(email)
+    windowWidth, windowHeight = love.graphics.getDimensions()
+    local openedEmailWidth, openedEmailHeight = loginBackground:getDimensions()
+
+    local openedEmailScaleX = windowWidth / openedEmailWidth
+    local openedEmailScaleY = windowHeight / openedEmailHeight
     love.graphics.setColor(1, 1, 1)
     love.graphics.rectangle("fill", 0, 0, love.graphics.getWidth(), love.graphics.getHeight())
 
-    --local scaleX = 800/loginBackground:getWidth() 
-    --local scaleY = 400/loginBackground:getHeight() 
-    love.graphics.draw(loginBackground, 0, 0, 0, scaleX, scaleY)
+    love.graphics.draw(loginBackground, 0, 0, 0, openedEmailScaleX, openedEmailScaleY)
 
     love.graphics.setColor(0.5, 0.5, 0.5)
     love.graphics.rectangle("fill", 10, 10, 100, 40)
