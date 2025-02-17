@@ -2,7 +2,7 @@
 -- UI handling implemenation
 
 -- global vars
-local trashBin = { x = love.graphics.getWidth() / 2 - 360, y = love.graphics.getHeight() / 2 - 250, width = 157, height = 157, color = {1, 0, 0} }
+local trashBin = { x = love.graphics.getWidth() / 2 - 330, y = love.graphics.getHeight() / 2 - 250, width = 157, height = 157, color = {1, 0, 0} }
 local inboxBackground
 local loginBackground
 local trashBinIcon
@@ -48,7 +48,7 @@ end
 -- Draws the score counter label
 local function drawCurrency(currency)
     love.graphics.setColor(0, 0, 0)  -- Black color
-    love.graphics.printf("Currency: $" .. currency, trashBin.x, trashBin.y + 180, 120, "center")
+    love.graphics.printf("Currency: $" .. currency, trashBin.x + 10, trashBin.y + 180, 120, "center")
     love.graphics.setColor(1, 1, 1)  -- White color
 end
 
