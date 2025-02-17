@@ -1,5 +1,6 @@
 -- ui.lua --
 -- UI handling implemenation
+local scaling = require("src.scaling")
 
 -- global vars
 local trashBin = { x = love.graphics.getWidth() / 2 - 330, y = love.graphics.getHeight() / 2 - 250, width = 157, height = 157, color = {1, 0, 0} }
@@ -7,9 +8,10 @@ local inboxBackground
 local loginBackground
 local trashBinIcon
 
-local orignalWidth, originalHeight
+--local orignalWidth, originalHeight
+--local windowWidth, windowHeight
 
-local windowWidth, windowHeight
+local scaleX, scaleY = 1, 1
 
 -- getScaleXY()
 -- update the scale of the emails when window gets resized
@@ -55,12 +57,15 @@ end
 -- drawOpenedEmail()
 -- Brings open the 'opened email' if an email is double clicked
 local function drawOpenedEmail(email)
+    windowWidth, windowHeight = love.graphics.getDimensions()
+    local openedEmailWidth, openedEmailHeight = loginBackground:getDimensions()
+
+    local openedEmailScaleX = windowWidth / openedEmailWidth
+    local openedEmailScaleY = windowHeight / openedEmailHeight
     love.graphics.setColor(1, 1, 1)
     love.graphics.rectangle("fill", 0, 0, love.graphics.getWidth(), love.graphics.getHeight())
 
-    --local scaleX = 800/loginBackground:getWidth() 
-    --local scaleY = 400/loginBackground:getHeight() 
-    love.graphics.draw(loginBackground, 0, 0, 0, scaleX, scaleY)
+    love.graphics.draw(loginBackground, 0, 0, 0, openedEmailScaleX, openedEmailScaleY)
 
     love.graphics.setColor(0.5, 0.5, 0.5)
     love.graphics.rectangle("fill", 10, 10, 100, 40)

@@ -125,10 +125,12 @@ local function drawEmails()
 end
 
 local function printEmail(email)
+    scaleX = scaling.scaleX
+    scaleY = scaling.scaleY
     for row, values in ipairs(email) do
         print(unpack(values))
         love.graphics.setColor(0, 0, 0)
-        love.graphics.printf("content", screen.width - 390, screen.height - 280, 120, "center")
+        love.graphics.printf("content", screen.width * scaleX - 390, screen.height * scaleY - 280, 120 * scaleX, "center")
         for section, content in ipairs(values) do 
             print(unpack(content))
             love.graphics.setColor(0, 0, 0)

@@ -55,7 +55,7 @@ function gameState.handleMouseRelease(x, y, button)
             end
         end
 
-        if shop.isShopButtonClicked(x, y) then
+        if shop.isShopButtonClicked(x, y) and not gameState.openedEmail then
             if not gameState.shopButtonOpen then
                 gameState.shopButtonOpen = true
             else
