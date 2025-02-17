@@ -9,6 +9,8 @@ local shop = {
     shopOffsetY = -300,
 }
 
+local scaleX, scaleY = 1, 1
+
 local shopTitle = { x = love.graphics.getWidth() / 2 + 995, y = love.graphics.getHeight() / 2 - 220, width = 130, height = 40, color = {1, 0.5, 0} }
 -- Functions --
 
@@ -50,13 +52,15 @@ local function setUpShop()
 end
 
 local function isShopButtonClicked(x, y)
-    --scaleX, scaleY = scaling.getScale()
+    scaleX = scaling.scaleX
+    scaleY = scaling.scaleY
     return  x > shopTitle.x * scaleX and x < shopTitle.x * scaleX + shopTitle.width * scaleX and
             y > shopTitle.y * scaleY and y < shopTitle.y * scaleY + shopTitle.height * scaleY
 end
 
 local function drawShopTitle()
-    --scaleX, scaleY = scaling.getScale()
+    scaleX = scaling.scaleX
+    scaleY = scaling.scaleY
     love.graphics.setColor(shopTitle.color)
     love.graphics.rectangle("fill", shopTitle.x * scaleX, shopTitle.y * scaleY, shopTitle.width * scaleX, shopTitle.height * scaleY)
     love.graphics.setColor(1, 1, 1)
@@ -65,7 +69,9 @@ end
 
 --drawShopItems()
 -- draws all of the shop items buttons when shop is opened
-    local function drawShopItems()
+local function drawShopItems()
+    scaleX = scaling.scaleX
+    scaleY = scaling.scaleY
     -- draws out each item box
     for _, shopItem in ipairs(shopItems) do
         love.graphics.setColor(shopItem.color)
@@ -89,9 +95,11 @@ local function itemEffects(item)
 end
 
 local function isShopItemclicked(x, y, gameState)
+    scaleX = scaling.scaleX
+    scaleY = scaling.scaleY
     for _, shopItem in ipairs(shopItems) do
-        if x > shopItem.x and x < shopItem.x + shopItem.width and
-           y > shopItem.y and y < shopItem.y + shopItem.height then
+        if x > shopItem.x * scaleX and x < shopItem.x * scaleX + shopItem.width * scaleX and
+           y > shopItem.y * scaleY and y < shopItem.y * scaleY + shopItem.height * scaleY then
             print("Item ".._.." pressed.")
 
             if gameState.currency >= shopItem.price then

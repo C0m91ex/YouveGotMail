@@ -1,8 +1,8 @@
 -- email.lua --
 -- Implementation file for email class
+local scaling = require("src.scaling")
 local ui = require("src.ui")
 local file = require("src.file")
-local scaling = require("src.scaling")
 
 -- global vars
 local emails = {}
@@ -10,6 +10,8 @@ local screen = { width = love.graphics.getWidth() / 2, height = love.graphics.ge
 local globalOffsetY = 0
 local spawnPeriod = 0
 local emailValue = 1
+
+local scaleX, scaleY = 1, 1
 
 -- Functions --
 
@@ -61,7 +63,8 @@ end
 -- handleEmailSelection()
 -- Handler function for email selection & opening
 local function handleEmailSelection(mouseX, mouseY, gameState)
-    --scaleX, scaleY = scaling.getScale()
+    scaleX = scaling.scaleX
+    scaleY = scaling.scaleY
     if not gameState.selectedEmail then
         for _, email in ipairs(emails) do
             if mouseX > email.x * scaleX and mouseX < email.x * scaleX + email.width * scaleX and
@@ -109,7 +112,8 @@ end
 -- drawEmails()
 -- Draw function for drawing emails to the screen (in their respective colors)
 local function drawEmails()
-    --scaleX, scaleY = scaling.getScale()
+    scaleX = scaling.scaleX
+    scaleY = scaling.scaleY
     for _, email in ipairs(emails) do
         love.graphics.setColor(email.color)
         love.graphics.rectangle(email.mode, email.x * scaleX, email.y * scaleY, email.width * scaleX, email.height * scaleY)
