@@ -20,14 +20,20 @@ local scaleX, scaleY = 1, 1
 -- loadAssets()
 -- Loading function for loading in UI-related assets
 local function loadAssets()
-    inboxBackground = love.graphics.newImage('assets/inbox_background.png')
+    inboxBackground = love.graphics.newImage('assets/inbox/Inbox Background.png')
     loginBackground = love.graphics.newImage('assets/Login_Background.png')
     trashBinIcon = love.graphics.newImage('assets/Delete Button.png')
+    
+    -- fonts --
+    mainFont = love.graphics.newFont("assets/fonts/Roboto-Medium.ttf", 15)
+
+    currencyFont = love.graphics.newFont("assets/fonts/Roboto-Medium.ttf", 35)
 end
 
 -- drawBackground()
 -- Draws the given image as the game background. !!! CHANGE THIS LATER TO TAKE IN IMAGE AS ARGUMENT !!!
 local function drawBackground()
+    love.graphics.setFont(mainFont)
     -- scaling the inbox background size base off of window dimensions
     windowWidth, windowHeight = love.graphics.getDimensions()
     local inboxBackgroundWidth, inboxBackgroundHeight = inboxBackground:getDimensions()
@@ -49,9 +55,11 @@ end
 -- drawScore()
 -- Draws the score counter label
 local function drawCurrency(currency)
-    love.graphics.setColor(0, 0, 0)  -- Black color
-    love.graphics.printf("Currency: $" .. currency, trashBin.x + 10, trashBin.y + 180, 120, "center")
+    love.graphics.setColor(1, 0.84, 0)  -- gold yellow color
+    love.graphics.setFont(currencyFont)
+    love.graphics.printf(currency, trashBin.x + 10, trashBin.y + 320, 120, "center")
     love.graphics.setColor(1, 1, 1)  -- White color
+    love.graphics.setFont(mainFont) -- restores back to main font
 end
 
 -- drawOpenedEmail()
