@@ -57,7 +57,7 @@ end
 local function drawCurrency(currency)
     love.graphics.setColor(1, 0.84, 0)  -- gold yellow color
     love.graphics.setFont(currencyFont)
-    love.graphics.printf(currency, trashBin.x + 12, trashBin.y + 230, 120, "center")
+    love.graphics.printf(currency, trashBin.x + 15, trashBin.y + 240, 120, "center")
     love.graphics.setColor(1, 1, 1)  -- White color
     love.graphics.setFont(mainFont) -- restores back to main font
 end

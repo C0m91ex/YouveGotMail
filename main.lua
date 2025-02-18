@@ -24,9 +24,9 @@ function love.load()
     -- set window size and settings
     -- smaller window, use 800x600
     -- bigger window, use 1600x900
-    love.window.setMode(800, 600, {
+    love.window.setMode(1600, 900, {
         resizable = true,
-        fullscreen = false
+        fullscreen = true
     }) -- set window to 800x600 pixels
 
     gameState.load()
