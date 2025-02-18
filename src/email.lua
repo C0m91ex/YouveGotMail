@@ -40,10 +40,10 @@ local function fillEmailPool()
         local prereq = emailContent["prereq"]
         local prereqCheckFlag = true
         -- print(next(prereq))
-        if next(prereq) ~= nil then
-            for k,v in pairs(prereq) do
-                print(k.." = "..v)
-            end
+        if next(prereq) then
+            -- for k,v in pairs(prereq) do
+            --     print(k.." = "..v)
+            -- end
             for key, value in pairs(prereq) do
                 if not playerState.playerCheck(key, value) then prereqCheckFlag = false break end
             end
@@ -149,6 +149,7 @@ local function handleDragging(mouseX, mouseY, gameState)
             globalOffsetY = globalOffsetY + 70
             for i, email in ipairs(emails) do
                 if email == gameState.selectedEmail then
+                    -- insert ignored code here
                     table.remove(emails, i)
                     for j = i, #emails do
                         emails[j].y = emails[j].y - 70
@@ -243,11 +244,12 @@ function makeChoiceButton(x, y, width, height, choiceTable, gameState)
     local body = choiceTable.cBody
     local changes = choiceTable.cChanges
 
-    if next(prereqs) ~= nil then
-        for i, prereq in prereqs do 
-            if not playerCheck(prereqs) then unlockFlag = false
-            end
+    if next(prereqs) then
+        --print("mcb test1")
+        for key, value in pairs(prereqs) do
+            if not playerCheck(key, value) then unlockFlag = false end
         end
+        
     end
 
     if gameState.getOpenedEmail().respond == true then unlockFlag = false end
@@ -298,7 +300,7 @@ end
 local function isEmailChoiceClicked(x, y, gameState)
     for _, choiceButton in ipairs(choiceButtons) do
         local changes = choiceButton.changes
-        if not gameState.getOpenedEmail().respond then
+        if (choiceButton.unlockFlag) then
             if x > choiceButton.x and x < choiceButton.x + choiceButton.width and
             y > choiceButton.y and y < choiceButton.y + choiceButton.height then
                 for key, value in pairs(changes) do

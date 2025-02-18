@@ -22,11 +22,11 @@ local function setPlayerVar(variable, value)
 end
 
 function playerCheck(testKey, testValue)
-    print("playerCheck test")
+    --print("playerCheck test")
     if playerVars[testKey] then
         local value = tonumber(string.match(testValue, "[%+%-]?%d+")) --thanks chatGPT
         local operator = string.match(testValue, "[<>~!=]*")
-        print("operator is "..(operator))
+        --print("operator is "..(operator))
 
         if operator == "<" then
             return tonumber(playerVars[testKey]) < value
@@ -45,17 +45,23 @@ function playerCheck(testKey, testValue)
 end
 
 function playerChange(changeKey, changeValue)
-    print("playerChange test")
+    --print("playerChange test")
     local value = tonumber(string.match(changeValue, "[%+%-]?%d+")) --thanks chatGPT
     local operator = string.match(changeValue, "[%+%-%*=]*")
-    print("operator is "..(operator))
+    --print("operator is "..(operator))
 
     if operator == "+=" then
-        playerVars[changeKey] = (tonumber(playerVars[changeKey]) + tonumber(value))
+        if not playerVars[changeKey] then playerVars[changeKey] = 0 + tonumber(value)
+        else playerVars[changeKey] = (tonumber(playerVars[changeKey]) + tonumber(value))
+        end
     elseif operator == "-=" then
-        playerVars[changeKey] = (tonumber(playerVars[changeKey]) - tonumber(value))
+        if not playerVars[changeKey] then playerVars[changeKey] = 0 - tonumber(value)
+        else playerVars[changeKey] = (tonumber(playerVars[changeKey]) - tonumber(value))
+        end
     elseif operator == "*=" then
-        playerVars[changeKey] = (tonumber(playerVars[changeKey]) * tonumber(value))
+        if not playerVars[changeKey] then playerVars[changeKey] = 0 * tonumber(value)
+        else playerVars[changeKey] = (tonumber(playerVars[changeKey]) * tonumber(value))
+        end
     else
         playerVars[changeKey] = tonumber(value)
     end
