@@ -150,6 +150,15 @@ local function handleDragging(mouseX, mouseY, gameState)
             for i, email in ipairs(emails) do
                 if email == gameState.selectedEmail then
                     -- insert ignored code here
+                    if not email.respond then
+                        for key, value in pairs(email.content.ignored) do
+                            playerState.playerChange(key, value)
+                        end
+                        print("email ignored")
+                        for k, v in pairs(playerState.getPlayerVarList()) do
+                            print(k.." = "..v)
+                        end
+                    end
                     table.remove(emails, i)
                     for j = i, #emails do
                         emails[j].y = emails[j].y - 70
