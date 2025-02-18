@@ -19,12 +19,14 @@ local csv = {}
 -- load()
 -- Load function, calls load() from gameState.lua
 function love.load()
-    login.load()
-    login.start()  -- Block here until login is complete
+    --login.load()
+    --login.start()  -- Block here until login is complete
     -- set window size and settings
-    love.window.setMode(1600, 900, {
+    -- smaller window, use 800x600
+    -- bigger window, use 1600x900
+    love.window.setMode(800, 600, {
         resizable = true,
-        fullscreen = true
+        fullscreen = false
     }) -- set window to 800x600 pixels
 
     gameState.load()
@@ -114,8 +116,8 @@ function love.draw()
     -- Timer 
     love.graphics.setColor(0, 0, 0)  -- Black color
     local currentSecond = math.floor(love.timer.getTime())
-    love.graphics.print("Current second: " .. currentSecond, 90, 255)
-    love.graphics.print("Current # of emails: ".. email.getLengthEmails(), 80, 280)
+    love.graphics.print("Current second: " .. currentSecond, 60, 350)
+    love.graphics.print("Current # of emails: ".. email.getLengthEmails(), 50, 400)
     love.graphics.setColor(1, 1, 1)  -- White color
 
     if gameState.isEmailOpened() then

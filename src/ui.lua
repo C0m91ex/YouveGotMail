@@ -3,7 +3,7 @@
 local scaling = require("src.scaling")
 
 -- global vars
-local trashBin = { x = love.graphics.getWidth() / 2 - 330, y = love.graphics.getHeight() / 2 - 250, width = 157, height = 157, color = {1, 0, 0} }
+local trashBin = { x = love.graphics.getWidth() / 2 - 370, y = love.graphics.getHeight() / 2 - 250, width = 157, height = 157, color = {1, 0, 0} }
 local inboxBackground
 local loginBackground
 local trashBinIcon
@@ -57,7 +57,7 @@ end
 local function drawCurrency(currency)
     love.graphics.setColor(1, 0.84, 0)  -- gold yellow color
     love.graphics.setFont(currencyFont)
-    love.graphics.printf(currency, trashBin.x + 10, trashBin.y + 320, 120, "center")
+    love.graphics.printf(currency, trashBin.x + 12, trashBin.y + 230, 120, "center")
     love.graphics.setColor(1, 1, 1)  -- White color
     love.graphics.setFont(mainFont) -- restores back to main font
 end
