@@ -122,6 +122,7 @@ function love.draw()
         ui.drawOpenedEmail(gameState.getOpenedEmail())
         email.printEmailContent(gameState.getOpenedEmail())
     else
+        ui.drawCurrency(gameState.getCurrency())
         ui.drawTrashBin()
         email.drawEmails()
 
@@ -129,8 +130,6 @@ function love.draw()
         if gameState.isShopOpened() then
             shop.drawShopItems()
         end
-        
-        ui.drawCurrency(gameState.getCurrency())
     end
 end
 
