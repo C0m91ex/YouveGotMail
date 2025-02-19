@@ -6,6 +6,7 @@ local scaling = require("src.scaling")
 local trashBin = { x = love.graphics.getWidth() / 2 - 370, y = love.graphics.getHeight() / 2 - 250, width = 157, height = 157, color = {1, 0, 0} }
 local inboxBackground
 local loginBackground
+local emailBackground
 local trashBinIcon
 
 --local orignalWidth, originalHeight
@@ -22,6 +23,7 @@ local scaleX, scaleY = 1, 1
 local function loadAssets()
     inboxBackground = love.graphics.newImage('assets/inbox/Inbox Background.png')
     loginBackground = love.graphics.newImage('assets/Login_Background.png')
+    emailBackground = love.graphics.newImage('assets/read_email/Read Email Background.png')
     trashBinIcon = love.graphics.newImage('assets/Delete Button.png')
     
     -- fonts --
@@ -66,19 +68,19 @@ end
 -- Brings open the 'opened email' if an email is double clicked
 local function drawOpenedEmail(email)
     windowWidth, windowHeight = love.graphics.getDimensions()
-    local openedEmailWidth, openedEmailHeight = loginBackground:getDimensions()
+    local openedEmailWidth, openedEmailHeight = emailBackground:getDimensions()
 
     local openedEmailScaleX = windowWidth / openedEmailWidth
     local openedEmailScaleY = windowHeight / openedEmailHeight
     love.graphics.setColor(1, 1, 1)
     love.graphics.rectangle("fill", 0, 0, love.graphics.getWidth(), love.graphics.getHeight())
 
-    love.graphics.draw(loginBackground, 0, 0, 0, openedEmailScaleX, openedEmailScaleY)
+    love.graphics.draw(emailBackground, 0, 0, 0, openedEmailScaleX, openedEmailScaleY)
 
     love.graphics.setColor(0.5, 0.5, 0.5)
     love.graphics.rectangle("fill", 10, 10, 100, 40)
     love.graphics.setColor(0, 0, 0)
-    love.graphics.print("This is the placeholder for email text", 300, 300)
+    --love.graphics.print("This is the placeholder for email text", 300, 300)
     love.graphics.printf("Back", 10, 20, 100, "center")
 end
 

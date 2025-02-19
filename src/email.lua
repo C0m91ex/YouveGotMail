@@ -24,6 +24,8 @@ local globalOffsetY = 0
 local spawnPeriod = 0
 local emailValue = 1
 
+local buttonWidth = 175
+local buttonHeight = 70
 local scaleX, scaleY = 1, 1
 
 -- Functions --
@@ -121,7 +123,7 @@ local function handleEmailSelection(mouseX, mouseY, gameState)
                 if love.timer.getTime() - gameState.lastClickTime < gameState.doubleClickDelay then
                     gameState.openedEmail = email
                     for i, t in ipairs(gameState.openedEmail.content["choices"]) do
-                        local choiceButton = makeChoiceButton(100+((i-1)*150), 300, 120, 120, t, gameState)
+                        local choiceButton = makeChoiceButton(115+((i-1)*(buttonWidth+25)), 775, t, gameState)
                         table.insert(choiceButtons, choiceButton)
                     end
                     fillEmailPool()
@@ -181,8 +183,8 @@ local function drawEmails()
         love.graphics.setColor(email.color)
         love.graphics.rectangle(email.mode, email.x * scaleX, email.y * scaleY, email.width * scaleX, email.height * scaleY)
         love.graphics.setColor(0,0,0)
-        love.graphics.printf(email.content.sender, email.x * scaleX, email.y * scaleY, email.width * scaleX, "center")
-        love.graphics.printf(email.content.subject, email.x * scaleX, email.y * scaleY + 20, email.width * scaleX, "center")
+        love.graphics.printf(email.content.sender, email.x * scaleX, email.y * scaleY, email.width * scaleX, "left")
+        love.graphics.printf(email.content.subject, email.x * scaleX, email.y * scaleY + 20, email.width * scaleX, "left")
     end
 end
 
@@ -216,12 +218,12 @@ local function printEmailContent(email)
 
 
     love.graphics.setColor(0, 0, 0)
-    love.graphics.printf("prereq: ", 50, 50, 120, "center")
-    for k, v in pairs(content["prereq"]) do love.graphics.printf(k.." = "..v, 100, 50, 120, "center") end
-    love.graphics.printf(content["sender"], 50, 100, 600, "left")
-    love.graphics.printf(content["subject"], 50, 150, 600, "left")
-    love.graphics.printf(content["body"], 50, 200, 600, "left")
-    love.graphics.printf("choices: ", 50, 250, 120, "center")
+    --love.graphics.printf("prereq: ", 50, 50, 120, "center")
+    --for k, v in pairs(content["prereq"]) do love.graphics.printf(k.." = "..v, 100, 50, 120, "center") end
+    love.graphics.printf(content["sender"], 275, 100, 600, "left")
+    love.graphics.printf(content["subject"], 275, 175, 600, "left")
+    love.graphics.printf(content["body"], 125, 230, 600, "left")
+    --love.graphics.printf("choices: ", 50, 250, 120, "center")
     for i, choiceButton in ipairs(choiceButtons) do    
         drawChoiceButton(choiceButton)
     end
@@ -235,8 +237,8 @@ local function printEmailContent(email)
         -- for k, v in pairs(t["cChanges"]) do
         --     love.graphics.printf(k.." = "..v, 100*i, 350, 120, "center")
         -- end
-    love.graphics.printf("ignored: ", 50, 400, 120, "center")
-    for k, v in pairs(content["ignored"]) do love.graphics.printf(k.." = "..v, 100, 400, 120, "center") end
+    --love.graphics.printf("ignored: ", 50, 400, 120, "center")
+    --for k, v in pairs(content["ignored"]) do love.graphics.printf(k.." = "..v, 100, 400, 120, "center") end
     
 end
 
@@ -247,7 +249,7 @@ function setAvailableColor()
 function setBlockedColor()
     love.graphics.setColor(love.math.colorFromBytes(188, 188, 188, 255)) end
 
-function makeChoiceButton(x, y, width, height, choiceTable, gameState)
+function makeChoiceButton(x, y, choiceTable, gameState)
     local unlockFlag = true
     local prereqs = choiceTable.cPrereqs
     local body = choiceTable.cBody
@@ -266,8 +268,8 @@ function makeChoiceButton(x, y, width, height, choiceTable, gameState)
     return {
         x = x,
         y = y,
-        width = width,
-        height = height,
+        width = buttonWidth,
+        height = heightWidth,
         prereqs = prereqs,
         body = body,
         changes = changes,
@@ -294,9 +296,9 @@ function drawChoiceButton(choiceButton)
     -- if gameState.getOpenedEmail().respond == true then unlockFlag = false end
 
     if choiceButton.unlockFlag then setAvailableColor() else setBlockedColor() end
-    love.graphics.rectangle("fill", choiceButton.x, choiceButton.y, choiceButton.width, choiceButton.height)
+    love.graphics.rectangle("fill", choiceButton.x, choiceButton.y, buttonWidth, buttonHeight)
     love.graphics.setColor(0,0,0)
-    love.graphics.printf(choiceButton.body, choiceButton.x, choiceButton.y, choiceButton.width, "center")
+    love.graphics.printf(choiceButton.body, choiceButton.x, choiceButton.y, buttonWidth, "center")
 end
 
 function emailResponded(gameState)
@@ -310,8 +312,8 @@ local function isEmailChoiceClicked(x, y, gameState)
     for _, choiceButton in ipairs(choiceButtons) do
         local changes = choiceButton.changes
         if (choiceButton.unlockFlag) then
-            if x > choiceButton.x and x < choiceButton.x + choiceButton.width and
-            y > choiceButton.y and y < choiceButton.y + choiceButton.height then
+            if x > choiceButton.x and x < choiceButton.x + buttonWidth and
+            y > choiceButton.y and y < choiceButton.y + buttonHeight then
                 for key, value in pairs(changes) do
                     playerState.playerChange(key, value)
                     print("choice clicked "..key.." "..value)
