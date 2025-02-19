@@ -90,10 +90,15 @@ end
 
 -- isOverTrashBin()
 -- Checks to see if an email is hovering on top of trash bin location
-local function isOverTrashBin(email)
-    return email.x > trashBin.x and email.x < trashBin.x + trashBin.width and
-           email.y > trashBin.y and email.y < trashBin.y + trashBin.height
+-- local function isOverTrashBin(email)
+--     return email.x > trashBin.x and email.x < trashBin.x + trashBin.width and
+--            email.y > trashBin.y and email.y < trashBin.y + trashBin.height
+-- end
+local function isOverTrashBin(x, y)
+    return x > trashBin.x and x < trashBin.x + trashBin.width and
+           y > trashBin.y and y < trashBin.y + trashBin.height
 end
+
 
 return {
     loadWindow = loadWindow,
