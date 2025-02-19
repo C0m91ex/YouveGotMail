@@ -69,6 +69,10 @@ function gameState.handleMouseRelease(x, y, button)
         if gameState.shopButtonOpen then
             shop.isShopItemclicked(x, y, gameState)
         end
+
+        if ui.isOverTrashBin(x, y) then
+            email.deleteEmail(gameState)
+        end
     end
 end
 

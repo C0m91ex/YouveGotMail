@@ -145,30 +145,30 @@ local function handleDragging(mouseX, mouseY, gameState)
         gameState.selectedEmail.x = mouseX - gameState.offsetX
         gameState.selectedEmail.y = mouseY - gameState.offsetY
 
-        if ui.isOverTrashBin(gameState.selectedEmail) then
-            globalOffsetY = globalOffsetY + 70
-            for i, email in ipairs(emails) do
-                if email == gameState.selectedEmail then
-                    -- insert ignored code here
-                    if not email.respond then
-                        for key, value in pairs(email.content.ignored) do
-                            playerState.playerChange(key, value)
-                        end
-                        print("email ignored")
-                        for k, v in pairs(playerState.getPlayerVarList()) do
-                            print(k.." = "..v)
-                        end
-                    end
-                    table.remove(emails, i)
-                    for j = i, #emails do
-                        emails[j].y = emails[j].y - 70
-                    end
-                    gameState.selectedEmail = nil
-                    gameState.currency = gameState.currency + emailValue
-                    break
-                end
-            end
-        end
+        -- if ui.isOverTrashBin(gameState.selectedEmail) then
+        --     globalOffsetY = globalOffsetY + 70
+        --     for i, email in ipairs(emails) do
+        --         if email == gameState.selectedEmail then
+        --             -- insert ignored code here
+        --             if not email.respond then
+        --                 for key, value in pairs(email.content.ignored) do
+        --                     playerState.playerChange(key, value)
+        --                 end
+        --                 print("email ignored")
+        --                 for k, v in pairs(playerState.getPlayerVarList()) do
+        --                     print(k.." = "..v)
+        --                 end
+        --             end
+        --             table.remove(emails, i)
+        --             for j = i, #emails do
+        --                 emails[j].y = emails[j].y - 70
+        --             end
+        --             gameState.selectedEmail = nil
+        --             gameState.currency = gameState.currency + emailValue
+        --             break
+        --         end
+        --     end
+        -- end
     end
 end
 
@@ -329,6 +329,33 @@ function choiceReset()
     choiceButtons = {}
 end
 
+function deleteEmail(gameState)
+    if gameState.selectedEmail then
+        globalOffsetY = globalOffsetY + 70
+        for i, email in ipairs(emails) do
+            if email == gameState.selectedEmail then
+                -- insert ignored code here
+                if not email.respond then
+                    for key, value in pairs(email.content.ignored) do
+                        playerState.playerChange(key, value)
+                    end
+                    print("email ignored")
+                    for k, v in pairs(playerState.getPlayerVarList()) do
+                        print(k.." = "..v)
+                    end
+                end
+                table.remove(emails, i)
+                for j = i, #emails do
+                    emails[j].y = emails[j].y - 70
+                end
+                gameState.selectedEmail = nil
+                gameState.currency = gameState.currency + emailValue
+                break
+            end
+        end
+    end
+end
+
 return {
     getLengthEmails = getLengthEmails,
     spawnEmail = spawnEmail,
@@ -341,5 +368,6 @@ return {
     printEmailContent = printEmailContent,
     fillEmailPool = fillEmailPool,
     isEmailChoiceClicked = isEmailChoiceClicked,
-    choiceReset = choiceReset
+    choiceReset = choiceReset,
+    deleteEmail = deleteEmail
 }
