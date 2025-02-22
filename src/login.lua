@@ -5,7 +5,7 @@ local login = {}
 local username = ""
 local password = ""
 local activeField = nil
-local buttonX, buttonY, buttonWidth, buttonHeight = 300, 250, 100, 40
+local buttonX, buttonY, buttonWidth, buttonHeight = 200, 250, 100, 40
 local font
 
 function login.start()
@@ -45,6 +45,8 @@ function login.draw()
     love.graphics.rectangle("line", 200, 180, 200, 30)
     love.graphics.print(string.rep("*", #password), 210, 187) -- Mask password input
 
+    love.graphics.print("(Password & username both must be 15 characters or less.)", 200, 225)
+
     -- Login button
     love.graphics.rectangle("line", buttonX, buttonY, buttonWidth, buttonHeight)
     love.graphics.printf("Login", buttonX, buttonY + 10, buttonWidth, "center")
@@ -57,14 +59,14 @@ function login.handleEvent(e, a, b, c)
         elseif b >= 180 and b <= 210 then
             activeField = "password"
         elseif a >= buttonX and a <= buttonX + buttonWidth and b >= buttonY and b <= buttonY + buttonHeight then
-            if username ~= "" and password ~= "" then
+            if #username > 0 and #username <= 16 and #password > 0 and #password <= 16 then
                 login.completed = true
             end
         end
     elseif e == "textinput" then
-        if activeField == "username" then
+        if activeField == "username" and #username < 16 then
             username = username .. a
-        elseif activeField == "password" then
+        elseif activeField == "password" and #password < 16 then
             password = password .. a
         end
     elseif e == "keypressed" then
@@ -74,7 +76,7 @@ function login.handleEvent(e, a, b, c)
             elseif activeField == "password" then
                 password = password:sub(1, -2)
             end
-        elseif c == "return" and username ~= "" and password ~= "" then
+        elseif c == "return" and #username > 0 and #username <= 16 and #password > 0 and #password <= 16 then
             login.completed = true
         end
     end
