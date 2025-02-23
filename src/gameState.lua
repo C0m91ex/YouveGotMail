@@ -72,6 +72,8 @@ function gameState.handleMouseRelease(x, y, button)
 
         if ui.isOverTrashBin(x, y) then
             email.deleteEmail(gameState)
+        else
+            email.snapBack(gameState)
         end
     end
 end

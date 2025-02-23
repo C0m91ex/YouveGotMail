@@ -75,7 +75,9 @@ local function spawnEmail(mode, x, y, width, height, color, content)
     table.insert(emails, {
         mode = mode,
         x = x,
+        originX = x,
         y = y,
+        originY = y,
         width = width,
         height = height,
         color = color,
@@ -349,12 +351,20 @@ function deleteEmail(gameState)
                 table.remove(emails, i)
                 for j = i, #emails do
                     emails[j].y = emails[j].y - 70
+                    emails[j].originY = emails[j].y
                 end
                 gameState.selectedEmail = nil
                 gameState.currency = gameState.currency + emailValue
                 break
             end
         end
+    end
+end
+
+function snapBack(gameState)
+    if gameState.selectedEmail then
+        gameState.selectedEmail.x = gameState.selectedEmail.originX
+        gameState.selectedEmail.y = gameState.selectedEmail.originY
     end
 end
 
@@ -371,5 +381,6 @@ return {
     fillEmailPool = fillEmailPool,
     isEmailChoiceClicked = isEmailChoiceClicked,
     choiceReset = choiceReset,
-    deleteEmail = deleteEmail
+    deleteEmail = deleteEmail,
+    snapBack = snapBack
 }
