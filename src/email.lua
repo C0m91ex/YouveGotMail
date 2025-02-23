@@ -28,6 +28,10 @@ local buttonWidth = 175
 local buttonHeight = 70
 local scaleX, scaleY = 1, 1
 
+-- email dimensions
+local emailBoxWidth = 1080
+local emailBoxHeight = 50
+
 -- Functions --
 
 -- getLengthEmails()
@@ -95,7 +99,7 @@ end
 -- Spawns an email 
 
 local function timedEmailSpawn(period)
-    spawnEmail("fill", screen.width - 120, screen.height - globalOffsetY, 1080, 50, {1, 1, 1})
+    spawnEmail("fill", screen.width - 120, screen.height - globalOffsetY, emailBoxWidth, emailBoxHeight, {1, 1, 1})
     spawnPeriod = period
     globalOffsetY = globalOffsetY - 70
 end
@@ -106,7 +110,7 @@ end
 local function spawnInitialEmails()
 local yOffset = 130
     for _ = 1, 4 do
-        spawnEmail("fill", screen.width - 120, screen.height - yOffset, 1080, 50, {1, 1, 1})
+        spawnEmail("fill", screen.width - 120, screen.height - yOffset, emailBoxWidth, emailBoxHeight, {1, 1, 1})
         yOffset = yOffset - 70
     end
     globalOffsetY = yOffset
@@ -361,6 +365,13 @@ function deleteEmail(gameState)
     end
 end
 
+function moveEmailsDown()
+    for j = i, #emails do
+        emails[j].y = emails[j].y + 70
+        emails[j].originY = emails[j].y
+    end
+end
+
 function snapBack(gameState)
     if gameState.selectedEmail then
         gameState.selectedEmail.x = gameState.selectedEmail.originX
@@ -382,5 +393,6 @@ return {
     isEmailChoiceClicked = isEmailChoiceClicked,
     choiceReset = choiceReset,
     deleteEmail = deleteEmail,
+    moveEmailsDown = moveEmailsDown,
     snapBack = snapBack
 }
