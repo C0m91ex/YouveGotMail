@@ -4,11 +4,23 @@ local scaling = require("src.scaling")
 local ui = require("src.ui")
 local file = require("src.file")
 local playerState = require("src.playerState")
+local emailTables = require("src.spam")
+
+local function generateRandomSender()
+    local adj = emailTables.adjectives[math.random(#emailTables.adjectives)]
+    local noun = emailTables.nouns[math.random(#emailTables.nouns)]
+    local num = emailTables.numbers[math.random(#emailTables.numbers)]
+    local domain = emailTables.domains[math.random(#emailTables.domains)]
+    
+    local sender = string.format("%s%s%d@%s.com", adj, noun, num, domain)
+    print("Generated sender:", sender) -- DEBUG OUTPUT
+    return sender
+end
 
 -- global vars
 local defaultEmail = {
     prereq = {},
-    sender = "spam@spam.spam",
+    sender = generateRandomSender(),
     subject = "Pelase clik thia linkl!!!",
     body = "link hehe",
     choices = {},
@@ -29,6 +41,18 @@ local buttonHeight = 70
 local scaleX, scaleY = 1, 1
 
 -- Functions --
+local function getRandomElement(tbl)
+    return tbl[math.random(#tbl)]
+end
+
+local function generateRandomSender()
+    local adj = getRandomElement(emailTables.adjectives)
+    local noun = getRandomElement(emailTables.nouns)
+    local num = getRandomElement(emailTables.numbers)
+    local domain = getRandomElement(emailTables.domains)
+    
+    return string.format("%s%s%d@%s.com", adj, noun, num, domain)
+end
 
 -- getLengthEmails()
 -- Getter function that returns length of emails table
@@ -62,9 +86,12 @@ end
 
 local function getFromPool()
     if next(emailPool) ~= nil then
-        return table.remove(emailPool)
+        local email = table.remove(emailPool)
+        email.sender = generateRandomSender() -- Assign a random sender
+        print("Assigned sender:", email.sender) -- DEBUG OUTPUT
+        return email
     else 
-        return defaultEmail 
+        return defaultEmail
     end
 end
 
