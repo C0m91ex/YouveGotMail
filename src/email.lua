@@ -29,6 +29,7 @@ local buttonHeight = 70
 local scaleX, scaleY = 1, 1
 
 -- email dimensions
+local emailSpawnPoint = {x = screen.width, y = screen.height}
 local emailBoxWidth = 1080
 local emailBoxHeight = 50
 local emailBoxSpacing = 20
@@ -77,6 +78,7 @@ end
 -- Spawns an email with the given mode, x & y position, dimensions, and color
 local function spawnEmail(mode, x, y, width, height, color, content)
     fillEmailPool()
+    moveEmailsDown()
     table.insert(emails, {
         mode = mode,
         x = x,
@@ -100,21 +102,23 @@ end
 -- Spawns an email 
 
 local function timedEmailSpawn(period)
-    spawnEmail("fill", screen.width - 120, screen.height - globalOffsetY, emailBoxWidth, emailBoxHeight, {1, 1, 1})
+    --spawnEmail("fill", screen.width - 120, screen.height - globalOffsetY, emailBoxWidth, emailBoxHeight, {1, 1, 1})
+    spawnEmail("fill", emailSpawnPoint.x, emailSpawnPoint.y, emailBoxWidth, emailBoxHeight, {1, 1, 1})
     spawnPeriod = period
-    globalOffsetY = globalOffsetY - (emailBoxHeight + emailBoxSpacing)
+    --globalOffsetY = globalOffsetY - (emailBoxHeight + emailBoxSpacing)
 end
 
 -- spawnInitialEmails()
 -- Spawns the initial 9 emails for the gamestart setup
 -- Only gets called once at gamestart
 local function spawnInitialEmails()
-local yOffset = 130
+--local yOffset = 130
     for _ = 1, 4 do
-        spawnEmail("fill", screen.width - 120, screen.height - yOffset, emailBoxWidth, emailBoxHeight, {1, 1, 1})
-        yOffset = yOffset - (emailBoxHeight + emailBoxSpacing)
+        --spawnEmail("fill", screen.width - 120, screen.height - yOffset, emailBoxWidth, emailBoxHeight, {1, 1, 1})
+        spawnEmail("fill", emailSpawnPoint.x, emailSpawnPoint.y, emailBoxWidth, emailBoxHeight, {1, 1, 1})
+        --yOffset = yOffset - (emailBoxHeight + emailBoxSpacing)
     end
-    globalOffsetY = yOffset
+    --globalOffsetY = yOffset
 end
 
 -- handleEmailSelection()
@@ -367,9 +371,9 @@ function deleteEmail(gameState)
 end
 
 function moveEmailsDown()
-    for j = i, #emails do
-        emails[j].y = emails[j].y + (emailBoxHeight + emailBoxSpacing)
-        emails[j].originY = emails[j].y
+    for i, email in ipairs(emails) do
+        emails[i].y = emails[i].y + (emailBoxHeight + emailBoxSpacing)
+        emails[i].originY = emails[i].y
     end
 end
 
