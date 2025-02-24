@@ -31,6 +31,7 @@ local scaleX, scaleY = 1, 1
 -- email dimensions
 local emailBoxWidth = 1080
 local emailBoxHeight = 50
+local emailBoxSpacing = 20
 
 -- Functions --
 
@@ -101,7 +102,7 @@ end
 local function timedEmailSpawn(period)
     spawnEmail("fill", screen.width - 120, screen.height - globalOffsetY, emailBoxWidth, emailBoxHeight, {1, 1, 1})
     spawnPeriod = period
-    globalOffsetY = globalOffsetY - 70
+    globalOffsetY = globalOffsetY - (emailBoxHeight + emailBoxSpacing)
 end
 
 -- spawnInitialEmails()
@@ -111,7 +112,7 @@ local function spawnInitialEmails()
 local yOffset = 130
     for _ = 1, 4 do
         spawnEmail("fill", screen.width - 120, screen.height - yOffset, emailBoxWidth, emailBoxHeight, {1, 1, 1})
-        yOffset = yOffset - 70
+        yOffset = yOffset - (emailBoxHeight + emailBoxSpacing)
     end
     globalOffsetY = yOffset
 end
@@ -154,7 +155,7 @@ local function handleDragging(mouseX, mouseY, gameState)
         gameState.selectedEmail.y = mouseY - gameState.offsetY
 
         -- if ui.isOverTrashBin(gameState.selectedEmail) then
-        --     globalOffsetY = globalOffsetY + 70
+        --     globalOffsetY = globalOffsetY + (emailBoxHeight + emailBoxSpacing)
         --     for i, email in ipairs(emails) do
         --         if email == gameState.selectedEmail then
         --             -- insert ignored code here
@@ -169,7 +170,7 @@ local function handleDragging(mouseX, mouseY, gameState)
         --             end
         --             table.remove(emails, i)
         --             for j = i, #emails do
-        --                 emails[j].y = emails[j].y - 70
+        --                 emails[j].y = emails[j].y - (emailBoxHeight + emailBoxSpacing)
         --             end
         --             gameState.selectedEmail = nil
         --             gameState.currency = gameState.currency + emailValue
@@ -339,7 +340,7 @@ end
 
 function deleteEmail(gameState)
     if gameState.selectedEmail then
-        globalOffsetY = globalOffsetY + 70
+        globalOffsetY = globalOffsetY + (emailBoxHeight + emailBoxSpacing)
         for i, email in ipairs(emails) do
             if email == gameState.selectedEmail then
                 -- insert ignored code here
@@ -354,7 +355,7 @@ function deleteEmail(gameState)
                 end
                 table.remove(emails, i)
                 for j = i, #emails do
-                    emails[j].y = emails[j].y - 70
+                    emails[j].y = emails[j].y - (emailBoxHeight + emailBoxSpacing)
                     emails[j].originY = emails[j].y
                 end
                 gameState.selectedEmail = nil
@@ -367,7 +368,7 @@ end
 
 function moveEmailsDown()
     for j = i, #emails do
-        emails[j].y = emails[j].y + 70
+        emails[j].y = emails[j].y + (emailBoxHeight + emailBoxSpacing)
         emails[j].originY = emails[j].y
     end
 end
