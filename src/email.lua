@@ -358,10 +358,7 @@ function deleteEmail(gameState)
                     end
                 end
                 table.remove(emails, i)
-                for j = i, #emails do
-                    emails[j].y = emails[j].y - (emailBoxHeight + emailBoxSpacing)
-                    emails[j].originY = emails[j].y
-                end
+                moveEmailsUp()
                 gameState.selectedEmail = nil
                 gameState.currency = gameState.currency + emailValue
                 break
@@ -372,8 +369,15 @@ end
 
 function moveEmailsDown()
     for i, email in ipairs(emails) do
-        emails[i].y = emails[i].y + (emailBoxHeight + emailBoxSpacing)
-        emails[i].originY = emails[i].y
+        emails[i].originY = emails[i].originY + (emailBoxHeight + emailBoxSpacing)
+        emails[i].y = emails[i].originY
+    end
+end
+
+function moveEmailsUp()
+    for i, email in ipairs(emails) do
+        emails[i].originY = emails[i].originY - (emailBoxHeight + emailBoxSpacing)
+        emails[i].y = emails[i].originY
     end
 end
 
@@ -399,5 +403,6 @@ return {
     choiceReset = choiceReset,
     deleteEmail = deleteEmail,
     moveEmailsDown = moveEmailsDown,
+    moveEmailsUp = moveEmailsUp,
     snapBack = snapBack
 }
