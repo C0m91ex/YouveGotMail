@@ -429,7 +429,7 @@ end
 
 function snapBack(gameState)
     if gameState.selectedEmail then
-        --resetOrigin(gameState.selectedEmail)
+        resetOrigin(gameState.selectedEmail)
         moveToOrigin(gameState.selectedEmail)
     end
 end
