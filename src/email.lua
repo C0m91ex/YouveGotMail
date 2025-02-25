@@ -30,9 +30,7 @@ local scaleX, scaleY = 1, 1
 
 -- email dimensions
 local emailSpawnPoint = {x = screen.width, y = screen.height}
-local emailBoxWidth = 1080
-local emailBoxHeight = 50
-local emailBoxSpacing = 20
+local emailBox = {width = 1080, height = 50, ySpacing = 20}
 
 -- Functions --
 
@@ -77,20 +75,28 @@ end
 -- spawnEmail()
 -- Spawns an email with the given mode, x & y position, dimensions, and color
 local function spawnEmail(mode, x, y, width, height, color, content)
-    fillEmailPool()
     moveEmailsDown()
-    table.insert(emails, {
+    local emailToAdd = {
         mode = mode,
         x = x,
         originX = x,
         y = y,
         originY = y,
+        emailAbove = nil,
+        emailBelow = nil,
         width = width,
         height = height,
         color = color,
         content = getFromPool(),
         respond = false
-    })
+    }
+    local _, topEmail = next(emails)
+    if topEmail then
+        emailToAdd.emailBelow = topEmail
+        topEmail.emailAbove = emailToAdd
+    end
+    table.insert(emails, 1, emailToAdd)
+    fillEmailPool()
 end
 
 local function updateEmailValue()
@@ -102,10 +108,10 @@ end
 -- Spawns an email 
 
 local function timedEmailSpawn(period)
-    --spawnEmail("fill", screen.width - 120, screen.height - globalOffsetY, emailBoxWidth, emailBoxHeight, {1, 1, 1})
-    spawnEmail("fill", emailSpawnPoint.x, emailSpawnPoint.y, emailBoxWidth, emailBoxHeight, {1, 1, 1})
+    --spawnEmail("fill", screen.width - 120, screen.height - globalOffsetY, emailBox.width, emailBox.height, {1, 1, 1})
+    spawnEmail("fill", emailSpawnPoint.x, emailSpawnPoint.y, emailBox.width, emailBox.height, {1, 1, 1})
     spawnPeriod = period
-    --globalOffsetY = globalOffsetY - (emailBoxHeight + emailBoxSpacing)
+    --globalOffsetY = globalOffsetY - (emailBox.height + emailBox.ySpacing)
 end
 
 -- spawnInitialEmails()
@@ -114,9 +120,9 @@ end
 local function spawnInitialEmails()
 --local yOffset = 130
     for _ = 1, 4 do
-        --spawnEmail("fill", screen.width - 120, screen.height - yOffset, emailBoxWidth, emailBoxHeight, {1, 1, 1})
-        spawnEmail("fill", emailSpawnPoint.x, emailSpawnPoint.y, emailBoxWidth, emailBoxHeight, {1, 1, 1})
-        --yOffset = yOffset - (emailBoxHeight + emailBoxSpacing)
+        --spawnEmail("fill", screen.width - 120, screen.height - yOffset, emailBox.width, emailBox.height, {1, 1, 1})
+        spawnEmail("fill", emailSpawnPoint.x, emailSpawnPoint.y, emailBox.width, emailBox.height, {1, 1, 1})
+        --yOffset = yOffset - (emailBox.height + emailBox.ySpacing)
     end
     --globalOffsetY = yOffset
 end
@@ -159,7 +165,7 @@ local function handleDragging(mouseX, mouseY, gameState)
         gameState.selectedEmail.y = mouseY - gameState.offsetY
 
         -- if ui.isOverTrashBin(gameState.selectedEmail) then
-        --     globalOffsetY = globalOffsetY + (emailBoxHeight + emailBoxSpacing)
+        --     globalOffsetY = globalOffsetY + (emailBox.height + emailBox.ySpacing)
         --     for i, email in ipairs(emails) do
         --         if email == gameState.selectedEmail then
         --             -- insert ignored code here
@@ -174,7 +180,7 @@ local function handleDragging(mouseX, mouseY, gameState)
         --             end
         --             table.remove(emails, i)
         --             for j = i, #emails do
-        --                 emails[j].y = emails[j].y - (emailBoxHeight + emailBoxSpacing)
+        --                 emails[j].y = emails[j].y - (emailBox.height + emailBox.ySpacing)
         --             end
         --             gameState.selectedEmail = nil
         --             gameState.currency = gameState.currency + emailValue
@@ -344,7 +350,7 @@ end
 
 function deleteEmail(gameState)
     if gameState.selectedEmail then
-        globalOffsetY = globalOffsetY + (emailBoxHeight + emailBoxSpacing)
+        globalOffsetY = globalOffsetY + (emailBox.height + emailBox.ySpacing)
         for i, email in ipairs(emails) do
             if email == gameState.selectedEmail then
                 -- insert ignored code here
@@ -357,8 +363,20 @@ function deleteEmail(gameState)
                         print(k.." = "..v)
                     end
                 end
+
+                if email.emailAbove then
+                    email.emailAbove.emailBelow = nil
+                end
+                if email.emailBelow then
+                    email.emailBelow.emailAbove = nil
+                end
+
+                if email.emailAbove and email.emailBelow then
+                    email.emailAbove.emailBelow = email.emailBelow
+                    email.emailBelow.emailAbove = email.emailAbove
+                end
+                moveEmailsUp(email)
                 table.remove(emails, i)
-                moveEmailsUp()
                 gameState.selectedEmail = nil
                 gameState.currency = gameState.currency + emailValue
                 break
@@ -369,22 +387,62 @@ end
 
 function moveEmailsDown()
     for i, email in ipairs(emails) do
-        emails[i].originY = emails[i].originY + (emailBoxHeight + emailBoxSpacing)
-        emails[i].y = emails[i].originY
+        -- emails[i].y = emails[i].originY + (emailBox.height + emailBox.ySpacing)
+        -- emails[i].y = emails[i].originY
+        updateOrigin(email, email.x, email.y + (emailBox.height + emailBox.ySpacing))
+        moveToOrigin(email)
+        --emails[i].originX = emails[i].x emails[i].originY = emails[i].y
     end
 end
 
-function moveEmailsUp()
-    for i, email in ipairs(emails) do
-        emails[i].originY = emails[i].originY - (emailBoxHeight + emailBoxSpacing)
-        emails[i].y = emails[i].originY
+function moveEmailsUp(email)
+    if email.emailBelow then
+        for i, email in ipairs(emails) do
+            -- emails[i].originY = emails[i].originY - (emailBox.height + emailBox.ySpacing)
+            -- emails[i].y = emails[i].originY
+            -- if email.emailAbove then
+            --     updateOrigin(email, email.x, email.emailAbove.originY + (emailBox.height + emailBox.ySpacing))
+            --     --resetOrigin(email)
+            --     moveToOrigin(email)
+            -- else
+            --     email.y = emails[i].y - (emailBox.height + emailBox.ySpacing)
+            --     updateOrigin(email, email.x, email.y)
+            -- end
+            if not email.emailAbove then
+                updateOrigin(email, email.x, email.y - (emailBox.height + emailBox.ySpacing))
+                moveToOrigin(email)
+            else
+                updateOrigin(email, email.emailAbove.x, email.emailAbove.y + (emailBox.height + emailBox.ySpacing))
+                moveToOrigin(email)
+            end
+        end
     end
+end
+
+function resetOrigin(email)
+    if email.emailAbove then
+        email.originX = email.emailAbove.originX
+        email.originY = email.emailAbove.originY + (emailBox.height + emailBox.ySpacing)
+    elseif email.emailBelow then
+        email.originX = email.emailBelow.originX
+        email.originY = email.emailBelow.originY - (emailBox.height + emailBox.ySpacing)
+    end
+end
+
+function updateOrigin(email, x, y)
+    email.originX = x
+    email.originY = y
+end
+
+function moveToOrigin(email)
+    email.x = email.originX
+    email.y = email.originY
 end
 
 function snapBack(gameState)
     if gameState.selectedEmail then
-        gameState.selectedEmail.x = gameState.selectedEmail.originX
-        gameState.selectedEmail.y = gameState.selectedEmail.originY
+        --resetOrigin(gameState.selectedEmail)
+        moveToOrigin(gameState.selectedEmail)
     end
 end
 
@@ -404,5 +462,8 @@ return {
     deleteEmail = deleteEmail,
     moveEmailsDown = moveEmailsDown,
     moveEmailsUp = moveEmailsUp,
+    resetOrigin = resetOrigin,
+    updateOrigin = updateOrigin,
+    moveToOrigin = moveToOrigin,
     snapBack = snapBack
 }
