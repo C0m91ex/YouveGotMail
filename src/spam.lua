@@ -27,12 +27,15 @@ scenario.money = {
 topic.things = {"bicycle", "briefcase", "credit card"}
 
 --body tables--
+local message = {}
+message.money = {"This is a test message. Please give me money so I can afford a %s."}
 
 --combination tables
 local combination = {}
 combination.donation = {
     senderTable = {{localpart.adjectives, localpart.nouns, localpart.numbers}, {domain.official, domain.test}, {extension.official}},
-    subjectTable = {{scenario.money}, {topic.things}}
+    subjectTable = {{scenario.money}, {topic.things}},
+    bodyTable = {{message.money}}
 }
 -- Functions --
 local function getRandomElement(tbl)
@@ -72,7 +75,7 @@ end
 
 function createBody(message, topic)
     return {
-        subject = string.format(scenario, topic),
+        body = string.format(message, topic),
         topic = topic
     }
 end
@@ -106,14 +109,20 @@ function generateRandomSubject(scenarioTable, topicTable)
     return createSubject(scenario, topic)
 end
 
+function generateRandomBody(messageTable, topic)
+    local message = getRandomFrom(unpack(messageTable))
+    return createBody(message, topic)
+end
+
 function generateSpamEmail(combination)
     local senderTable = generateRandomSender(unpack(combination.senderTable))
     local subjectTable = generateRandomSubject(unpack(combination.subjectTable))
+    local bodyTable = generateRandomBody(unpack(combination.bodyTable), subjectTable.topic)
     return {
         prereq = {},
         sender = senderTable.sender,
         subject = subjectTable.subject,
-        body = subjectTable.topic,
+        body = bodyTable.body,
         choices = {},
         ignored = {}
     }
