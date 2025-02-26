@@ -24,7 +24,8 @@ function love.load()
     -- set window size and settings
     -- smaller window, use 800x600
     -- bigger window, use 1600x900
-    love.window.setMode(1600, 900, {
+    windowWidth, windowHeight = love.window.getDesktopDimensions()
+    love.window.setMode(windowWidth, windowHeight, {
         resizable = true,
         fullscreen = true
     }) -- set window to 800x600 pixels
