@@ -12,7 +12,7 @@ local scaling = {
 -- gets the current width and height of the window as well as set the scale to 1 at default
 function scaling.loadWindow()
     --orignalWidth, originalHeight = love.graphics.getDimensions()
-    newWidth, newHeight = love.graphics.getDimensions()
+    newWidth, newHeight = love.window.getDesktopDimensions()
     scaling.scaleX = newWidth / orignalWidth
     scaling.scaleY = newHeight / originalHeight
 
