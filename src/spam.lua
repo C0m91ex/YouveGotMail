@@ -1,6 +1,7 @@
 -- spam.lua --
 -- Implementation file for spam functions and tables
 
+--sender tables
 local localpart = {}
 local domain = {}
 local extension = {}
@@ -12,6 +13,19 @@ localpart.numbers = { 123, 456, 789 }
 domain.official = { "example", "test", "mail" }
 
 extension.official = {"com", "org", "net"}
+
+--subject tables
+local scenario = {}
+local topic = {}
+
+scenario.money = {
+    "Lost my %s. Spare some change?",
+    "Need a new %s. Won't you please donate today?"
+}
+
+topic.things = {"bicycle", "briefcase", "credit card"}
+
+--body tables
 
 -- Functions --
 local function getRandomElement(tbl)
@@ -32,6 +46,10 @@ function createSender(localpart, domain, extension)
     return string.format("%s@%s.%s", localpart, domain, extension)
 end
 
+function createSubject(scenario, topic)
+    return string.format(scenario, topic)
+end
+
 function generateRandomSender()
     -- local adj = spam.adjectives[math.random(#spam.adjectives)]
     -- local noun = spam.nouns[math.random(#spam.nouns)]
@@ -44,6 +62,30 @@ function generateRandomSender()
     return createSender(localpart, domain, extension)
 end
 
+function generateRandomSubject()
+    -- local adj = spam.adjectives[math.random(#spam.adjectives)]
+    -- local noun = spam.nouns[math.random(#spam.nouns)]
+    -- local num = spam.numbers[math.random(#spam.numbers)]
+    local scenario = generateRandomString(scenario.money)
+    local topic = generateRandomString(topic.things)
+    
+    --return string.format("%s%s%d@%s.com", adj, noun, num, domain)
+    return createSubject(scenario, topic)
+end
+
+function generateSpamEmail()
+    return {
+        prereq = {},
+        sender = generateRandomSender(),
+        subject = generateRandomSubject(),
+        body = "spam hehe",
+        choices = {},
+        ignored = {}
+    }
+end
+
 return {
-    generateRandomSender = generateRandomSender
+    generateRandomSender = generateRandomSender,
+    generateRandomSubject = generateRandomSubject,
+    generateSpamEmail = generateSpamEmail
 }

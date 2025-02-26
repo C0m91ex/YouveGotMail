@@ -12,7 +12,7 @@ local defaultEmail = {
     prereq = {},
     sender = "spam@spam.spam",
     subject = "Pelase clik thia linkl!!!",
-    body = "link hehe",
+    body = "spam hehe",
     choices = {},
     ignored = {}
 }
@@ -75,17 +75,16 @@ local function fillEmailPool()
     -- end
 end
 
-local function getFromPool()
-    local email = {}
+local function getNextEmailContent()
+    local emailContent = {}
     if next(emailPool) ~= nil then
-        email = table.remove(emailPool)
+        emailContent = table.remove(emailPool)
         --email.sender = generateRandomSender() -- Assign a random sender
         --print("Assigned sender:", email.sender) -- DEBUG OUTPUT
     else
-        email = defaultEmail
-        email.sender = generateRandomSender()
+        emailContent = generateSpamEmail()
     end
-    return email
+    return emailContent
 end
 
 -- spawnEmail()
@@ -103,7 +102,7 @@ local function spawnEmail(mode, x, y, width, height, color, content)
         width = width,
         height = height,
         color = color,
-        content = getFromPool(),
+        content = getNextEmailContent(),
         respond = false
     }
     local _, topEmail = next(emails)
