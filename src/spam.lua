@@ -11,6 +11,7 @@ localpart.nouns = { "cat", "dog", "panda" }
 localpart.numbers = { 123, 456, 789 }
 
 domain.official = { "example", "test", "mail" }
+domain.test = {"wow", "woah"}
 
 extension.official = {"com", "org", "net"}
 
@@ -25,14 +26,20 @@ scenario.money = {
 
 topic.things = {"bicycle", "briefcase", "credit card"}
 
---body tables
+--body tables--
 
+--combination tables
+local combination = {}
+combination.donation = {
+    senderTable = {{localpart.adjectives, localpart.nouns, localpart.numbers}, {domain.official, domain.test}, {extension.official}},
+    subjectTable = {{scenario.money}, {topic.things}}
+}
 -- Functions --
 local function getRandomElement(tbl)
     return tbl[math.random(#tbl)]
 end
 
-function generateRandomString(...)
+function combineRandomString(...)
     local arg = {...}
     local randomString = ""
     for i, partsTable in ipairs(arg) do
@@ -40,6 +47,11 @@ function generateRandomString(...)
         randomString = tostring(randomString..part)
     end
     return randomString
+end
+
+function getRandomFrom(...)
+    local arg = {...}
+    return getRandomElement(getRandomElement(arg))
 end
 
 function createSender(localpart, domain, extension)
@@ -65,32 +77,38 @@ function createBody(message, topic)
     }
 end
 
-function generateRandomSender()
+function generateRandomSender(localpartTable, domainTable, extensionTable)
     -- local adj = spam.adjectives[math.random(#spam.adjectives)]
     -- local noun = spam.nouns[math.random(#spam.nouns)]
     -- local num = spam.numbers[math.random(#spam.numbers)]
-    local localpart = generateRandomString(localpart.adjectives, localpart.nouns, localpart.numbers)
-    local domain = generateRandomString(domain.official)
-    local extension = generateRandomString(extension.official)
+    -- test1 = {localpart.adjectives, localpart.nouns, localpart.numbers}
+    -- test2 = {domain.official}
+    -- test3 = {extension.official}
+    -- test1 = localpartTable
+    -- test2 = domainTable
+    -- test3 = extensionTable
+    local localpart = combineRandomString(unpack(localpartTable))
+    local domain = getRandomFrom(unpack(domainTable))
+    local extension = getRandomFrom(unpack(extensionTable))
     
     --return string.format("%s%s%d@%s.com", adj, noun, num, domain)
     return createSender(localpart, domain, extension)
 end
 
-function generateRandomSubject()
+function generateRandomSubject(scenarioTable, topicTable)
     -- local adj = spam.adjectives[math.random(#spam.adjectives)]
     -- local noun = spam.nouns[math.random(#spam.nouns)]
     -- local num = spam.numbers[math.random(#spam.numbers)]
-    local scenario = generateRandomString(scenario.money)
-    local topic = generateRandomString(topic.things)
+    local scenario = getRandomFrom(unpack(scenarioTable))
+    local topic = getRandomFrom(unpack(topicTable))
     
     --return string.format("%s%s%d@%s.com", adj, noun, num, domain)
     return createSubject(scenario, topic)
 end
 
-function generateSpamEmail()
-    local senderTable = generateRandomSender()
-    local subjectTable = generateRandomSubject()
+function generateSpamEmail(combination)
+    local senderTable = generateRandomSender(unpack(combination.senderTable))
+    local subjectTable = generateRandomSubject(unpack(combination.subjectTable))
     return {
         prereq = {},
         sender = senderTable.sender,
@@ -102,6 +120,7 @@ function generateSpamEmail()
 end
 
 return {
+    combination = combination,
     generateRandomSender = generateRandomSender,
     generateRandomSubject = generateRandomSubject,
     generateSpamEmail = generateSpamEmail
