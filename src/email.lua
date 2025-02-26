@@ -179,6 +179,7 @@ local function handleDragging(mouseX, mouseY, gameState)
     if gameState.selectedEmail then
         gameState.selectedEmail.x = mouseX - gameState.offsetX
         gameState.selectedEmail.y = mouseY - gameState.offsetY
+        --print(string.format("offsetX = %d, offsetY = %d", gameState.offsetX, gameState.offsetY))
 
         -- if ui.isOverTrashBin(gameState.selectedEmail) then
         --     globalOffsetY = globalOffsetY + (emailBox.height + emailBox.ySpacing)
