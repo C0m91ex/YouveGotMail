@@ -146,4 +146,7 @@ function love.keypressed(key, scancode, isrepeat)
     if key == "escape" then
        love.event.quit()
     end
+    if key == "space" then
+        email.timedEmailSpawn(1)
+    end
  end
