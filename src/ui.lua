@@ -3,7 +3,12 @@
 local scaling = require("src.scaling")
 
 -- global vars
+<<<<<<< Updated upstream
 local trashBin = { x = love.graphics.getWidth() / 2 - 330, y = love.graphics.getHeight() / 2 - 250, width = 157, height = 157, color = {1, 0, 0} }
+=======
+local desktopWidth, desktopHeight = love.window.getDesktopDimensions()
+local trashBin = { x = desktopWidth / 2 - 370, y = desktopHeight / 2 - 250, width = 157, height = 157, color = {1, 0, 0} }
+>>>>>>> Stashed changes
 local inboxBackground
 local loginBackground
 local trashBinIcon
@@ -29,7 +34,7 @@ end
 -- Draws the given image as the game background. !!! CHANGE THIS LATER TO TAKE IN IMAGE AS ARGUMENT !!!
 local function drawBackground()
     -- scaling the inbox background size base off of window dimensions
-    windowWidth, windowHeight = love.graphics.getDimensions()
+    windowWidth, windowHeight = love.window.getDesktopDimensions()
     local inboxBackgroundWidth, inboxBackgroundHeight = inboxBackground:getDimensions()
 
     local inboxScaleX = windowWidth / inboxBackgroundWidth
@@ -49,21 +54,32 @@ end
 -- drawScore()
 -- Draws the score counter label
 local function drawCurrency(currency)
+<<<<<<< Updated upstream
     love.graphics.setColor(0, 0, 0)  -- Black color
     love.graphics.printf("Currency: $" .. currency, trashBin.x + 10, trashBin.y + 180, 120, "center")
+=======
+    love.graphics.setColor(1, 0.84, 0)  -- gold yellow color
+    love.graphics.setFont(currencyFont)
+    love.graphics.printf(currency, trashBin.x - 455, trashBin.y + 75, 120, "left")
+>>>>>>> Stashed changes
     love.graphics.setColor(1, 1, 1)  -- White color
 end
 
 -- drawOpenedEmail()
 -- Brings open the 'opened email' if an email is double clicked
 local function drawOpenedEmail(email)
+<<<<<<< Updated upstream
     windowWidth, windowHeight = love.graphics.getDimensions()
     local openedEmailWidth, openedEmailHeight = loginBackground:getDimensions()
+=======
+    windowWidth, windowHeight = love.window.getDesktopDimensions()
+    local openedEmailWidth, openedEmailHeight = emailBackground:getDimensions()
+>>>>>>> Stashed changes
 
     local openedEmailScaleX = windowWidth / openedEmailWidth
     local openedEmailScaleY = windowHeight / openedEmailHeight
     love.graphics.setColor(1, 1, 1)
-    love.graphics.rectangle("fill", 0, 0, love.graphics.getWidth(), love.graphics.getHeight())
+    love.graphics.rectangle("fill", 0, 0, desktopWidth, desktopHeight)
 
     love.graphics.draw(loginBackground, 0, 0, 0, openedEmailScaleX, openedEmailScaleY)
 

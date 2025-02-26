@@ -9,9 +9,15 @@ local shop = {
     shopOffsetY = -410,
 }
 
+local desktopWidth, desktopHeight = love.window.getDesktopDimensions()
+
 local scaleX, scaleY = 1, 1
 
+<<<<<<< Updated upstream
 local shopTitle = { x = love.graphics.getWidth() / 2 + 995, y = love.graphics.getHeight() / 2 - 220, width = 130, height = 40, color = {1, 0.5, 0} }
+=======
+local shopTitle = { x = desktopWidth / 2 + 995, y = desktopHeight / 2 - 220, width = 204, height = 66 }
+>>>>>>> Stashed changes
 -- Functions --
 
 -- Table used as the bone structure for shop items
@@ -35,7 +41,11 @@ local function setUpShop()
     -- Make sure when increasing this variable to set up name and price for the added items to the shop
     for _ = 1, numberOfShopItems do
         -- createShopItem(mode, x, y, width, height, color)
+<<<<<<< Updated upstream
         createShopItem("fill", love.graphics.getWidth() / 2 + 450, love.graphics.getHeight() / 2 + shop.shopOffsetY, 100, 70, {1, 0.5, 0})
+=======
+        createShopItem("fill", desktopWidth / 2 + 645, desktopHeight / 2 + shop.shopOffsetY, 175, 70, {0.855, 0.855, 0.855})
+>>>>>>> Stashed changes
         shop.shopOffsetY = shop.shopOffsetY + 90
     end
 

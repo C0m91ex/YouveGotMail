@@ -15,11 +15,13 @@ local defaultEmail = {
     ignored = {}
 }
 
+local desktopWidth, desktopHeight = love.window.getDesktopDimensions()
+
 local emailBase = file.loadEmailFile('data/EmailBase.csv')
 local emailPool = {}
 local emails = {} --emails shown--
 local choiceButtons = {}
-local screen = { width = love.graphics.getWidth() / 2, height = love.graphics.getHeight() / 2 }
+local screen = { width = desktopWidth / 2, height = desktopHeight / 2 }
 local globalOffsetY = 0
 local spawnPeriod = 0
 local emailValue = 1
