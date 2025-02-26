@@ -6,21 +6,11 @@ local file = require("src.file")
 local playerState = require("src.playerState")
 local emailTables = require("src.spam")
 
-local function generateRandomSender()
-    local adj = emailTables.adjectives[math.random(#emailTables.adjectives)]
-    local noun = emailTables.nouns[math.random(#emailTables.nouns)]
-    local num = emailTables.numbers[math.random(#emailTables.numbers)]
-    local domain = emailTables.domains[math.random(#emailTables.domains)]
-    
-    local sender = string.format("%s%s%d@%s.com", adj, noun, num, domain)
-    print("Generated sender:", sender) -- DEBUG OUTPUT
-    return sender
-end
 
 -- global vars
 local defaultEmail = {
     prereq = {},
-    sender = generateRandomSender(),
+    sender = emailTables.generateRandomSender(),
     subject = "Pelase clik thia linkl!!!",
     body = "link hehe",
     choices = {},
