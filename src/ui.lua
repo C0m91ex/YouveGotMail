@@ -5,7 +5,7 @@ local scaling = require("src.scaling")
 -- global vars
 local scaleX, scaleY = 1, 1
 local desktopWidth, desktopHeight = love.window.getDesktopDimensions()
-local trashBin = { x = (love.graphics.getWidth() / 2 - 370) * scaling.scaleX, y = (love.graphics.getHeight() / 2 - 250) * scaling.scaleY, width = 157, height = 157, color = {1, 0, 0} }
+local trashBin = { x = (love.graphics.getWidth() / 2 - 370) * scaling.scaleX, y = (love.graphics.getHeight() / 2 - 240) * scaling.scaleY, width = 157, height = 157, color = {1, 0, 0} }
 local inboxBackground
 local loginBackground
 local emailBackground

@@ -11,7 +11,7 @@ local shop = {
 
 local scaleX, scaleY = 1, 1
 
-local shopTitle = { x = love.graphics.getWidth() / 2 + 995, y = love.graphics.getHeight() / 2 - 220, width = 204, height = 66 }
+local shopTitle = { x = (love.graphics.getWidth() / 2 + 995), y = (love.graphics.getHeight() / 2 - 220), width = 204, height = 66 }
 -- Functions --
 
 -- Table used as the bone structure for shop items
@@ -74,17 +74,17 @@ local function drawShopItems()
     scaleX = scaling.scaleX
     scaleY = scaling.scaleY
     love.graphics.setColor(0.616, 0.671, 0.788, 1)
-    love.graphics.rectangle("fill", shopTitle.x * scaleX, shopTitle.y + 52 * scaleY, 203 * scaleX, 700 * scaleY)
+    love.graphics.rectangle("fill", shopTitle.x * scaleX, (shopTitle.y + 52) * scaleY, 203 * scaleX, 700 * scaleY)
     -- draws out each item box
     for _, shopItem in ipairs(shopItems) do
         love.graphics.setColor(shopItem.color)
         love.graphics.rectangle(shopItem.mode, shopItem.x * scaleX, shopItem.y * scaleY, shopItem.width * scaleX, shopItem.height * scaleY)
         love.graphics.setColor(0.490, 0.525, 0.608)
-        love.graphics.rectangle("fill", shopItem.x * scaleX, shopItem.y + borderYOffset * scaleY, shopItem.width * scaleX, 25 * scaleY)
+        love.graphics.rectangle("fill", shopItem.x * scaleX, (shopItem.y + borderYOffset) * scaleY, shopItem.width * scaleX, 25 * scaleY)
         borderYOffset = borderYOffset - 1
         love.graphics.setColor(1, 1, 1)
-        love.graphics.printf(shopItem.name, shopItem.x * scaleX + 30, shopItem.y * scaleY + 11, 120 * scaleX, "center")
-        love.graphics.printf("Price: $"..shopItem.price, shopItem.x * scaleX + 30, shopItem.y + priceYOffset * scaleY, 120 * scaleX, "center")
+        love.graphics.printf(shopItem.name, (shopItem.x + 30) * scaleX, (shopItem.y + 11) * scaleY, 120 * scaleX, "center")
+        love.graphics.printf("Price: $"..shopItem.price, (shopItem.x + 30) * scaleX, (shopItem.y + priceYOffset) * scaleY, 120 * scaleX, "center")
         priceYOffset = priceYOffset - 1
     end
 end
