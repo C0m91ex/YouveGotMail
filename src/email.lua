@@ -4,13 +4,13 @@ local scaling = require("src.scaling")
 local ui = require("src.ui")
 local file = require("src.file")
 local playerState = require("src.playerState")
-local emailTables = require("src.spam")
+local spam = require("src.spam")
 
 
 -- global vars
 local defaultEmail = {
     prereq = {},
-    sender = emailTables.generateRandomSender(),
+    sender = "spam@spam.spam",
     subject = "Pelase clik thia linkl!!!",
     body = "link hehe",
     choices = {},
@@ -34,19 +34,16 @@ local scaleX, scaleY = 1, 1
 local emailSpawnPoint = {x = screen.width, y = screen.height}
 local emailBox = {width = 1080, height = 50, ySpacing = 20}
 
--- Functions --
-local function getRandomElement(tbl)
-    return tbl[math.random(#tbl)]
-end
 
-local function generateRandomSender()
-    local adj = getRandomElement(emailTables.adjectives)
-    local noun = getRandomElement(emailTables.nouns)
-    local num = getRandomElement(emailTables.numbers)
-    local domain = getRandomElement(emailTables.domains)
+
+-- local function generateRandomSender()
+--     local adj = getRandomElement(emailTables.adjectives)
+--     local noun = getRandomElement(emailTables.nouns)
+--     local num = getRandomElement(emailTables.numbers)
+--     local domain = getRandomElement(emailTables.domains)
     
-    return string.format("%s%s%d@%s.com", adj, noun, num, domain)
-end
+--     return string.format("%s%s%d@%s.com", adj, noun, num, domain)
+-- end
 
 -- getLengthEmails()
 -- Getter function that returns length of emails table
@@ -79,14 +76,16 @@ local function fillEmailPool()
 end
 
 local function getFromPool()
+    local email = {}
     if next(emailPool) ~= nil then
-        local email = table.remove(emailPool)
-        email.sender = generateRandomSender() -- Assign a random sender
-        print("Assigned sender:", email.sender) -- DEBUG OUTPUT
-        return email
-    else 
-        return defaultEmail
+        email = table.remove(emailPool)
+        --email.sender = generateRandomSender() -- Assign a random sender
+        --print("Assigned sender:", email.sender) -- DEBUG OUTPUT
+    else
+        email = defaultEmail
+        email.sender = generateRandomSender()
     end
+    return email
 end
 
 -- spawnEmail()
@@ -135,6 +134,7 @@ end
 -- Spawns the initial 9 emails for the gamestart setup
 -- Only gets called once at gamestart
 local function spawnInitialEmails()
+    fillEmailPool()
 --local yOffset = 130
     for _ = 1, 4 do
         --spawnEmail("fill", screen.width - 120, screen.height - yOffset, emailBox.width, emailBox.height, {1, 1, 1})
