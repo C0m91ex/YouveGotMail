@@ -43,11 +43,26 @@ function generateRandomString(...)
 end
 
 function createSender(localpart, domain, extension)
-    return string.format("%s@%s.%s", localpart, domain, extension)
+    return {
+        sender = string.format("%s@%s.%s", localpart, domain, extension),
+        localpart = localpart,
+        doamin = domain,
+        extension = extension
+    }
 end
 
 function createSubject(scenario, topic)
-    return string.format(scenario, topic)
+    return {
+        subject = string.format(scenario, topic),
+        topic = topic
+    }
+end
+
+function createBody(message, topic)
+    return {
+        subject = string.format(scenario, topic),
+        topic = topic
+    }
 end
 
 function generateRandomSender()
@@ -74,11 +89,13 @@ function generateRandomSubject()
 end
 
 function generateSpamEmail()
+    local senderTable = generateRandomSender()
+    local subjectTable = generateRandomSubject()
     return {
         prereq = {},
-        sender = generateRandomSender(),
-        subject = generateRandomSubject(),
-        body = "spam hehe",
+        sender = senderTable.sender,
+        subject = subjectTable.subject,
+        body = subjectTable.topic,
         choices = {},
         ignored = {}
     }
