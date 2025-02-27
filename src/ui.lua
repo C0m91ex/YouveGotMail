@@ -3,7 +3,9 @@
 local scaling = require("src.scaling")
 
 -- global vars
-local trashBin = { x = love.graphics.getWidth() / 2 - 370, y = love.graphics.getHeight() / 2 - 250, width = 157, height = 157, color = {1, 0, 0} }
+local scaleX, scaleY = 1, 1
+local desktopWidth, desktopHeight = love.window.getDesktopDimensions()
+local trashBin = { x = (love.graphics.getWidth() / 2 - 370) * scaling.scaleX, y = (love.graphics.getHeight() / 2 - 240) * scaling.scaleY, width = 157, height = 157, color = {1, 0, 0} }
 local inboxBackground
 local loginBackground
 local emailBackground
@@ -11,8 +13,6 @@ local trashBinIcon
 
 --local orignalWidth, originalHeight
 --local windowWidth, windowHeight
-
-local scaleX, scaleY = 1, 1
 
 -- getScaleXY()
 -- update the scale of the emails when window gets resized
@@ -59,7 +59,7 @@ end
 local function drawCurrency(currency)
     love.graphics.setColor(1, 0.84, 0)  -- gold yellow color
     love.graphics.setFont(currencyFont)
-    love.graphics.printf(currency, trashBin.x + 70, trashBin.y + 240, 120, "left")
+    love.graphics.printf(currency, (trashBin.x + 70) * scaling.scaleX, (trashBin.y + 240) * scaling.scaleY, 120, "left")
     love.graphics.setColor(1, 1, 1)  -- White color
     love.graphics.setFont(mainFont) -- restores back to main font
 end
