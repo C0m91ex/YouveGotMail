@@ -11,6 +11,8 @@ local loginBackground
 local emailBackground
 local trashBinIcon
 
+local timerFontSize = 25
+
 --local orignalWidth, originalHeight
 --local windowWidth, windowHeight
 
@@ -31,7 +33,7 @@ local function loadAssets()
 
     currencyFont = love.graphics.newFont("assets/fonts/Roboto-Medium.ttf", 35)
 
-    timerFont = love.graphics.newFont("assets/fonts/Roboto-Medium.ttf", 25)
+    timerFont = love.graphics.newFont("assets/fonts/Roboto-Medium.ttf", timerFontSize)
 
     emailCountFont = love.graphics.newFont("assets/fonts/Roboto-Medium.ttf", 25)
 end
@@ -76,7 +78,16 @@ local function drawEmailCount(emailCount)
     love.graphics.setFont(mainFont) -- restores back to main font
 end
 
+local timerMaxMultiplier = 0
 local function drawTimer(timer)
+    if timer == 1000 * 10^timerMaxMultiplier  then
+        timerFontSize = timerFontSize - 3
+        timerFont = love.graphics.newFont(timerFontSize)
+        love.graphics.setFont(timerFont)
+
+        timerMaxMultiplier = timerMaxMultiplier + 1
+        print(timerMaxMultiplier)
+    end
     love.graphics.setColor(0, 0, 0)
     love.graphics.setFont(timerFont)
     love.graphics.printf(timer, (trashBin.x + 24) * scaling.scaleX, (trashBin.y + 298) * scaling.scaleY, 120, "left")
