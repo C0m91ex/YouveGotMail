@@ -379,6 +379,7 @@ local function isEmailChoiceClicked(x, y, gameState)
                     end
                 end
                 emailResponded(gameState)
+                sounds.pickChoice:stop()
                 sounds.pickChoice:play()
             end
         end
@@ -420,6 +421,7 @@ function deleteEmail(gameState)
                 table.remove(emails, i)
                 gameState.selectedEmail = nil
                 gameState.currency = gameState.currency + emailValue
+                sounds.emailDelete:stop()
                 sounds.emailDelete:play()
                 break
             end

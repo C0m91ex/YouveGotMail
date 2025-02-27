@@ -143,6 +143,7 @@ local function isShopItemclicked(x, y, gameState)
             if gameState.currency >= shopItem.itemTable.price then
                 itemEffects(_)
                 gameState.currency = gameState.currency - shopItem.itemTable.price
+                sounds.powerUp:stop()
                 sounds.powerUp:play()
             end
         end
