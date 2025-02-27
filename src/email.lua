@@ -88,6 +88,10 @@ local function getNextEmailContent()
     return emailContent
 end
 
+local function spawnEmailEvent(gameState)
+    gameState.addMoney(spawnValue)
+end
+
 -- spawnEmail()
 -- Spawns an email with the given mode, x & y position, dimensions, and color
 local function spawnEmail(mode, x, y, width, height, color, content)
@@ -128,9 +132,10 @@ end
 -- timedEmailSpawn()
 -- Spawns an email 
 
-local function timedEmailSpawn(period)
+local function timedEmailSpawn(period, gameState)
     --spawnEmail("fill", screen.width - 120, screen.height - globalOffsetY, emailBox.width, emailBox.height, {1, 1, 1})
     spawnEmail("fill", emailSpawnPoint.x, emailSpawnPoint.y, emailBox.width, emailBox.height, {1, 1, 1})
+    spawnEmailEvent(gameState)
     spawnPeriod = period
     --globalOffsetY = globalOffsetY - (emailBox.height + emailBox.ySpacing)
 end

@@ -110,6 +110,7 @@ local function itemEffects(item)
         items.item1.effect()
     elseif item == 2 then
         print("Item 2 effect.")
+        items.item2.effect()
     elseif item == 3 then
         print("Item 3 effect.")
     end

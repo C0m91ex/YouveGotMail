@@ -100,7 +100,7 @@ function love.update(dt)
         lastSecond = currentSecond
         if currentSecond % 5 == 0 then
             -- call a function in email
-            email.timedEmailSpawn(growthPeriod)
+            email.timedEmailSpawn(growthPeriod, gameState)
         end
     end
 end
@@ -147,6 +147,6 @@ function love.keypressed(key, scancode, isrepeat)
        love.event.quit()
     end
     if key == "space" then
-        email.timedEmailSpawn(1)
+        email.timedEmailSpawn(1, gameState)
     end
  end
