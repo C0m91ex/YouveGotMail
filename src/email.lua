@@ -94,7 +94,8 @@ local function getNextEmailContent()
         --email.sender = generateRandomSender() -- Assign a random sender
         --print("Assigned sender:", email.sender) -- DEBUG OUTPUT
     else
-        emailContent = generateSpamEmail(spam.combination.donation)
+        --emailContent = spam.generateSpamEmail(spam.getCombination().donation)
+        emailContent = spam.generateRandomSpamEmail()
     end
     return emailContent
 end

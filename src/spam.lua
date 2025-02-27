@@ -1,5 +1,6 @@
 -- spam.lua --
 -- Implementation file for spam functions and tables
+local utils = require("src.utils")
 
 --sender tables
 local localpart = {}
@@ -39,12 +40,13 @@ combination.donation = {
     subjectTable = {{scenario.money}, {topic.things}},
     bodyTable = {{message.money}}
 }
+
 -- Functions --
 local function getRandomElement(tbl)
     return tbl[math.random(#tbl)]
 end
 
-function combineRandomString(...)
+local function combineRandomString(...)
     local arg = {...}
     local randomString = ""
     for i, partsTable in ipairs(arg) do
@@ -54,12 +56,12 @@ function combineRandomString(...)
     return randomString
 end
 
-function getRandomFrom(...)
+local function getRandomFrom(...)
     local arg = {...}
     return getRandomElement(getRandomElement(arg))
 end
 
-function createSender(localpart, domain, extension)
+local function createSender(localpart, domain, extension)
     return {
         sender = string.format("%s@%s.%s", localpart, domain, extension),
         localpart = localpart,
@@ -68,21 +70,21 @@ function createSender(localpart, domain, extension)
     }
 end
 
-function createSubject(scenario, topic)
+local function createSubject(scenario, topic)
     return {
         subject = string.format(scenario, topic),
         topic = topic
     }
 end
 
-function createBody(message, topic)
+local function createBody(message, topic)
     return {
         body = string.format(message, topic),
         topic = topic
     }
 end
 
-function generateRandomSender(localpartTable, domainTable, extensionTable)
+local function generateRandomSender(localpartTable, domainTable, extensionTable)
     -- local adj = spam.adjectives[math.random(#spam.adjectives)]
     -- local noun = spam.nouns[math.random(#spam.nouns)]
     -- local num = spam.numbers[math.random(#spam.numbers)]
@@ -100,7 +102,7 @@ function generateRandomSender(localpartTable, domainTable, extensionTable)
     return createSender(localpart, domain, extension)
 end
 
-function generateRandomSubject(scenarioTable, topicTable)
+local function generateRandomSubject(scenarioTable, topicTable)
     -- local adj = spam.adjectives[math.random(#spam.adjectives)]
     -- local noun = spam.nouns[math.random(#spam.nouns)]
     -- local num = spam.numbers[math.random(#spam.numbers)]
@@ -111,12 +113,16 @@ function generateRandomSubject(scenarioTable, topicTable)
     return createSubject(scenario, topic)
 end
 
-function generateRandomBody(messageTable, topic)
+local function generateRandomBody(messageTable, topic)
     local message = getRandomFrom(unpack(messageTable))
     return createBody(message, topic)
 end
 
-function generateSpamEmail(combination)
+local function getCombination()
+    return combination
+end
+
+local function generateSpamEmail(combination)
     local senderTable = generateRandomSender(unpack(combination.senderTable))
     local subjectTable = generateRandomSubject(unpack(combination.subjectTable))
     local bodyTable = generateRandomBody(unpack(combination.bodyTable), subjectTable.topic)
@@ -130,9 +136,16 @@ function generateSpamEmail(combination)
     }
 end
 
+function generateRandomSpamEmail()
+    local tempTable = {}
+    for _, combo in pairs(combination) do
+        table.insert(tempTable, combo)
+    end
+    return generateSpamEmail(getRandomElement(tempTable))
+end
+
 return {
-    combination = combination,
-    generateRandomSender = generateRandomSender,
-    generateRandomSubject = generateRandomSubject,
-    generateSpamEmail = generateSpamEmail
+    getCombination = getCombination,
+    generateSpamEmail = generateSpamEmail,
+    generateRandomSpamEmail = generateRandomSpamEmail
 }
