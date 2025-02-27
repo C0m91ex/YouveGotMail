@@ -332,9 +332,9 @@ function drawChoiceButton(choiceButton)
     -- if gameState.getOpenedEmail().respond == true then unlockFlag = false end
 
     if choiceButton.unlockFlag then setAvailableColor() else setBlockedColor() end
-    love.graphics.rectangle("fill", choiceButton.x * scaleX, choiceButton.y * scaleY, buttonWidth * scaleX, buttonHeight * scaleY)
+    love.graphics.rectangle("fill", (choiceButton.x + 10) * scaleX, (choiceButton.y + 30) * scaleY, buttonWidth * scaleX, buttonHeight * scaleY)
     love.graphics.setColor(0,0,0)
-    love.graphics.printf(choiceButton.body, choiceButton.x * scaleX, choiceButton.y * scaleY, buttonWidth * scaleX, "center")
+    love.graphics.printf(choiceButton.body, (choiceButton.x + 10) * scaleX, (choiceButton.y + 30) * scaleY, buttonWidth * scaleX, "center")
 end
 
 function emailResponded(gameState)
