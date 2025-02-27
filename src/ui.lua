@@ -135,6 +135,7 @@ end
 -- isBackButtonClicked()
 -- Handles mouse interaction with the back button for opened emails to close them
 local function isBackButtonClicked(x, y)
+    sounds.pickChoice:stop()
     return x > 10 and x < 110 and y > 10 and y < 50
 end
 
