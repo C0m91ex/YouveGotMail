@@ -9,6 +9,21 @@ local shop = {
     shopOffsetY = -250,
 }
 
+local items = {}
+items.item1 = {
+    modifier = 1,
+    effect = function()
+        email.updateEmailValue(items.item1.modifier)
+    end
+}
+items.item2 = {
+    modifier = 1,
+    effect = function()
+        email.updateSpawnValue(items.item2.modifier)
+    end
+
+}
+
 local scaleX, scaleY = 1, 1
 
 local shopTitle = { x = love.graphics.getWidth() / 2 + 995, y = love.graphics.getHeight() / 2 - 220, width = 204, height = 66 }
@@ -92,7 +107,7 @@ end
 local function itemEffects(item)
     if item == 1 then
         print("Item 1 effect.")
-        email.updateEmailValue()
+        items.item1.effect()
     elseif item == 2 then
         print("Item 2 effect.")
     elseif item == 3 then
