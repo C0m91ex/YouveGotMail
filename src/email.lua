@@ -227,16 +227,19 @@ local function printEmail(email)
     for row, values in ipairs(email) do
         print(unpack(values))
         love.graphics.setColor(0, 0, 0)
-        love.graphics.printf("content", screen.width * scaleX - 390, screen.height * scaleY - 280, 120 * scaleX, "center")
+        love.graphics.printf("content", (screen.width * scaleX) - 390, (screen.height * scaleY) - 280, 120 * scaleX, "center")
         for section, content in ipairs(values) do 
             print(unpack(content))
             love.graphics.setColor(0, 0, 0)
-            love.graphics.printf(unpack(content), screen.width - 390, screen.height - 280, 120, "center")
+            love.graphics.printf(unpack(content), (screen.width *scaleX) - 390, (screen.height * scaleY) - 280, 120 * scaleX, "center")
         end
     end
 end
 
 local function printEmailContent(email)
+    scaleX = scaling.scaleX
+    scaleY = scaling.scaleY
+
     local content = {}
     content = email["content"]
     -- for section, content in ipairs(email) do
@@ -253,9 +256,9 @@ local function printEmailContent(email)
     love.graphics.setColor(0, 0, 0)
     --love.graphics.printf("prereq: ", 50, 50, 120, "center")
     --for k, v in pairs(content["prereq"]) do love.graphics.printf(k.." = "..v, 100, 50, 120, "center") end
-    love.graphics.printf(content["sender"], 275, 100, 600, "left")
-    love.graphics.printf(content["subject"], 275, 175, 600, "left")
-    love.graphics.printf(content["body"], 125, 230, 600, "left")
+    love.graphics.printf(content["sender"], 275 * scaleX, 100 * scaleY, 600 * scaleX, "left")
+    love.graphics.printf(content["subject"], 275 * scaleX, 175 * scaleY, 600 * scaleX, "left")
+    love.graphics.printf(content["body"], 125 * scaleX, 230 * scaleY, 600 * scaleX, "left")
     --love.graphics.printf("choices: ", 50, 250, 120, "center")
     for i, choiceButton in ipairs(choiceButtons) do    
         drawChoiceButton(choiceButton)
@@ -329,9 +332,9 @@ function drawChoiceButton(choiceButton)
     -- if gameState.getOpenedEmail().respond == true then unlockFlag = false end
 
     if choiceButton.unlockFlag then setAvailableColor() else setBlockedColor() end
-    love.graphics.rectangle("fill", choiceButton.x, choiceButton.y, buttonWidth, buttonHeight)
+    love.graphics.rectangle("fill", choiceButton.x * scaleX, choiceButton.y * scaleY, buttonWidth * scaleX, buttonHeight * scaleY)
     love.graphics.setColor(0,0,0)
-    love.graphics.printf(choiceButton.body, choiceButton.x, choiceButton.y, buttonWidth, "center")
+    love.graphics.printf(choiceButton.body, choiceButton.x * scaleX, choiceButton.y * scaleY, buttonWidth * scaleX, "center")
 end
 
 function emailResponded(gameState)
