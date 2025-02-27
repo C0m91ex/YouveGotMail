@@ -28,18 +28,15 @@ local function createShopItem(mode, x, y, width, height, color)
         price = 0
     })
 end
-
     -- Shop item setup --
 local numberOfShopItems = 3
 local function setUpShop()
-    scaleX = scaling.scaleX
-    scaleY = scaling.scaleY
     shopIcon = love.graphics.newImage('assets/inbox/Shop Button.png')
     -- Make sure when increasing this variable to set up name and price for the added items to the shop
     for _ = 1, numberOfShopItems do
         -- createShopItem(mode, x, y, width, height, color)
-        createShopItem("fill", (love.graphics.getWidth() / 2 + 645) * scaleX, (love.graphics.getHeight() / 2 + shop.shopOffsetY) * scaleY, 175 * scaleX, 70 * scaleY, {0.855, 0.855, 0.855})
-        shop.shopOffsetY = shop.shopOffsetY + (90 * scaleY)
+        createShopItem("fill", love.graphics.getWidth() / 2 + 645, love.graphics.getHeight() / 2 + shop.shopOffsetY, 175, 70, {0.855, 0.855, 0.855})
+        shop.shopOffsetY = shop.shopOffsetY + 90
     end
 
     -- setting the name and price for item 1
@@ -72,25 +69,22 @@ end
 --drawShopItems()
 -- draws all of the shop items buttons when shop is opened
 local function drawShopItems()
+    local borderYOffset = 45
+    local priceYOffset = 50
     scaleX = scaling.scaleX
     scaleY = scaling.scaleY
-
-    local borderYOffset = 45 * scaleX
-    local priceYOffset = 50 * scaleY
     love.graphics.setColor(0.616, 0.671, 0.788, 1)
-    --love.graphics.rectangle("fill", shopTitle.x * scaleX, (shopTitle.y + 52) * scaleY, 203 * scaleX, 700 * scaleY)
-    love.graphics.rectangle("fill", (love.graphics.getWidth() / 2 + 645) * scaleX, (love.graphics.getHeight() / 2 - 220 + 52) * scaleY, 203 * scaleX, 700 * scaleY)
+    love.graphics.rectangle("fill", shopTitle.x * scaleX, (shopTitle.y + 52) * scaleY, 203 * scaleX, 700 * scaleY)
     -- draws out each item box
     for _, shopItem in ipairs(shopItems) do
         love.graphics.setColor(shopItem.color)
-        love.graphics.rectangle(shopItem.mode, shopItem.x, shopItem.y, shopItem.width, shopItem.height)
-
+        love.graphics.rectangle(shopItem.mode, shopItem.x * scaleX, shopItem.y * scaleY, shopItem.width * scaleX, shopItem.height * scaleY)
         love.graphics.setColor(0.490, 0.525, 0.608)
-        love.graphics.rectangle("fill", shopItem.x, shopItem.y + borderYOffset, shopItem.width, 25 * scaleY)
+        love.graphics.rectangle("fill", shopItem.x * scaleX, (shopItem.y + borderYOffset) * scaleY, shopItem.width * scaleX, 25 * scaleY)
         --borderYOffset = borderYOffset - 1
         love.graphics.setColor(1, 1, 1)
-        love.graphics.printf(shopItem.name, shopItem.x + (30 * scaleX), shopItem.y + (11 * scaleY), 120 * scaleX, "center")
-        love.graphics.printf("Price: $"..shopItem.price, shopItem.x + (30 * scaleX), shopItem.y + priceYOffset, 120 * scaleX, "center")
+        love.graphics.printf(shopItem.name, (shopItem.x + 30) * scaleX, (shopItem.y + 11) * scaleY, 120 * scaleX, "center")
+        love.graphics.printf("Price: $"..shopItem.price, (shopItem.x + 30) * scaleX, (shopItem.y + priceYOffset) * scaleY, 120 * scaleX, "center")
         --priceYOffset = priceYOffset - 1
     end
 end
