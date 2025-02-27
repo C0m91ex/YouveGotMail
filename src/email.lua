@@ -25,6 +25,7 @@ local screen = { width = love.graphics.getWidth() / 2, height = love.graphics.ge
 local globalOffsetY = 0
 local spawnPeriod = 0
 local emailValue = 1
+local spawnValue = 0
 
 local buttonWidth = 175
 local buttonHeight = 70
@@ -114,9 +115,14 @@ local function spawnEmail(mode, x, y, width, height, color, content)
     fillEmailPool()
 end
 
-local function updateEmailValue()
-    emailValue = emailValue + 1
+local function updateEmailValue(value)
+    emailValue = emailValue + value
     print("Email value has been updated to "..emailValue..".")
+end
+
+local function updateSpawnValue(value)
+    spawnValue = spawnValue + value
+    print("Spawn value has been updated to "..spawnValue..".")
 end
 
 -- timedEmailSpawn()
@@ -459,6 +465,7 @@ return {
     handleDragging = handleDragging,
     drawEmails = drawEmails,
     updateEmailValue = updateEmailValue,
+    updateSpawnValue = updateSpawnValue,
     printEmailContent = printEmailContent,
     fillEmailPool = fillEmailPool,
     isEmailChoiceClicked = isEmailChoiceClicked,

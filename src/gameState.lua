@@ -78,6 +78,10 @@ function gameState.handleMouseRelease(x, y, button)
     end
 end
 
+function gameState.addMoney(value)
+    currency = currency + value
+end
+
 function gameState.isEmailOpened() return gameState.openedEmail end
 function gameState.getOpenedEmail() return gameState.openedEmail end
 function gameState.getCurrency() return gameState.currency end
