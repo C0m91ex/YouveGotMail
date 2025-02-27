@@ -6,7 +6,6 @@ local file = require("src.file")
 local playerState = require("src.playerState")
 local spam = require("src.spam")
 
-
 -- global vars
 local defaultEmail = {
     prereq = {},
@@ -23,7 +22,7 @@ local emails = {} --emails shown--
 local choiceButtons = {}
 local screen = { width = love.graphics.getWidth() / 2, height = love.graphics.getHeight() / 2 }
 local globalOffsetY = 0
-local spawnPeriod = 0
+local spawnPeriod = 5
 local emailValue = 1
 local spawnValue = 0
 
@@ -45,6 +44,17 @@ local emailBox = {width = 1080, height = 50, ySpacing = 20}
     
 --     return string.format("%s%s%d@%s.com", adj, noun, num, domain)
 -- end
+
+local function getSpawnPeriod() return spawnPeriod end
+local function setSpawnPeriod(value) spawnPeriod = value end
+
+local function autospawnEmail(email, gameState)
+    local currentTime = love.timer.getTime()
+    if currentTime >= gameState.lastTime + email.getSpawnPeriod() then
+        email.receiveEmail(gameState)
+        gameState.lastTime = currentTime
+    end
+end
 
 -- getLengthEmails()
 -- Getter function that returns length of emails table
@@ -78,6 +88,7 @@ end
 
 local function getNextEmailContent()
     local emailContent = {}
+    --note, lets make this periodic to put spam in between
     if next(emailPool) ~= nil then
         emailContent = table.remove(emailPool)
         --email.sender = generateRandomSender() -- Assign a random sender
@@ -129,14 +140,13 @@ local function updateSpawnValue(value)
     print("Spawn value has been updated to "..spawnValue..".")
 end
 
--- timedEmailSpawn()
+-- receiveEmail()
 -- Spawns an email 
 
-local function timedEmailSpawn(period, gameState)
+local function receiveEmail(gameState)
     --spawnEmail("fill", screen.width - 120, screen.height - globalOffsetY, emailBox.width, emailBox.height, {1, 1, 1})
     spawnEmail("fill", emailSpawnPoint.x, emailSpawnPoint.y, emailBox.width, emailBox.height, {1, 1, 1})
     spawnEmailEvent(gameState)
-    spawnPeriod = period
     --globalOffsetY = globalOffsetY - (emailBox.height + emailBox.ySpacing)
 end
 
@@ -462,9 +472,12 @@ function snapBack(gameState)
 end
 
 return {
+    getSpawnPeriod = getSpawnPeriod,
+    setSpawnPeriod = setSpawnPeriod,
+    autospawnEmail = autospawnEmail,
     getLengthEmails = getLengthEmails,
     spawnEmail = spawnEmail,
-    timedEmailSpawn = timedEmailSpawn,
+    receiveEmail = receiveEmail,
     spawnInitialEmails = spawnInitialEmails,
     handleEmailSelection = handleEmailSelection,
     handleDragging = handleDragging,

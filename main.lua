@@ -92,17 +92,17 @@ end
 function love.update(dt)
     gameState.update(dt)
 
-    local currentTime = love.timer.getTime()
-    local currentSecond = math.floor(currentTime)
-    local growthRate = 1 / growthPeriod
+    -- local currentTime = love.timer.getTime()
+    -- local currentSecond = math.floor(currentTime)
+    -- local growthRate = 1 / growthPeriod
 
-    if currentSecond ~= lastSecond then
-        lastSecond = currentSecond
-        if currentSecond % 5 == 0 then
-            -- call a function in email
-            email.timedEmailSpawn(growthPeriod, gameState)
-        end
-    end
+    -- if currentSecond ~= lastSecond then
+    --     lastSecond = currentSecond
+    --     if currentSecond % 5 == 0 then
+    --         -- call a function in email
+    --         email.receiveEmail(gameState)
+    --     end
+    -- end
 end
 
 -- draw()
@@ -147,6 +147,9 @@ function love.keypressed(key, scancode, isrepeat)
        love.event.quit()
     end
     if key == "space" then
-        email.timedEmailSpawn(1, gameState)
+        email.receiveEmail(gameState)
+    end
+    if key == "=" then
+        gameState.currency = gameState.currency + 100
     end
  end

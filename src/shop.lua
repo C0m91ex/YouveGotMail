@@ -11,17 +11,33 @@ local shop = {
 
 local items = {}
 items.item1 = {
+    price = 10,
+    name = "Concentrated Encryption",
+    description = "Emails give more money when they are deleted",
     modifier = 1,
     effect = function()
         email.updateEmailValue(items.item1.modifier)
     end
 }
 items.item2 = {
+    price = 20,
+    name = "Data Scraping",
+    description = "Get a bit of money when emails come in.",
     modifier = 1,
     effect = function()
         email.updateSpawnValue(items.item2.modifier)
     end
-
+}
+items.item3 = {
+    price = 30,
+    name = "Net Speedrouting",
+    description = "Emails come in faster.",
+    modifier = email.getSpawnPeriod()/10,
+    effect = function()
+        email.setSpawnPeriod(email.getSpawnPeriod() - items.item3.modifier)
+        items.item3.modifier = email.getSpawnPeriod()/10
+        print(email.getSpawnPeriod())
+    end
 }
 
 local scaleX, scaleY = 1, 1
@@ -39,8 +55,7 @@ local function createShopItem(mode, x, y, width, height, color)
         width = width,
         height = height,
         color = color,
-        name = "",
-        price = 0
+        itemTable = {}
     })
 end
     -- Shop item setup --
@@ -55,15 +70,15 @@ local function setUpShop()
     end
 
     -- setting the name and price for item 1
-    shopItems[1].name = "Increase email value"
-    shopItems[1].price = 10
+    shopItems[1].itemTable.name = items.item1.name
+    shopItems[1].itemTable.price = items.item1.price
 
     -- setting the name and price for item 2
-    shopItems[2].name = "item 2"
-    shopItems[2].price = 20
+    shopItems[2].itemTable.name = items.item2.name
+    shopItems[2].itemTable.price = items.item2.price
     
-    shopItems[3].name = "Item 3"
-    shopItems[3].price = 30
+    shopItems[3].itemTable.name = items.item3.name
+    shopItems[3].itemTable.price = items.item3.price
 end
 
 local function isShopButtonClicked(x, y)
@@ -98,8 +113,8 @@ local function drawShopItems()
         love.graphics.rectangle("fill", shopItem.x * scaleX, shopItem.y + borderYOffset * scaleY, shopItem.width * scaleX, 25 * scaleY)
         borderYOffset = borderYOffset - 1
         love.graphics.setColor(1, 1, 1)
-        love.graphics.printf(shopItem.name, shopItem.x * scaleX + 30, shopItem.y * scaleY + 11, 120 * scaleX, "center")
-        love.graphics.printf("Price: $"..shopItem.price, shopItem.x * scaleX + 30, shopItem.y + priceYOffset * scaleY, 120 * scaleX, "center")
+        love.graphics.printf(shopItem.itemTable.name, shopItem.x * scaleX + 30, shopItem.y * scaleY + 11, 120 * scaleX, "center")
+        love.graphics.printf("Price: $"..shopItem.itemTable.price, shopItem.x * scaleX + 30, shopItem.y + priceYOffset * scaleY, 120 * scaleX, "center")
         priceYOffset = priceYOffset - 1
     end
 end
@@ -113,6 +128,7 @@ local function itemEffects(item)
         items.item2.effect()
     elseif item == 3 then
         print("Item 3 effect.")
+        items.item3.effect()
     end
 end
 
@@ -124,9 +140,9 @@ local function isShopItemclicked(x, y, gameState)
            y > shopItem.y * scaleY and y < shopItem.y * scaleY + shopItem.height * scaleY then
             print("Item ".._.." pressed.")
 
-            if gameState.currency >= shopItem.price then
+            if gameState.currency >= shopItem.itemTable.price then
                 itemEffects(_)
-                gameState.currency = gameState.currency - shopItem.price
+                gameState.currency = gameState.currency - shopItem.itemTable.price
             end
         end
     end
