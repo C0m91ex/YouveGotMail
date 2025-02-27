@@ -22,9 +22,9 @@ local trashBinIcon
 -- Loading function for loading in UI-related assets
 local function loadAssets()
     inboxBackground = love.graphics.newImage('assets/inbox/Inbox Background.png')
-    loginBackground = love.graphics.newImage('assets/Login_Background.png')
+    loginBackground = love.graphics.newImage('assets/main_menu/Login Background.png')
     emailBackground = love.graphics.newImage('assets/read_email/Read Email Background.png')
-    trashBinIcon = love.graphics.newImage('assets/Delete Button.png')
+    trashBinIcon = love.graphics.newImage('assets/inbox/Trash Bin.png')
     
     -- fonts --
     mainFont = love.graphics.newFont("assets/fonts/Roboto-Medium.ttf", 15)
