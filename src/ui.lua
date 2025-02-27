@@ -11,9 +11,9 @@ local loginBackground
 local emailBackground
 local trashBinIcon
 
-local currencyFontSize = 35
-local timerFontSize = 25
-local emailCountFontSize = 25
+local currencyFontSize = 30
+local timerFontSize = 20
+local emailCountFontSize = 20
 
 --local orignalWidth, originalHeight
 --local windowWidth, windowHeight
@@ -91,7 +91,7 @@ local function drawEmailCount(emailCount)
     end
     love.graphics.setColor(0, 0, 0)
     love.graphics.setFont(emailCountFont)
-    love.graphics.printf(emailCount, (trashBin.x + 119) * scaling.scaleX, (trashBin.y + 298) * scaling.scaleY, 120, "left")
+    love.graphics.printf(emailCount, (trashBin.x + 119) * scaling.scaleX, (trashBin.y + 303) * scaling.scaleY, 120, "left")
     love.graphics.setColor(1, 1, 1)  -- White color
     love.graphics.setFont(mainFont) -- restores back to main font
 end
@@ -107,7 +107,7 @@ local function drawTimer(timer)
     end
     love.graphics.setColor(0, 0, 0)
     love.graphics.setFont(timerFont)
-    love.graphics.printf(timer, (trashBin.x + 24) * scaling.scaleX, (trashBin.y + 298) * scaling.scaleY, 120, "left")
+    love.graphics.printf(timer, (trashBin.x + 24) * scaling.scaleX, (trashBin.y + 303) * scaling.scaleY, 120, "left")
     love.graphics.setColor(1, 1, 1)  -- White color
     love.graphics.setFont(mainFont) -- restores back to main font
 end
