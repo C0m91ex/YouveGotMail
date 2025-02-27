@@ -348,8 +348,8 @@ local function isEmailChoiceClicked(x, y, gameState)
     for _, choiceButton in ipairs(choiceButtons) do
         local changes = choiceButton.changes
         if (choiceButton.unlockFlag) then
-            if x > choiceButton.x and x < choiceButton.x + buttonWidth and
-            y > choiceButton.y and y < choiceButton.y + buttonHeight then
+            if x > choiceButton.x * scaling.scaleX and x < choiceButton.x * scaling.scaleX + buttonWidth * scaling.scaleX and
+            y > choiceButton.y * scaling.scaleY and y < choiceButton.y * scaling.scaleY + buttonHeight * scaling.scaleY then
                 for key, value in pairs(changes) do
                     playerState.playerChange(key, value)
                     print("choice clicked "..key.." "..value)

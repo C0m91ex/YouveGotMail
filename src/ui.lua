@@ -78,7 +78,7 @@ local function drawOpenedEmail(email)
     love.graphics.draw(emailBackground, 0, 0, 0, openedEmailScaleX, openedEmailScaleY)
 
     love.graphics.setColor(0.5, 0.5, 0.5)
-    love.graphics.rectangle("fill", 10, 10, 100, 40)
+    love.graphics.rectangle("fill", 10 * scaling.scaleX, 10 * scaling.scaleY, 100 * scaling.scaleX, 40 * scaling.scaleY)
     love.graphics.setColor(0, 0, 0)
     --love.graphics.print("This is the placeholder for email text", 300, 300)
     love.graphics.printf("Back", 10, 20, 100, "center")
