@@ -3,7 +3,9 @@
 local scaling = require("src.scaling")
 
 -- global vars
-local trashBin = { x = love.graphics.getWidth() / 2 - 370, y = love.graphics.getHeight() / 2 - 250, width = 157, height = 157, color = {1, 0, 0} }
+local scaleX, scaleY = 1, 1
+local desktopWidth, desktopHeight = love.window.getDesktopDimensions()
+local trashBin = { x = (love.graphics.getWidth() / 2 - 370) * scaling.scaleX, y = (love.graphics.getHeight() / 2 - 240) * scaling.scaleY, width = 157, height = 157, color = {1, 0, 0} }
 local inboxBackground
 local loginBackground
 local emailBackground
@@ -11,8 +13,6 @@ local trashBinIcon
 
 --local orignalWidth, originalHeight
 --local windowWidth, windowHeight
-
-local scaleX, scaleY = 1, 1
 
 -- getScaleXY()
 -- update the scale of the emails when window gets resized
@@ -22,9 +22,9 @@ local scaleX, scaleY = 1, 1
 -- Loading function for loading in UI-related assets
 local function loadAssets()
     inboxBackground = love.graphics.newImage('assets/inbox/Inbox Background.png')
-    loginBackground = love.graphics.newImage('assets/Login_Background.png')
+    loginBackground = love.graphics.newImage('assets/main_menu/Login Background.png')
     emailBackground = love.graphics.newImage('assets/read_email/Read Email Background.png')
-    trashBinIcon = love.graphics.newImage('assets/Delete Button.png')
+    trashBinIcon = love.graphics.newImage('assets/inbox/Trash Bin.png')
     
     -- fonts --
     mainFont = love.graphics.newFont("assets/fonts/Roboto-Medium.ttf", 15)
@@ -59,7 +59,7 @@ end
 local function drawCurrency(currency)
     love.graphics.setColor(1, 0.84, 0)  -- gold yellow color
     love.graphics.setFont(currencyFont)
-    love.graphics.printf(currency, trashBin.x + 70, trashBin.y + 240, 120, "left")
+    love.graphics.printf(currency, (trashBin.x + 70) * scaling.scaleX, (trashBin.y + 240) * scaling.scaleY, 120, "left")
     love.graphics.setColor(1, 1, 1)  -- White color
     love.graphics.setFont(mainFont) -- restores back to main font
 end
@@ -78,7 +78,7 @@ local function drawOpenedEmail(email)
     love.graphics.draw(emailBackground, 0, 0, 0, openedEmailScaleX, openedEmailScaleY)
 
     love.graphics.setColor(0.5, 0.5, 0.5)
-    love.graphics.rectangle("fill", 10, 10, 100, 40)
+    love.graphics.rectangle("fill", 10 * scaling.scaleX, 10 * scaling.scaleY, 100 * scaling.scaleX, 40 * scaling.scaleY)
     love.graphics.setColor(0, 0, 0)
     --love.graphics.print("This is the placeholder for email text", 300, 300)
     love.graphics.printf("Back", 10, 20, 100, "center")

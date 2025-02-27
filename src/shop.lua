@@ -6,7 +6,7 @@ local scaling = require("src.scaling")
 
 -- global vars
 local shop = {
-    shopOffsetY = -250,
+    shopOffsetY = 105,
 }
 
 local items = {}
@@ -42,7 +42,7 @@ items.item3 = {
 
 local scaleX, scaleY = 1, 1
 
-local shopTitle = { x = love.graphics.getWidth() / 2 + 995, y = love.graphics.getHeight() / 2 - 220, width = 204, height = 66 }
+local shopTitle = { x = (love.graphics.getWidth() / 2 + 995), y = (love.graphics.getHeight() / 2 - 220), width = 204, height = 66 }
 -- Functions --
 
 -- Table used as the bone structure for shop items
@@ -65,7 +65,7 @@ local function setUpShop()
     -- Make sure when increasing this variable to set up name and price for the added items to the shop
     for _ = 1, numberOfShopItems do
         -- createShopItem(mode, x, y, width, height, color)
-        createShopItem("fill", love.graphics.getWidth() / 2 + 645, love.graphics.getHeight() / 2 + shop.shopOffsetY, 175, 70, {0.855, 0.855, 0.855})
+        createShopItem("fill", shopTitle.x + 15, shopTitle.y + shop.shopOffsetY, 175, 70, {0.855, 0.855, 0.855})
         shop.shopOffsetY = shop.shopOffsetY + 90
     end
 
@@ -99,18 +99,18 @@ end
 --drawShopItems()
 -- draws all of the shop items buttons when shop is opened
 local function drawShopItems()
-    local borderYOffset = 40
-    local priceYOffset = 45
+    local borderYOffset = 45
+    local priceYOffset = 50
     scaleX = scaling.scaleX
     scaleY = scaling.scaleY
     love.graphics.setColor(0.616, 0.671, 0.788, 1)
-    love.graphics.rectangle("fill", shopTitle.x * scaleX, shopTitle.y + 52 * scaleY, 203 * scaleX, 700 * scaleY)
+    love.graphics.rectangle("fill", shopTitle.x * scaleX, (shopTitle.y + 52) * scaleY, 203 * scaleX, 700 * scaleY)
     -- draws out each item box
     for _, shopItem in ipairs(shopItems) do
         love.graphics.setColor(shopItem.color)
         love.graphics.rectangle(shopItem.mode, shopItem.x * scaleX, shopItem.y * scaleY, shopItem.width * scaleX, shopItem.height * scaleY)
         love.graphics.setColor(0.490, 0.525, 0.608)
-        love.graphics.rectangle("fill", shopItem.x * scaleX, shopItem.y + borderYOffset * scaleY, shopItem.width * scaleX, 25 * scaleY)
+        love.graphics.rectangle("fill", shopItem.x * scaleX, (shopItem.y + borderYOffset) * scaleY, shopItem.width * scaleX, 25 * scaleY)
         borderYOffset = borderYOffset - 1
         love.graphics.setColor(1, 1, 1)
         love.graphics.printf(shopItem.itemTable.name, shopItem.x * scaleX + 30, shopItem.y * scaleY + 11, 120 * scaleX, "center")
