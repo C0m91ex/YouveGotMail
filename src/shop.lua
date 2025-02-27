@@ -69,8 +69,8 @@ end
 --drawShopItems()
 -- draws all of the shop items buttons when shop is opened
 local function drawShopItems()
-    local borderYOffset = 40
-    local priceYOffset = 45
+    local borderYOffset = 45
+    local priceYOffset = 50
     scaleX = scaling.scaleX
     scaleY = scaling.scaleY
     love.graphics.setColor(0.616, 0.671, 0.788, 1)
@@ -81,11 +81,11 @@ local function drawShopItems()
         love.graphics.rectangle(shopItem.mode, shopItem.x * scaleX, shopItem.y * scaleY, shopItem.width * scaleX, shopItem.height * scaleY)
         love.graphics.setColor(0.490, 0.525, 0.608)
         love.graphics.rectangle("fill", shopItem.x * scaleX, (shopItem.y + borderYOffset) * scaleY, shopItem.width * scaleX, 25 * scaleY)
-        borderYOffset = borderYOffset - 1
+        --borderYOffset = borderYOffset - 1
         love.graphics.setColor(1, 1, 1)
         love.graphics.printf(shopItem.name, (shopItem.x + 30) * scaleX, (shopItem.y + 11) * scaleY, 120 * scaleX, "center")
         love.graphics.printf("Price: $"..shopItem.price, (shopItem.x + 30) * scaleX, (shopItem.y + priceYOffset) * scaleY, 120 * scaleX, "center")
-        priceYOffset = priceYOffset - 1
+        --priceYOffset = priceYOffset - 1
     end
 end
 
