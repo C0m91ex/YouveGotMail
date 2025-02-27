@@ -33,6 +33,16 @@ function love.load()
     gameState.load()
     csv = file.loadEmailFile("data/EmailBase.csv")
 
+    sounds.music:setVolume(1)
+
+    sounds.music = love.audio.newSource("sounds/music.mp3", "stream")
+    sounds.emailDelete = love.audio.newSource("sounds/email-delete.mp3", "static")
+    sounds.pickChoice = love.audio.newSource("sounds/pick-choice.mp3", "static")
+    sounds.powerUp = love.audio.newSource("sounds/power-up.mp3", "static")
+
+    sounds.music:setLooping(true)
+    sounds.music:play()
+
     -- for i, v in pairs (csv[1]) do
     --     print(i.."="..tostring(v))
     -- end
