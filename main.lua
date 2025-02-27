@@ -115,11 +115,11 @@ function love.draw()
     ui.drawBackground()
 
     -- Timer 
-    love.graphics.setColor(0, 0, 0)  -- Black color
+    --love.graphics.setColor(0, 0, 0)  -- Black color
     local currentSecond = math.floor(love.timer.getTime())
-    love.graphics.print("Current second: " .. currentSecond, 60, 350)
-    love.graphics.print("Current # of emails: ".. email.getLengthEmails(), 50, 400)
-    love.graphics.setColor(1, 1, 1)  -- White color
+    --love.graphics.print("Current second: " .. currentSecond, 60, 350)
+    --love.graphics.print("Current # of emails: ".. email.getLengthEmails(), 50, 400)
+    --love.graphics.setColor(1, 1, 1)  -- White color
 
     if gameState.isEmailOpened() then
         ui.drawOpenedEmail(gameState.getOpenedEmail())
