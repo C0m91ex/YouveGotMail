@@ -11,7 +11,9 @@ local loginBackground
 local emailBackground
 local trashBinIcon
 
+local currencyFontSize = 35
 local timerFontSize = 25
+local emailCountFontSize = 25
 
 --local orignalWidth, originalHeight
 --local windowWidth, windowHeight
@@ -31,11 +33,11 @@ local function loadAssets()
     -- fonts --
     mainFont = love.graphics.newFont("assets/fonts/Roboto-Medium.ttf", 15)
 
-    currencyFont = love.graphics.newFont("assets/fonts/Roboto-Medium.ttf", 35)
+    currencyFont = love.graphics.newFont("assets/fonts/Roboto-Medium.ttf", currencyFontSize)
 
     timerFont = love.graphics.newFont("assets/fonts/Roboto-Medium.ttf", timerFontSize)
 
-    emailCountFont = love.graphics.newFont("assets/fonts/Roboto-Medium.ttf", 25)
+    emailCountFont = love.graphics.newFont("assets/fonts/Roboto-Medium.ttf", emailCountFontSize)
 end
 
 -- drawBackground()
@@ -62,7 +64,15 @@ end
 
 -- drawScore()
 -- Draws the score counter label
+local currencyCountMultiplier = 0
 local function drawCurrency(currency)
+    if currency >= 1000 * 10^currencyCountMultiplier then
+        currencyFontSize = currencyFontSize - 3
+        currencyFont = love.graphics.newFont(currencyFontSize)
+        love.graphics.setFont(currencyFont)
+
+        currencyCountMultiplier = currencyCountMultiplier + 1
+    end
     love.graphics.setColor(1, 0.84, 0)  -- gold yellow color
     love.graphics.setFont(currencyFont)
     love.graphics.printf(currency, (trashBin.x + 70) * scaling.scaleX, (trashBin.y + 215) * scaling.scaleY, 120, "left")
@@ -70,7 +80,15 @@ local function drawCurrency(currency)
     love.graphics.setFont(mainFont) -- restores back to main font
 end
 
+local emailCountMultiplier = 0
 local function drawEmailCount(emailCount)
+    if emailCount >= 1000 * 10^emailCountMultiplier then
+        emailCountFontSize = emailCountFontSize - 3
+        emailCountFont = love.graphics.newFont(emailCountFontSize)
+        love.graphics.setFont(emailCountFont)
+
+        emailCountMultiplier = emailCountMultiplier + 1
+    end
     love.graphics.setColor(0, 0, 0)
     love.graphics.setFont(emailCountFont)
     love.graphics.printf(emailCount, (trashBin.x + 119) * scaling.scaleX, (trashBin.y + 298) * scaling.scaleY, 120, "left")
@@ -80,13 +98,12 @@ end
 
 local timerMaxMultiplier = 0
 local function drawTimer(timer)
-    if timer == 1000 * 10^timerMaxMultiplier  then
+    if timer >= 1000 * 10^timerMaxMultiplier  then
         timerFontSize = timerFontSize - 3
         timerFont = love.graphics.newFont(timerFontSize)
         love.graphics.setFont(timerFont)
 
         timerMaxMultiplier = timerMaxMultiplier + 1
-        print(timerMaxMultiplier)
     end
     love.graphics.setColor(0, 0, 0)
     love.graphics.setFont(timerFont)

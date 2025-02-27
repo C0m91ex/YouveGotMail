@@ -31,7 +31,7 @@ local buttonHeight = 70
 local scaleX, scaleY = 1, 1
 
 -- email dimensions
-local emailSpawnPoint = {x = screen.width, y = screen.height}
+local emailSpawnPoint = {x = (screen.width - 100) * scaling.scaleX, y = (screen.height - 100) * scaling.scaleY}
 local emailBox = {width = 1080, height = 50, ySpacing = 20}
 
 
