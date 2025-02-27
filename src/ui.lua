@@ -30,6 +30,10 @@ local function loadAssets()
     mainFont = love.graphics.newFont("assets/fonts/Roboto-Medium.ttf", 15)
 
     currencyFont = love.graphics.newFont("assets/fonts/Roboto-Medium.ttf", 35)
+
+    timerFont = love.graphics.newFont("assets/fonts/Roboto-Medium.ttf", 25)
+
+    emailCountFont = love.graphics.newFont("assets/fonts/Roboto-Medium.ttf", 25)
 end
 
 -- drawBackground()
@@ -60,6 +64,22 @@ local function drawCurrency(currency)
     love.graphics.setColor(1, 0.84, 0)  -- gold yellow color
     love.graphics.setFont(currencyFont)
     love.graphics.printf(currency, (trashBin.x + 70) * scaling.scaleX, (trashBin.y + 215) * scaling.scaleY, 120, "left")
+    love.graphics.setColor(1, 1, 1)  -- White color
+    love.graphics.setFont(mainFont) -- restores back to main font
+end
+
+local function drawEmailCount(emailCount)
+    love.graphics.setColor(0, 0, 0)
+    love.graphics.setFont(emailCountFont)
+    love.graphics.printf(emailCount, (trashBin.x + 119) * scaling.scaleX, (trashBin.y + 298) * scaling.scaleY, 120, "left")
+    love.graphics.setColor(1, 1, 1)  -- White color
+    love.graphics.setFont(mainFont) -- restores back to main font
+end
+
+local function drawTimer(timer)
+    love.graphics.setColor(0, 0, 0)
+    love.graphics.setFont(timerFont)
+    love.graphics.printf(timer, (trashBin.x + 24) * scaling.scaleX, (trashBin.y + 298) * scaling.scaleY, 120, "left")
     love.graphics.setColor(1, 1, 1)  -- White color
     love.graphics.setFont(mainFont) -- restores back to main font
 end
@@ -108,6 +128,8 @@ return {
     drawBackground = drawBackground,
     drawTrashBin = drawTrashBin,
     drawCurrency = drawCurrency,
+    drawEmailCount = drawEmailCount,
+    drawTimer = drawTimer,
     drawOpenedEmail = drawOpenedEmail,
     isBackButtonClicked = isBackButtonClicked,
     isOverTrashBin = isOverTrashBin

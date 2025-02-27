@@ -117,6 +117,8 @@ function love.draw()
     -- Timer 
     --love.graphics.setColor(0, 0, 0)  -- Black color
     local currentSecond = math.floor(love.timer.getTime())
+    ui.drawEmailCount(email.getLengthEmails())
+    ui.drawTimer(currentSecond)
     --love.graphics.print("Current second: " .. currentSecond, 60, 350)
     --love.graphics.print("Current # of emails: ".. email.getLengthEmails(), 50, 400)
     --love.graphics.setColor(1, 1, 1)  -- White color
