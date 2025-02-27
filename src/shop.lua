@@ -111,11 +111,11 @@ local function drawShopItems()
         love.graphics.rectangle(shopItem.mode, shopItem.x * scaleX, shopItem.y * scaleY, shopItem.width * scaleX, shopItem.height * scaleY)
         love.graphics.setColor(0.490, 0.525, 0.608)
         love.graphics.rectangle("fill", shopItem.x * scaleX, (shopItem.y + borderYOffset) * scaleY, shopItem.width * scaleX, 25 * scaleY)
-        borderYOffset = borderYOffset - 1
+        borderYOffset = borderYOffset + 1
         love.graphics.setColor(1, 1, 1)
-        love.graphics.printf(shopItem.itemTable.name, shopItem.x * scaleX + 30, shopItem.y * scaleY + 11, 120 * scaleX, "center")
-        love.graphics.printf("Price: $"..shopItem.itemTable.price, shopItem.x * scaleX + 30, shopItem.y + priceYOffset * scaleY, 120 * scaleX, "center")
-        priceYOffset = priceYOffset - 1
+        love.graphics.printf(shopItem.itemTable.name, (shopItem.x + 30) * scaleX , (shopItem.y + 8) * scaleY, 120 * scaleX, "center")
+        love.graphics.printf("Price: $"..shopItem.itemTable.price, (shopItem.x + 30) * scaleX, (shopItem.y + priceYOffset) * scaleY, 120 * scaleX, "center")
+        priceYOffset = priceYOffset + 1
     end
 end
 
