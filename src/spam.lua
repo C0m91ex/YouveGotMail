@@ -27,8 +27,10 @@ scenario.money = {
 topic.things = {"bicycle", "briefcase", "credit card"}
 
 --body tables--
+--note to spam writer. one topic only please
 local message = {}
 message.money = {"This is a test message. Please give me money so I can afford a %s."}
+
 
 --combination tables
 local combination = {}

@@ -6,6 +6,7 @@ local shop = require("src.shop")
 local scaling = require("src.scaling")
 
 -- global vars
+local start = love.timer.getTime()
 local gameState = {
     currency = 0,
     selectedEmail = nil,
@@ -14,7 +15,8 @@ local gameState = {
     offsetY = 0,
     lastClickTime = 0,
     doubleClickDelay = 0.3,
-    shopButtonOpen = false
+    shopButtonOpen = false,
+    lastTime = start
 }
 
 -- load()
@@ -35,7 +37,7 @@ end
 -- Handles mouse interaction player actions in regards to current gamestate
 function gameState.update(dt)
     if gameState.openedEmail then return end
-
+    email.autospawnEmail(email, gameState)
     local mouseX, mouseY = love.mouse.getPosition()
     if love.mouse.isDown(1) then
         email.handleEmailSelection(mouseX, mouseY, gameState)
@@ -79,7 +81,7 @@ function gameState.handleMouseRelease(x, y, button)
 end
 
 function gameState.addMoney(value)
-    currency = currency + value
+    gameState.currency = gameState.currency + value
 end
 
 function gameState.isEmailOpened() return gameState.openedEmail end
