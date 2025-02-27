@@ -6,7 +6,7 @@ local scaling = require("src.scaling")
 
 -- global vars
 local shop = {
-    shopOffsetY = -250,
+    shopOffsetY = 105,
 }
 
 local scaleX, scaleY = 1, 1
@@ -35,7 +35,7 @@ local function setUpShop()
     -- Make sure when increasing this variable to set up name and price for the added items to the shop
     for _ = 1, numberOfShopItems do
         -- createShopItem(mode, x, y, width, height, color)
-        createShopItem("fill", love.graphics.getWidth() / 2 + 645, love.graphics.getHeight() / 2 + shop.shopOffsetY, 175, 70, {0.855, 0.855, 0.855})
+        createShopItem("fill", shopTitle.x + 15, shopTitle.y + shop.shopOffsetY, 175, 70, {0.855, 0.855, 0.855})
         shop.shopOffsetY = shop.shopOffsetY + 90
     end
 
