@@ -5,7 +5,7 @@ local login = {}
 local username = ""
 local password = ""
 local activeField = nil
-local buttonX, buttonY, buttonWidth, buttonHeight = 200, 250, 100, 40
+local buttonX, buttonY, buttonWidth, buttonHeight = 50, 350, 100, 40 -- Shifted left 150px, down 100px
 local font
 
 function login.start()
@@ -30,33 +30,49 @@ end
 function login.load()
     font = love.graphics.newFont(14)
     login.completed = false
+    login.background = love.graphics.newImage("assets/main_menu/smaller.png")
+    love.window.setMode(800, 450, { resizable = false })
 end
 
 function login.draw()
+    love.graphics.draw(login.background, 0, 0)
+
     love.graphics.setFont(font)
+
+    -- Set text box color to black
+    love.graphics.setColor(0, 0, 0)
     
     -- Username text input box w/ label
-    love.graphics.print("Username:", 200, 100)
-    love.graphics.rectangle("line", 200, 120, 200, 30)
-    love.graphics.print(username, 210, 127)
+    love.graphics.print("Username:", 50, 200) -- Shifted left 150px, down 100px
+    love.graphics.rectangle("line", 50, 220, 200, 30) -- Shifted
+    love.graphics.setColor(1, 1, 1) -- Reset to white for text
+    love.graphics.print(username, 60, 227)
+
+    -- Set text box color to black again
+    love.graphics.setColor(0, 0, 0)
 
     -- Password text input box w/ label
-    love.graphics.print("Password:", 200, 160)
-    love.graphics.rectangle("line", 200, 180, 200, 30)
-    love.graphics.print(string.rep("*", #password), 210, 187) -- Mask password input
+    love.graphics.print("Password:", 50, 260) -- Shifted
+    love.graphics.rectangle("line", 50, 280, 200, 30) -- Shifted
+    love.graphics.setColor(1, 1, 1) -- Reset to white for text
+    love.graphics.print(string.rep("*", #password), 60, 287) -- Mask password input
 
-    love.graphics.print("(Password & username both must be 15 characters or less.)", 200, 225)
+    love.graphics.setColor(0, 0, 0)
+    love.graphics.print("(Password & username both must be 15 characters or less.)", 50, 325) -- Shifted
 
     -- Login button
     love.graphics.rectangle("line", buttonX, buttonY, buttonWidth, buttonHeight)
     love.graphics.printf("Login", buttonX, buttonY + 10, buttonWidth, "center")
+
+    love.graphics.setColor(1, 1, 1)
 end
+
 
 function login.handleEvent(e, a, b, c)
     if e == "mousepressed" then
-        if b >= 120 and b <= 150 then
+        if b >= 220 and b <= 250 then -- Adjusted for new position
             activeField = "username"
-        elseif b >= 180 and b <= 210 then
+        elseif b >= 280 and b <= 310 then -- Adjusted for new position
             activeField = "password"
         elseif a >= buttonX and a <= buttonX + buttonWidth and b >= buttonY and b <= buttonY + buttonHeight then
             if #username > 0 and #username <= 16 and #password > 0 and #password <= 16 then

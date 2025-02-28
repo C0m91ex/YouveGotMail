@@ -21,8 +21,8 @@ sounds = {}
 -- load()
 -- Load function, calls load() from gameState.lua
 function love.load()
-    --login.load()
-    --login.start()  -- Block here until login is complete
+    login.load()
+    login.start()  -- Block here until login is complete
     -- set window size and settings
     -- smaller window, use 800x600
     -- bigger window, use 1600x900
