@@ -105,9 +105,15 @@ local function drawShopItems()
     scaleY = scaling.scaleY
     love.graphics.setColor(0.616, 0.671, 0.788, 1)
     love.graphics.rectangle("fill", shopTitle.x * scaleX, (shopTitle.y + 52) * scaleY, 203 * scaleX, 700 * scaleY)
-    -- draws out each item box
+    
     for _, shopItem in ipairs(shopItems) do
-        love.graphics.setColor(shopItem.color)
+        -- Change color if this item is being hovered over
+        if shop.hoveredItem == shopItem then
+            love.graphics.setColor(0.9, 0.9, 0.9) -- Lighten color when hovering
+        else
+            love.graphics.setColor(shopItem.color)
+        end
+
         love.graphics.rectangle(shopItem.mode, shopItem.x * scaleX, shopItem.y * scaleY, shopItem.width * scaleX, shopItem.height * scaleY)
         love.graphics.setColor(0.490, 0.525, 0.608)
         love.graphics.rectangle("fill", shopItem.x * scaleX, (shopItem.y + borderYOffset) * scaleY, shopItem.width * scaleX, 25 * scaleY)
@@ -150,6 +156,22 @@ local function isShopItemclicked(x, y, gameState)
     end
 end
 
+local function isShopItemHovered(x, y)
+    scaleX = scaling.scaleX
+    scaleY = scaling.scaleY
+    for _, shopItem in ipairs(shopItems) do
+        if x > shopItem.x * scaleX and x < shopItem.x * scaleX + shopItem.width * scaleX and
+           y > shopItem.y * scaleY and y < shopItem.y * scaleY + shopItem.height * scaleY then
+            -- Placeholder: Perform actions when hovering over a shop item
+            print("Hovering over item: " .. shopItem.itemTable.name)
+            -- You can set a flag like `shop.hoveredItem = shopItem` to use it elsewhere
+            shop.hoveredItem = shopItem
+            return
+        end
+    end
+    -- Reset hovered item if not hovering over anything
+    shop.hoveredItem = nil
+end
 
 return {
     createShopItem = createShopItem,
@@ -158,5 +180,6 @@ return {
     drawShopItems = drawShopItems,
     itemEffects = itemEffects,
     isShopButtonClicked = isShopButtonClicked,
-    isShopItemclicked = isShopItemclicked
+    isShopItemclicked = isShopItemclicked,
+    isShopItemHovered = isShopItemHovered
 }

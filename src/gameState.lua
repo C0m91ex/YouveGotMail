@@ -32,7 +32,6 @@ function gameState.load()
     email.spawnInitialEmails()
 end
 
--- update()
 -- Update function for gameState, calls email.handleEmailselection & email.handleDragging
 -- Handles mouse interaction player actions in regards to current gamestate
 function gameState.update(dt)
@@ -44,6 +43,7 @@ function gameState.update(dt)
         email.handleDragging(mouseX, mouseY, gameState)
     else
         gameState.selectedEmail = nil
+        shop.isShopItemHovered(mouseX, mouseY)
     end
 end
 
