@@ -196,7 +196,7 @@ return {
     drawShopItems = drawShopItems,
     itemEffects = itemEffects,
     isShopButtonClicked = isShopButtonClicked,
-    -- isShopButtonHovered = isShopButtonHovered,
+    isShopButtonHovered = isShopButtonHovered,
     isShopItemClicked = isShopItemClicked,
     isShopItemHovered = isShopItemHovered
 }

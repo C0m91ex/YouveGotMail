@@ -20,7 +20,7 @@ local gameState = {
 }
 
 local shopButtonNormal = love.graphics.newImage('assets/inbox/Shop Button.png')
-local shopButtonHover = love.graphics.newImage('assets/inbox/Shop Button Hover.png')
+local shopButtonHovered = love.graphics.newImage('assets/inbox/Shop Button Hover.png')
 local shopButtonClicked = love.graphics.newImage('assets/inbox/Shop Button Click.png')
 
 shopButtonImage = shopButtonNormal
@@ -43,6 +43,11 @@ function shop.setShopButtonClicked()
     shopButtonImage = shopButtonClicked
 end
 
+-- Function to change the button image when hovered
+function shop.setShopButtonHovered()
+    shopButtonImage = shopButtonHovered
+end
+
 -- Function to reset button to normal
 function shop.resetShopButton()
     shopButtonImage = shopButtonNormal
@@ -60,7 +65,12 @@ function gameState.update(dt)
     else
         gameState.selectedEmail = nil
         shop.isShopItemHovered(mouseX, mouseY)
-        -- shop.isShopButtonHovered(mouseX, mouseY)
+        --shop.isShopButtonHovered(mouseX, mouseY)
+        if shop.isShopButtonHovered(mouseX, mouseY) and not gameState.openedEmail then
+            shop.setShopButtonHovered()
+        else
+            shop.resetShopButton()
+        end
     end
 end
 
