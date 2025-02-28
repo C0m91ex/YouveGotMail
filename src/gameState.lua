@@ -19,6 +19,12 @@ local gameState = {
     lastTime = start
 }
 
+local shopButtonNormal = love.graphics.newImage('assets/inbox/Shop Button.png')
+local shopButtonHover = love.graphics.newImage('assets/inbox/Shop Button Hover.png')
+local shopButtonClicked = love.graphics.newImage('assets/inbox/Shop Button Click.png')
+
+shopButtonImage = shopButtonNormal
+
 -- load()
 -- Load function for the gameState, calls ui.loadAssets() & email.spawnInitialEmails()
 -- Handles loading UI assets and the initial email spawning
@@ -30,6 +36,16 @@ function gameState.load()
     shop.setUpShop()
 
     email.spawnInitialEmails()
+end
+
+-- Function to change the button image when clicked
+function shop.setShopButtonClicked()
+    shopButtonImage = shopButtonClicked
+end
+
+-- Function to reset button to normal
+function shop.resetShopButton()
+    shopButtonImage = shopButtonNormal
 end
 
 -- Update function for gameState, calls email.handleEmailselection & email.handleDragging
@@ -44,6 +60,7 @@ function gameState.update(dt)
     else
         gameState.selectedEmail = nil
         shop.isShopItemHovered(mouseX, mouseY)
+        -- shop.isShopButtonHovered(mouseX, mouseY)
     end
 end
 
@@ -60,16 +77,19 @@ function gameState.handleMouseRelease(x, y, button)
             end
         end
 
+        -- Toggle shop button state
         if shop.isShopButtonClicked(x, y) and not gameState.openedEmail then
             if not gameState.shopButtonOpen then
                 gameState.shopButtonOpen = true
+                shop.setShopButtonClicked()  -- Change to clicked image
             else
                 gameState.shopButtonOpen = false
+                shop.resetShopButton()  -- Reset to normal image
             end
         end
 
         if gameState.shopButtonOpen then
-            shop.isShopItemclicked(x, y, gameState)
+            shop.isShopItemClicked(x, y, gameState)
         end
 
         if ui.isOverTrashBin(x, y) then

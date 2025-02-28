@@ -4,6 +4,11 @@ local ui = require("src.ui")
 local email = require("src.email")
 local scaling = require("src.scaling")
 
+-- Shop Button Images
+shopButtonNormal = love.graphics.newImage('assets/inbox/Shop Button.png')
+shopButtonHover = love.graphics.newImage('assets/inbox/Shop Button Hover.png')
+shopButtonClicked = love.graphics.newImage('assets/inbox/Shop Button Click.png')
+
 -- global vars
 local shop = {
     shopOffsetY = 105,
@@ -61,7 +66,8 @@ end
     -- Shop item setup --
 local numberOfShopItems = 3
 local function setUpShop()
-    shopIcon = love.graphics.newImage('assets/inbox/Shop Button.png')
+    -- shopIcon = love.graphics.newImage('assets/inbox/Shop Button.png')
+    shopIcon = shopButtonImage
     -- Make sure when increasing this variable to set up name and price for the added items to the shop
     for _ = 1, numberOfShopItems do
         -- createShopItem(mode, x, y, width, height, color)
@@ -88,12 +94,20 @@ local function isShopButtonClicked(x, y)
             y > shopTitle.y * scaleY and y < shopTitle.y * scaleY + shopTitle.height * scaleY
 end
 
+local function isShopButtonHovered(x, y)
+    scaleX = scaling.scaleX
+    scaleY = scaling.scaleY
+    return  x > shopTitle.x * scaleX and x < shopTitle.x * scaleX + shopTitle.width * scaleX and
+            y > shopTitle.y * scaleY and y < shopTitle.y * scaleY + shopTitle.height * scaleY  
+end
+
+-- Function to draw the shop button dynamically based on state
 local function drawShopTitle()
     scaleX = scaling.scaleX
     scaleY = scaling.scaleY
     love.graphics.setColor(1, 1, 1)
     --love.graphics.rectangle("fill", shopTitle.x * scaleX, shopTitle.y * scaleY, shopTitle.width * scaleX, shopTitle.height * scaleY)
-    love.graphics.draw(shopIcon, shopTitle.x * scaleX, shopTitle.y * scaleY, 0, scaleX, scaleY)
+    love.graphics.draw(shopButtonImage, shopTitle.x * scaleX, shopTitle.y * scaleY, 0, scaleX, scaleY)
 end
 
 --drawShopItems()
@@ -138,7 +152,7 @@ local function itemEffects(item)
     end
 end
 
-local function isShopItemclicked(x, y, gameState)
+local function isShopItemClicked(x, y, gameState)
     scaleX = scaling.scaleX
     scaleY = scaling.scaleY
     for _, shopItem in ipairs(shopItems) do
@@ -173,6 +187,8 @@ local function isShopItemHovered(x, y)
     shop.hoveredItem = nil
 end
 
+-- local 
+
 return {
     createShopItem = createShopItem,
     setUpShop = setUpShop,
@@ -180,6 +196,7 @@ return {
     drawShopItems = drawShopItems,
     itemEffects = itemEffects,
     isShopButtonClicked = isShopButtonClicked,
-    isShopItemclicked = isShopItemclicked,
+    -- isShopButtonHovered = isShopButtonHovered,
+    isShopItemClicked = isShopItemClicked,
     isShopItemHovered = isShopItemHovered
 }
