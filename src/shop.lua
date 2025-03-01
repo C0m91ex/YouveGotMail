@@ -4,10 +4,17 @@ local ui = require("src.ui")
 local email = require("src.email")
 local scaling = require("src.scaling")
 
+-- Shop Button Images
+shopButtonNormal = love.graphics.newImage('assets/inbox/Shop Button.png')
+shopButtonHover = love.graphics.newImage('assets/inbox/Shop Button Hover.png')
+shopButtonClicked = love.graphics.newImage('assets/inbox/Shop Button Click.png')
+
 -- global vars
 local shop = {
     shopOffsetY = 105,
 }
+
+shop.hoverPopup = { x = 0, y = 0, visible = false }
 
 local items = {}
 items.item1 = {
@@ -61,7 +68,8 @@ end
     -- Shop item setup --
 local numberOfShopItems = 3
 local function setUpShop()
-    shopIcon = love.graphics.newImage('assets/inbox/Shop Button.png')
+    -- shopIcon = love.graphics.newImage('assets/inbox/Shop Button.png')
+    shopIcon = shopButtonImage
     -- Make sure when increasing this variable to set up name and price for the added items to the shop
     for _ = 1, numberOfShopItems do
         -- createShopItem(mode, x, y, width, height, color)
@@ -88,12 +96,27 @@ local function isShopButtonClicked(x, y)
             y > shopTitle.y * scaleY and y < shopTitle.y * scaleY + shopTitle.height * scaleY
 end
 
+local function isShopButtonHovered(x, y)
+    scaleX = scaling.scaleX
+    scaleY = scaling.scaleY
+    return  x > shopTitle.x * scaleX and x < shopTitle.x * scaleX + shopTitle.width * scaleX and
+            y > shopTitle.y * scaleY and y < shopTitle.y * scaleY + shopTitle.height * scaleY  
+end
+
+-- Function to draw the shop button dynamically based on state
 local function drawShopTitle()
     scaleX = scaling.scaleX
     scaleY = scaling.scaleY
     love.graphics.setColor(1, 1, 1)
     --love.graphics.rectangle("fill", shopTitle.x * scaleX, shopTitle.y * scaleY, shopTitle.width * scaleX, shopTitle.height * scaleY)
-    love.graphics.draw(shopIcon, shopTitle.x * scaleX, shopTitle.y * scaleY, 0, scaleX, scaleY)
+    love.graphics.draw(shopButtonImage, shopTitle.x * scaleX, shopTitle.y * scaleY, 0, scaleX, scaleY)
+end
+
+local function drawHoverPopup()
+    if shop.hoverPopup.visible then
+        love.graphics.setColor(1, 1, 1) -- White rectangle
+        love.graphics.rectangle("fill", shop.hoverPopup.x, shop.hoverPopup.y, 100, 50)
+    end
 end
 
 --drawShopItems()
@@ -105,9 +128,14 @@ local function drawShopItems()
     scaleY = scaling.scaleY
     love.graphics.setColor(0.616, 0.671, 0.788, 1)
     love.graphics.rectangle("fill", shopTitle.x * scaleX, (shopTitle.y + 52) * scaleY, 203 * scaleX, 700 * scaleY)
-    -- draws out each item box
+    
     for _, shopItem in ipairs(shopItems) do
-        love.graphics.setColor(shopItem.color)
+        if shop.hoveredItem == shopItem then
+            love.graphics.setColor(0.9, 0.9, 0.9) -- Lighten color when hovering
+        else
+            love.graphics.setColor(shopItem.color)
+        end
+
         love.graphics.rectangle(shopItem.mode, shopItem.x * scaleX, shopItem.y * scaleY, shopItem.width * scaleX, shopItem.height * scaleY)
         love.graphics.setColor(0.490, 0.525, 0.608)
         love.graphics.rectangle("fill", shopItem.x * scaleX, (shopItem.y + borderYOffset) * scaleY, shopItem.width * scaleX, 25 * scaleY)
@@ -117,7 +145,19 @@ local function drawShopItems()
         love.graphics.printf("Price: $"..shopItem.itemTable.price, (shopItem.x + 30) * scaleX, (shopItem.y + priceYOffset) * scaleY, 120 * scaleX, "center")
         priceYOffset = priceYOffset + 1
     end
+
+    -- Draw popup if hovering over an item
+    if shop.hoveredItem then
+        local mouseX, mouseY = love.mouse.getPosition()
+        local popupWidth, popupHeight = 120, 60
+        local popupX = mouseX - popupWidth - 10  -- To the left of the cursor
+        local popupY = mouseY + 10  -- Slightly below the cursor
+
+        love.graphics.setColor(1, 1, 1, 1) -- White rectangle
+        love.graphics.rectangle("fill", popupX, popupY, popupWidth, popupHeight)
+    end
 end
+
 
 local function itemEffects(item)
     if item == 1 then
@@ -132,7 +172,7 @@ local function itemEffects(item)
     end
 end
 
-local function isShopItemclicked(x, y, gameState)
+local function isShopItemClicked(x, y, gameState)
     scaleX = scaling.scaleX
     scaleY = scaling.scaleY
     for _, shopItem in ipairs(shopItems) do
@@ -150,6 +190,25 @@ local function isShopItemclicked(x, y, gameState)
     end
 end
 
+local function isShopItemHovered(x, y)
+    scaleX = scaling.scaleX
+    scaleY = scaling.scaleY
+    for _, shopItem in ipairs(shopItems) do
+        if x > shopItem.x * scaleX and x < shopItem.x * scaleX + shopItem.width * scaleX and
+           y > shopItem.y * scaleY and y < shopItem.y * scaleY + shopItem.height * scaleY then
+            print("Hovering over item: " .. shopItem.itemTable.name)
+            shop.hoveredItem = shopItem
+            shop.hoverPopup.x = (x - 120) * scaleX -- Position to the left of the mouse
+            shop.hoverPopup.y = (y + 10) * scaleY -- Slightly below the mouse
+            shop.hoverPopup.visible = true
+            return
+        end
+    end
+    shop.hoveredItem = nil
+    shop.hoverPopup.visible = false
+end
+
+-- local 
 
 return {
     createShopItem = createShopItem,
@@ -158,5 +217,7 @@ return {
     drawShopItems = drawShopItems,
     itemEffects = itemEffects,
     isShopButtonClicked = isShopButtonClicked,
-    isShopItemclicked = isShopItemclicked
+    isShopButtonHovered = isShopButtonHovered,
+    isShopItemClicked = isShopItemClicked,
+    isShopItemHovered = isShopItemHovered
 }
