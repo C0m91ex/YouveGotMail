@@ -169,10 +169,15 @@ end
 local function handleEmailSelection(mouseX, mouseY, gameState)
     scaleX = scaling.scaleX
     scaleY = scaling.scaleY
+
+    -- convert mouse position to match scaled coordinates
+    local scaledMouseX = mouseX / scaleX
+    local scaledMouseY = mouseY / scaleY
+
     if not gameState.selectedEmail then
         for _, email in ipairs(emails) do
-            if mouseX > email.x * scaleX and mouseX < email.x * scaleX + email.width * scaleX and
-               mouseY > email.y * scaleY and mouseY < email.y * scaleY + email.height * scaleY then
+            if scaledMouseX > email.x and scaledMouseX < email.x + email.width and
+               scaledMouseY > email.y and scaledMouseY < email.y + email.height then
 
                 if love.timer.getTime() - gameState.lastClickTime < gameState.doubleClickDelay then
                     gameState.openedEmail = email
@@ -185,8 +190,10 @@ local function handleEmailSelection(mouseX, mouseY, gameState)
                 end
 
                 gameState.selectedEmail = email
-                gameState.offsetX = mouseX - email.x
-                gameState.offsetY = mouseY - email.y
+
+                gameState.offsetX = scaledMouseX - email.x
+                gameState.offsetY = scaledMouseY - email.y
+
                 gameState.lastClickTime = love.timer.getTime()
                 break
             end
@@ -198,8 +205,12 @@ end
 -- Handler function for dragging emails w/mouse
 local function handleDragging(mouseX, mouseY, gameState)
     if gameState.selectedEmail then
-        gameState.selectedEmail.x = mouseX - gameState.offsetX
-        gameState.selectedEmail.y = mouseY - gameState.offsetY
+        local scaledMouseX = mouseX / scaling.scaleX
+        local scaledMouseY = mouseY / scaling.scaleY
+
+        -- Update email postion correctly
+        gameState.selectedEmail.x = scaledMouseX - gameState.offsetX
+        gameState.selectedEmail.y = scaledMouseY - gameState.offsetY
 
         -- if ui.isOverTrashBin(gameState.selectedEmail) then
         --     globalOffsetY = globalOffsetY + (emailBox.height + emailBox.ySpacing)
