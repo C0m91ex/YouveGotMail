@@ -69,7 +69,7 @@ end
 
 
 function login.handleEvent(e, a, b, c)
-    if e == "mousepressed" then
+    if e == "mousereleased" then
         if b >= 220 and b <= 250 then -- Adjusted for new position
             activeField = "username"
         elseif b >= 280 and b <= 310 then -- Adjusted for new position
