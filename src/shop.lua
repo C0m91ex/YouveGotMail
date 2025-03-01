@@ -14,6 +14,8 @@ local shop = {
     shopOffsetY = 105,
 }
 
+shop.hoverPopup = { x = 0, y = 0, visible = false }
+
 local items = {}
 items.item1 = {
     price = 10,
@@ -110,6 +112,13 @@ local function drawShopTitle()
     love.graphics.draw(shopButtonImage, shopTitle.x * scaleX, shopTitle.y * scaleY, 0, scaleX, scaleY)
 end
 
+local function drawHoverPopup()
+    if shop.hoverPopup.visible then
+        love.graphics.setColor(1, 1, 1) -- White rectangle
+        love.graphics.rectangle("fill", shop.hoverPopup.x, shop.hoverPopup.y, 100, 50)
+    end
+end
+
 --drawShopItems()
 -- draws all of the shop items buttons when shop is opened
 local function drawShopItems()
@@ -121,7 +130,6 @@ local function drawShopItems()
     love.graphics.rectangle("fill", shopTitle.x * scaleX, (shopTitle.y + 52) * scaleY, 203 * scaleX, 700 * scaleY)
     
     for _, shopItem in ipairs(shopItems) do
-        -- Change color if this item is being hovered over
         if shop.hoveredItem == shopItem then
             love.graphics.setColor(0.9, 0.9, 0.9) -- Lighten color when hovering
         else
@@ -137,7 +145,19 @@ local function drawShopItems()
         love.graphics.printf("Price: $"..shopItem.itemTable.price, (shopItem.x + 30) * scaleX, (shopItem.y + priceYOffset) * scaleY, 120 * scaleX, "center")
         priceYOffset = priceYOffset + 1
     end
+
+    -- Draw popup if hovering over an item
+    if shop.hoveredItem then
+        local mouseX, mouseY = love.mouse.getPosition()
+        local popupWidth, popupHeight = 120, 60
+        local popupX = mouseX - popupWidth - 10  -- To the left of the cursor
+        local popupY = mouseY + 10  -- Slightly below the cursor
+
+        love.graphics.setColor(1, 1, 1, 1) -- White rectangle
+        love.graphics.rectangle("fill", popupX, popupY, popupWidth, popupHeight)
+    end
 end
+
 
 local function itemEffects(item)
     if item == 1 then
@@ -176,15 +196,16 @@ local function isShopItemHovered(x, y)
     for _, shopItem in ipairs(shopItems) do
         if x > shopItem.x * scaleX and x < shopItem.x * scaleX + shopItem.width * scaleX and
            y > shopItem.y * scaleY and y < shopItem.y * scaleY + shopItem.height * scaleY then
-            -- Placeholder: Perform actions when hovering over a shop item
             print("Hovering over item: " .. shopItem.itemTable.name)
-            -- You can set a flag like `shop.hoveredItem = shopItem` to use it elsewhere
             shop.hoveredItem = shopItem
+            shop.hoverPopup.x = (x - 120) * scaleX -- Position to the left of the mouse
+            shop.hoverPopup.y = (y + 10) * scaleY -- Slightly below the mouse
+            shop.hoverPopup.visible = true
             return
         end
     end
-    -- Reset hovered item if not hovering over anything
     shop.hoveredItem = nil
+    shop.hoverPopup.visible = false
 end
 
 -- local 
