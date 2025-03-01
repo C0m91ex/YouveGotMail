@@ -127,7 +127,7 @@ local function drawShopItems()
     scaleX = scaling.scaleX
     scaleY = scaling.scaleY
     love.graphics.setColor(0.616, 0.671, 0.788, 1)
-    love.graphics.rectangle("fill", shopTitle.x * scaleX, (shopTitle.y + 52) * scaleY, 203 * scaleX, 700 * scaleY)
+    love.graphics.rectangle("fill", shopTitle.x * scaleX, (shopTitle.y + 66) * scaleY, 203 * scaleX, 700 * scaleY)
     
     for _, shopItem in ipairs(shopItems) do
         if shop.hoveredItem == shopItem then
