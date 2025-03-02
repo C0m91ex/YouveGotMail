@@ -146,7 +146,7 @@ local function drawShopItems()
         local popupX = mouseX - popupWidth - 10  -- To the left of the cursor
         local popupY = mouseY + 10  -- Slightly below the cursor
 
-        love.graphics.setColor(0.678, 0.678, 0.678) -- Light grey background
+        love.graphics.setColor(0.678, 0.678, 0.678, 0.5) -- Light grey background
         love.graphics.rectangle("fill", popupX, popupY, popupWidth, popupHeight)
         love.graphics.setColor(0, 0, 0) -- Black text
         love.graphics.print(shop.hoverPopup.text, popupX + 10, popupY + 10)
