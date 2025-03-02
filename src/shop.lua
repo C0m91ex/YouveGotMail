@@ -112,13 +112,6 @@ local function drawShopTitle()
     love.graphics.draw(shopButtonImage, shopTitle.x * scaleX, shopTitle.y * scaleY, 0, scaleX, scaleY)
 end
 
-local function drawHoverPopup()
-    if shop.hoverPopup.visible then
-        love.graphics.setColor(1, 1, 1) -- White rectangle
-        love.graphics.rectangle("fill", shop.hoverPopup.x, shop.hoverPopup.y, 100, 50)
-    end
-end
-
 --drawShopItems()
 -- draws all of the shop items buttons when shop is opened
 local function drawShopItems()
@@ -149,12 +142,15 @@ local function drawShopItems()
     -- Draw popup if hovering over an item
     if shop.hoveredItem then
         local mouseX, mouseY = love.mouse.getPosition()
-        local popupWidth, popupHeight = 120, 60
+        local popupWidth, popupHeight = 360, 180
         local popupX = mouseX - popupWidth - 10  -- To the left of the cursor
         local popupY = mouseY + 10  -- Slightly below the cursor
 
-        love.graphics.setColor(1, 1, 1, 1) -- White rectangle
+        love.graphics.setColor(0.678, 0.678, 0.678) -- Light grey background
         love.graphics.rectangle("fill", popupX, popupY, popupWidth, popupHeight)
+        love.graphics.setColor(0, 0, 0) -- Black text
+        love.graphics.print(shop.hoverPopup.text, popupX + 10, popupY + 10)
+        love.graphics.setColor(1, 1, 1) -- Reset color
     end
 end
 
@@ -190,16 +186,36 @@ local function isShopItemClicked(x, y, gameState)
     end
 end
 
-local function isShopItemHovered(x, y)
+function isShopItemHovered(x, y)
     scaleX = scaling.scaleX
     scaleY = scaling.scaleY
-    for _, shopItem in ipairs(shopItems) do
+    for index = 1, #shopItems do
+        local shopItem = shopItems[index]
         if x > shopItem.x * scaleX and x < shopItem.x * scaleX + shopItem.width * scaleX and
            y > shopItem.y * scaleY and y < shopItem.y * scaleY + shopItem.height * scaleY then
-            print("Hovering over item: " .. shopItem.itemTable.name)
             shop.hoveredItem = shopItem
-            shop.hoverPopup.x = (x - 120) * scaleX -- Position to the left of the mouse
-            shop.hoverPopup.y = (y + 10) * scaleY -- Slightly below the mouse
+            shop.hoverPopup.x = (x - 120) * scaleX 
+            shop.hoverPopup.y = (y + 10) * scaleY 
+            -- shop.hoverPopup.text = "Hello world" 
+            if index == 1 then
+                shop.hoverPopup.text =
+                    "Item Name: " .. items.item1.name .. "\n" ..
+                    "Price: Starting price: $10, $8 increase for whenever\nthe item is purchased again.\n" ..
+                    "Description: Increase deletion value by 1."
+            elseif shop.hoveredItem == shopItem then
+                if index == 2 then
+                    shop.hoverPopup.text =
+                        "Item Name: " .. items.item2.name .. "\n" ..
+                        "Price: Starting price: $15, $5 increase when the\nitem is purchased again.\n" ..
+                        "Description: Passively generate money when\nemails come in."
+                elseif index == 3 then
+                    shop.hoverPopup.text =
+                        "Item Name: " .. items.item3.name .. "\n" ..
+                        "Price: Starting price: $30, $15 increase for\nwhenever the item is purchased again.\n" ..
+                        "Description: Increase the spawn rate of emails."
+                end
+            end            
+
             shop.hoverPopup.visible = true
             return
         end
