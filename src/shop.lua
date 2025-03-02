@@ -199,19 +199,19 @@ function isShopItemHovered(x, y)
             -- shop.hoverPopup.text = "Hello world" 
             if index == 1 then
                 shop.hoverPopup.text =
-                    "Item Name: " .. items.item1.name .. "\n" ..
-                    "Price: Starting price: $10, $8 increase for whenever\nthe item is purchased again.\n" ..
+                    "Item Name: " .. items.item1.name .. "\n\n" ..
+                    "Price: Starting price: $10, $8 increase for whenever\nthe item is purchased again.\n\n" ..
                     "Description: Increase deletion value by 1."
             elseif shop.hoveredItem == shopItem then
                 if index == 2 then
                     shop.hoverPopup.text =
-                        "Item Name: " .. items.item2.name .. "\n" ..
-                        "Price: Starting price: $15, $5 increase when the\nitem is purchased again.\n" ..
+                        "Item Name: " .. items.item2.name .. "\n\n" ..
+                        "Price: Starting price: $15, $5 increase when the\nitem is purchased again.\n\n" ..
                         "Description: Passively generate money when\nemails come in."
                 elseif index == 3 then
                     shop.hoverPopup.text =
-                        "Item Name: " .. items.item3.name .. "\n" ..
-                        "Price: Starting price: $30, $15 increase for\nwhenever the item is purchased again.\n" ..
+                        "Item Name: " .. items.item3.name .. "\n\n" ..
+                        "Price: Starting price: $30, $15 increase for\nwhenever the item is purchased again.\n\n" ..
                         "Description: Increase the spawn rate of emails."
                 end
             end            
