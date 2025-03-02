@@ -39,4 +39,29 @@ function utils.createChoiceTableFromString(choiceTable, string)
     return choiceTable
 end
 
+-- Creates a popup near where the mouse position is hovering so long as text is provided
+-- All other fields are optional and will set to default values if not provided
+function utils.hoverPopup(text, textColor, red, green, blue, alpha, width, height)
+    if text == nil then return end
+    if textColor == nil then textColor = {0, 0, 0} end
+    if red == nil then red = 0.678 end
+    if green == nil then green = 0.678 end
+    if blue == nil then blue = 0.678 end
+    if alpha == nil then alpha = 0.5 end
+    if width == nil then width = 360 end
+    if height == nil then height = 180 end
+
+    local mouseX, mouseY = love.mouse.getPosition()
+    local popupX = mouseX - width - 10
+    local popupY = mouseY + 10
+    
+    love.graphics.setColor(red, green, blue, alpha)
+    love.graphics.rectangle("fill", popupX, popupY, width, height)
+    love.graphics.setColor(textColor)
+    love.graphics.print(text, popupX + 10, popupY + 10)
+    love.graphics.setColor(1, 1, 1)
+end
+
+
+
 return utils

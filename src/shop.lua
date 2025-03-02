@@ -3,6 +3,7 @@
 local ui = require("src.ui")
 local email = require("src.email")
 local scaling = require("src.scaling")
+local ui = require("src.utils")
 
 -- Shop Button Images
 shopButtonNormal = love.graphics.newImage('assets/inbox/Shop Button.png')
@@ -141,16 +142,7 @@ local function drawShopItems()
 
     -- Draw popup if hovering over an item
     if shop.hoveredItem then
-        local mouseX, mouseY = love.mouse.getPosition()
-        local popupWidth, popupHeight = 360, 180
-        local popupX = mouseX - popupWidth - 10  -- To the left of the cursor
-        local popupY = mouseY + 10  -- Slightly below the cursor
-
-        love.graphics.setColor(0.678, 0.678, 0.678, 0.5) -- Light grey background
-        love.graphics.rectangle("fill", popupX, popupY, popupWidth, popupHeight)
-        love.graphics.setColor(0, 0, 0) -- Black text
-        love.graphics.print(shop.hoverPopup.text, popupX + 10, popupY + 10)
-        love.graphics.setColor(1, 1, 1) -- Reset color
+        ui.hoverPopup(shop.hoverPopup.text, nil, nil, nil, nil, nil, nil, nil)
     end
 end
 
