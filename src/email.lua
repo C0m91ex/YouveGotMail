@@ -320,6 +320,9 @@ end
 function setAvailableColor()
     love.graphics.setColor(love.math.colorFromBytes(255, 255, 255, 255)) end
 
+function setHoverColor()
+    love.graphics.setColor(love.math.colorFromBytes(220, 220, 220, 255)) end
+
 function setBlockedColor()
     love.graphics.setColor(love.math.colorFromBytes(188, 188, 188, 255)) end
 
@@ -352,6 +355,9 @@ function makeChoiceButton(x, y, choiceTable, gameState)
 end
 
 function drawChoiceButton(choiceButton)
+    scaleX = scaling.scaleX
+    scaleY = scaling.scaleY
+    x,y = love.mouse.getPosition()
     -- local function setAvailableColor()
     --     love.graphics.setColor(love.math.colorFromBytes(255, 255, 255, 255)) end
     -- local function setBlockedColor()
@@ -371,6 +377,10 @@ function drawChoiceButton(choiceButton)
 
     if choiceButton.unlockFlag then
         setAvailableColor()
+        if x > choiceButton.x * scaleX and x < choiceButton.x * scaleX + buttonWidth * scaleX and
+           y > choiceButton.y * scaleY and y < choiceButton.y * scaleY + buttonHeight * scaleY then
+            setHoverColor()
+        end
     else 
         setBlockedColor()
     end
