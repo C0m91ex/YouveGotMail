@@ -407,7 +407,33 @@ local function isEmailChoiceClicked(x, y, gameState)
     end
 end
 
-local function isEmailChoiceHovered(x, y)
+local function printChoiceButtonPrereqs(choiceButton)
+    if next(choiceButton.prereqs) then
+        local returnString = ""
+        for prereqKey, prereqString in pairs(choiceButton.prereqs) do
+            local value = tonumber(string.match(prereqString, "[%+%-]?%d+")) --thanks chatGPT
+            local operator = string.match(prereqString, "[<>~!=]*")
+            --print("operator is "..(operator))
+
+            if operator == "<" then
+                returnString = returnString.."having "..tostring(prereqKey).." less than ".. tostring(value).."\n"
+            elseif operator == "<=" then
+                returnString = returnString.."having "..tostring(prereqKey).." less than ".. tostring(value).."\n"
+            elseif operator == ">" then
+                returnString = returnString.."having "..tostring(prereqKey).." greater than ".. tostring(value).."\n"
+            elseif operator == ">=" then
+                returnString = returnString.."having "..tostring(prereqKey).." greater than ".. tostring(value).."\n"
+            elseif operator == "~" or operator == "~=" or operator == "!" or operator == "!=" then
+                returnString = returnString.."not having "..tostring(prereqKey).." equal to ".. tostring(value).."\n"
+            else
+                returnString = returnString.."having "..tostring(prereqKey).." equal to ".. tostring(value).."\n"
+            end
+        end
+    return tostring(returnString)
+    end
+end
+
+local function isEmailChoiceHovered(x, y, gameState)
     scaleX = scaling.scaleX
     scaleY = scaling.scaleY
     for _, choiceButton in ipairs(choiceButtons) do
@@ -416,8 +442,15 @@ local function isEmailChoiceHovered(x, y)
             hoverPopup.x = (x - 120) * scaleX 
             hoverPopup.y = (y + 10) * scaleY 
             -- shop.hoverPopup.text = "Hello world" 
-            if (choiceButton.unlockFlag) then hoverPopup.text = "test1" else hoverPopup.text = "test2" end
-            hoverPopup.visible = true
+            if not gameState.getOpenedEmail().respond then
+                if not choiceButton.unlockFlag then
+                    hoverPopup.text = "You can unlock this by\n"..printChoiceButtonPrereqs(choiceButton)
+                    hoverPopup.visible = true
+                elseif next(choiceButton.prereqs) then
+                    hoverPopup.text = "You've unlocked this by\n"..printChoiceButtonPrereqs(choiceButton)
+                    hoverPopup.visible = true
+                end
+            end
             return
         end
     end

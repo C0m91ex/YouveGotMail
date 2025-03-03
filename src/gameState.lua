@@ -58,7 +58,7 @@ end
 function gameState.update(dt)
     local mouseX, mouseY = love.mouse.getPosition()
     if gameState.openedEmail then
-        email.isEmailChoiceHovered(mouseX, mouseY)
+        email.isEmailChoiceHovered(mouseX, mouseY, gameState)
         return
     end
     email.autospawnEmail(email, gameState)
