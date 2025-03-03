@@ -56,9 +56,13 @@ end
 -- Update function for gameState, calls email.handleEmailselection & email.handleDragging
 -- Handles mouse interaction player actions in regards to current gamestate
 function gameState.update(dt)
-    if gameState.openedEmail then return end
-    email.autospawnEmail(email, gameState)
     local mouseX, mouseY = love.mouse.getPosition()
+    if gameState.openedEmail then
+        email.isEmailChoiceHovered(mouseX, mouseY)
+        return
+    end
+    email.autospawnEmail(email, gameState)
+    
     if love.mouse.isDown(1) then
         email.handleEmailSelection(mouseX, mouseY, gameState)
         email.handleDragging(mouseX, mouseY, gameState)

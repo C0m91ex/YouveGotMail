@@ -150,6 +150,44 @@ local function isOverTrashBin(x, y)
            y > trashBin.y and y < trashBin.y + trashBin.height
 end
 
+-- Creates a popup near where the mouse position is hovering so long as text is provided
+-- All other fields are optional and will set to default values if not provided
+local function hoverPopup(text, textColor, red, green, blue, alpha, width, height, align)
+    if text == nil then return end
+    if textColor == nil then textColor = {0, 0, 0} end
+    if red == nil then red = 0.678 end
+    if green == nil then green = 0.678 end
+    if blue == nil then blue = 0.678 end
+    if alpha == nil then alpha = 0.5 end
+    if width == nil then width = 360 end
+    if height == nil then height = 180 end
+    if align == nil then align = "bl" end
+
+    local mouseX, mouseY = love.mouse.getPosition()
+    local popupX = 0
+    local popupY = 0
+
+    if align == "bl" then
+        popupX = mouseX - width - 10
+        popupY = mouseY + 10
+    elseif align == "br" then
+        popupX = mouseX + 10
+        popupY = mouseY + 10
+    elseif align == "tl" then
+        popupX = mouseX - width - 10
+        popupY = mouseY - height - 10 
+    elseif align == "tr" then
+        popupX = mouseX + 10
+        popupY = mouseY - height - 10
+    end 
+    
+    love.graphics.setColor(red, green, blue, alpha)
+    love.graphics.rectangle("fill", popupX, popupY, width, height)
+    love.graphics.setColor(textColor)
+    love.graphics.print(text, popupX + 10, popupY + 10)
+    love.graphics.setColor(1, 1, 1)
+end
+
 
 return {
     loadWindow = loadWindow,
@@ -161,5 +199,6 @@ return {
     drawTimer = drawTimer,
     drawOpenedEmail = drawOpenedEmail,
     isBackButtonClicked = isBackButtonClicked,
-    isOverTrashBin = isOverTrashBin
+    isOverTrashBin = isOverTrashBin,
+    hoverPopup = hoverPopup
 }

@@ -26,6 +26,8 @@ local spawnPeriod = 5
 local emailValue = 1
 local spawnValue = 0
 
+local hoverPopup = { x = 0, y = 0, visible = false }
+
 local buttonWidth = 175
 local buttonHeight = 70
 local scaleX, scaleY = 1, 1
@@ -296,6 +298,9 @@ local function printEmailContent(email)
     for i, choiceButton in ipairs(choiceButtons) do    
         drawChoiceButton(choiceButton)
     end
+    if hoverPopup.visible then
+        ui.hoverPopup(hoverPopup.text, nil, nil, nil, nil, nil, nil, nil, "tr")
+    end
     -- for i, t in ipairs(content["choices"]) do
         -- local choiceButton = makeChoiceButton(100+((i-1)*150), 300, 120, 120, t)
         -- drawChoiceButton(choiceButton)
@@ -364,7 +369,11 @@ function drawChoiceButton(choiceButton)
 
     -- if gameState.getOpenedEmail().respond == true then unlockFlag = false end
 
-    if choiceButton.unlockFlag then setAvailableColor() else setBlockedColor() end
+    if choiceButton.unlockFlag then
+        setAvailableColor()
+    else 
+        setBlockedColor()
+    end
     love.graphics.rectangle("fill", choiceButton.x * scaleX, choiceButton.y * scaleY, buttonWidth * scaleX, buttonHeight * scaleY)
     love.graphics.setColor(0,0,0)
     love.graphics.printf(choiceButton.body, choiceButton.x * scaleX, choiceButton.y * scaleY, buttonWidth * scaleX, "center")
@@ -396,6 +405,23 @@ local function isEmailChoiceClicked(x, y, gameState)
             end
         end
     end
+end
+
+local function isEmailChoiceHovered(x, y)
+    scaleX = scaling.scaleX
+    scaleY = scaling.scaleY
+    for _, choiceButton in ipairs(choiceButtons) do
+        if x > choiceButton.x * scaleX and x < choiceButton.x * scaleX + buttonWidth * scaleX and
+           y > choiceButton.y * scaleY and y < choiceButton.y * scaleY + buttonHeight * scaleY then
+            hoverPopup.x = (x - 120) * scaleX 
+            hoverPopup.y = (y + 10) * scaleY 
+            -- shop.hoverPopup.text = "Hello world" 
+            if (choiceButton.unlockFlag) then hoverPopup.text = "test1" else hoverPopup.text = "test2" end
+            hoverPopup.visible = true
+            return
+        end
+    end
+    hoverPopup.visible = false
 end
 
 function choiceReset()
@@ -506,6 +532,7 @@ return {
     printEmailContent = printEmailContent,
     fillEmailPool = fillEmailPool,
     isEmailChoiceClicked = isEmailChoiceClicked,
+    isEmailChoiceHovered = isEmailChoiceHovered,
     choiceReset = choiceReset,
     deleteEmail = deleteEmail,
     moveEmailsDown = moveEmailsDown,

@@ -3,7 +3,7 @@
 local ui = require("src.ui")
 local email = require("src.email")
 local scaling = require("src.scaling")
-local ui = require("src.utils")
+local utils = require("src.utils")
 
 -- Shop Button Images
 shopButtonNormal = love.graphics.newImage('assets/inbox/Shop Button.png')
@@ -152,7 +152,7 @@ local function drawShopItems()
 
     -- Draw popup if hovering over an item
     if shop.hoveredItem then
-        ui.hoverPopup(shop.hoverPopup.text, nil, nil, nil, nil, nil, nil, nil)
+        ui.hoverPopup(shop.hoverPopup.text, nil, nil, nil, nil, nil, nil, nil, nil)
     end
 end
 
