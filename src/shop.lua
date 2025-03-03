@@ -20,6 +20,7 @@ shop.hoverPopup = { x = 0, y = 0, visible = false }
 local items = {}
 items.item1 = {
     price = 10,
+    inflation = 8,
     name = "Concentrated Encryption",
     description = "Emails give more money when they are deleted",
     modifier = 1,
@@ -29,6 +30,7 @@ items.item1 = {
 }
 items.item2 = {
     price = 20,
+    inflation = 5,
     name = "Data Scraping",
     description = "Get a bit of money when emails come in.",
     modifier = 1,
@@ -38,6 +40,7 @@ items.item2 = {
 }
 items.item3 = {
     price = 30,
+    inflation = 15,
     name = "Net Speedrouting",
     description = "Emails come in faster.",
     modifier = email.getSpawnPeriod()/10,
@@ -66,6 +69,13 @@ local function createShopItem(mode, x, y, width, height, color)
         itemTable = {}
     })
 end
+
+local function updateShopItem(shopItem, item)
+    item.price = item.price + item.inflation
+    shopItem.itemTable.name = item.name
+    shopItem.itemTable.price = item.price
+end
+
     -- Shop item setup --
 local numberOfShopItems = 3
 local function setUpShop()
@@ -151,12 +161,15 @@ local function itemEffects(item)
     if item == 1 then
         print("Item 1 effect.")
         items.item1.effect()
+        updateShopItem(shopItems[1], items.item1)
     elseif item == 2 then
         print("Item 2 effect.")
         items.item2.effect()
+        updateShopItem(shopItems[2], items.item2)
     elseif item == 3 then
         print("Item 3 effect.")
         items.item3.effect()
+        updateShopItem(shopItems[3], items.item3)
     end
 end
 
@@ -169,8 +182,8 @@ local function isShopItemClicked(x, y, gameState)
             print("Item ".._.." pressed.")
 
             if gameState.currency >= shopItem.itemTable.price then
-                itemEffects(_)
                 gameState.currency = gameState.currency - shopItem.itemTable.price
+                itemEffects(_)
                 sounds.powerUp:stop()
                 sounds.powerUp:play()
             end
