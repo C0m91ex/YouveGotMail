@@ -81,7 +81,7 @@ local function getNextEmailContent()
     if next(emailPool) ~= nil then
         emailContent = table.remove(emailPool)
     else
-        emailContent = generateSpamEmail(spam.combination.donation)
+        emailContent = spam.generateRandomSpamEmail()
     end
     return emailContent
 end
