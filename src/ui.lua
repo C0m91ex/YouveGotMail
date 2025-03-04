@@ -6,6 +6,7 @@ local scaling = require("src.scaling")
 local scaleX, scaleY = 1, 1
 local desktopWidth, desktopHeight = love.window.getDesktopDimensions()
 local trashBin = { x = (love.graphics.getWidth() / 2 - 370) * scaling.scaleX, y = (love.graphics.getHeight() / 2 - 240) * scaling.scaleY, width = 157, height = 157, color = {1, 0, 0} }
+local xButton = { x = (love.graphics.getWidth() / 2 + 1093) * scaling.scaleX, y = (love.graphics.getHeight() / 2 - 302) * scaling.scaleY, width = 50 * scaling.scaleX, height = 18 * scaling.scaleY}
 local inboxBackground
 local loginBackground
 local emailBackground
@@ -61,6 +62,13 @@ local function drawTrashBin()
     --love.graphics.rectangle("fill", trashBin.x, trashBin.y, trashBin.width, trashBin.height)
     love.graphics.draw(trashBinIcon, trashBin.x, trashBin.y, 0, scaleX, scaleY)
 end
+
+--[[
+local function drawXButton()
+    love.graphics.setColor(1, 0, 0)
+    love.graphics.rectangle("fill", xButton.x, xButton.y, xButton.width, xButton.height)
+end
+]]--
 
 -- drawScore()
 -- Draws the score counter label
@@ -139,6 +147,12 @@ local function isBackButtonClicked(x, y)
     return x > 10 and x < 110 and y > 10 and y < 50
 end
 
+local function isXButtonClicked(x, y)
+    return  x > xButton.x and x < xButton.x + xButton.width and
+            y > xButton.y and y < xButton.y + xButton.height
+end
+
+
 -- isOverTrashBin()
 -- Checks to see if an email is hovering on top of trash bin location
 -- local function isOverTrashBin(email)
@@ -156,10 +170,12 @@ return {
     loadAssets = loadAssets,
     drawBackground = drawBackground,
     drawTrashBin = drawTrashBin,
+    drawXButton = drawXButton,
     drawCurrency = drawCurrency,
     drawEmailCount = drawEmailCount,
     drawTimer = drawTimer,
     drawOpenedEmail = drawOpenedEmail,
     isBackButtonClicked = isBackButtonClicked,
+    isXButtonClicked = isXButtonClicked,
     isOverTrashBin = isOverTrashBin
 }

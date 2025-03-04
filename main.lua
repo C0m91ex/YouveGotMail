@@ -142,6 +142,7 @@ function love.draw()
         ui.drawCurrency(gameState.getCurrency())
         ui.drawTrashBin()
         email.drawEmails()
+        --ui.drawXButton()
 
         shop.drawShopTitle()
         if gameState.isShopOpened() then
