@@ -6,8 +6,8 @@ local file = require("src.file")
 local playerState = require("src.playerState")
 local spam = require("src.spam")
 
--- local variables
-local defaultEmail = {                                                                          -- Email data 
+-- global vars
+local defaultEmail = {
     prereq = {},
     sender = "spam@spam.spam",
     subject = "Pelase clik thia linkl!!!",
@@ -15,33 +15,39 @@ local defaultEmail = {                                                          
     choices = {},
     ignored = {}
 }
-local emailBase = file.loadEmailFile('data/EmailBase.csv')                                      
+
+local emailBase = file.loadEmailFile('data/EmailBase.csv')
 local emailPool = {}
-local emails = {} 
-local emailValue = 1
+local emails = {} --emails shown--
 local choiceButtons = {}
-local spawnPeriod = 5                                                                           -- Email spawning
+local screen = { width = love.graphics.getWidth() / 2, height = love.graphics.getHeight() / 2 }
+local globalOffsetY = 0
+local spawnPeriod = 5
+local emailValue = 1
 local spawnValue = 0
-local screen =                                                                                  -- UI/Screen stuff
-    { width = love.graphics.getWidth() / 2, height = love.graphics.getHeight() / 2 } 
+
 local buttonWidth = 175
 local buttonHeight = 70
 local scaleX, scaleY = 1, 1
-local globalOffsetY = 0
-local emailSpawnPoint = 
-    {x = (screen.width - 100) * scaling.scaleX, y = (screen.height - 100) * scaling.scaleY} 
-local emailBox = {width = 1080, height = 50, ySpacing = 20}                                     -- Email box dimensions 
 
--- getSpawnPeriod()
--- Access function for email spawnPeriod
+-- email dimensions
+local emailSpawnPoint = {x = (screen.width - 100) * scaling.scaleX, y = (screen.height - 100) * scaling.scaleY}
+local emailBox = {width = 1080, height = 50, ySpacing = 20}
+
+
+
+-- local function generateRandomSender()
+--     local adj = getRandomElement(emailTables.adjectives)
+--     local noun = getRandomElement(emailTables.nouns)
+--     local num = getRandomElement(emailTables.numbers)
+--     local domain = getRandomElement(emailTables.domains)
+    
+--     return string.format("%s%s%d@%s.com", adj, noun, num, domain)
+-- end
+
 local function getSpawnPeriod() return spawnPeriod end
-
--- setSpawnPeriod()
--- Modifier/setter function for email spawnPeriod
 local function setSpawnPeriod(value) spawnPeriod = value end
 
--- autospawnEmail()
--- Handles procedural generation of emails, uses currentTime and spawnPeriod
 local function autospawnEmail(email, gameState)
     local currentTime = love.timer.getTime()
     if currentTime >= gameState.lastTime + email.getSpawnPeriod() then
@@ -51,18 +57,21 @@ local function autospawnEmail(email, gameState)
 end
 
 -- getLengthEmails()
--- Access function that returns length of emails table
+-- Getter function that returns length of emails table
 local function getLengthEmails()
     return #emails
 end
 
--- fillEmailPool()
--- Fills the email pool with emails that meet the prereqs
 local function fillEmailPool()
+    -- print("fillEmailPool test")
     for i, emailContent in ipairs(emailBase) do
         local prereq = emailContent["prereq"]
         local prereqCheckFlag = true
+        -- print(next(prereq))
         if next(prereq) then
+            -- for k,v in pairs(prereq) do
+            --     print(k.." = "..v)
+            -- end
             for key, value in pairs(prereq) do
                 if not playerState.playerCheck(key, value) then prereqCheckFlag = false break end
             end
@@ -72,22 +81,25 @@ local function fillEmailPool()
             table.remove(emailBase, i)
         end
     end
+    -- for i,v in ipairs(emailPool) do
+    --     print(unpack(v))
+    -- end
 end
 
--- getNextEmailContent()
--- Returns the next email content from the email pool
 local function getNextEmailContent()
     local emailContent = {}
+    --note, lets make this periodic to put spam in between
     if next(emailPool) ~= nil then
         emailContent = table.remove(emailPool)
+        --email.sender = generateRandomSender() -- Assign a random sender
+        --print("Assigned sender:", email.sender) -- DEBUG OUTPUT
     else
-        emailContent = generateSpamEmail(spam.combination.donation)
+        --emailContent = spam.generateSpamEmail(spam.getCombination().donation)
+        emailContent = spam.generateRandomSpamEmail()
     end
     return emailContent
 end
 
--- spawnEmailEvent()
--- Spawns an email event that adds money to the player's currency
 local function spawnEmailEvent(gameState)
     gameState.addMoney(spawnValue)
 end
@@ -119,25 +131,24 @@ local function spawnEmail(mode, x, y, width, height, color, content)
     fillEmailPool()
 end
 
--- updateEmailValue()
--- Updates the email value by the given value
 local function updateEmailValue(value)
     emailValue = emailValue + value
     print("Email value has been updated to "..emailValue..".")
 end
 
--- updateSpawnValue()
--- Spawn value modifier function
 local function updateSpawnValue(value)
     spawnValue = spawnValue + value
     print("Spawn value has been updated to "..spawnValue..".")
 end
 
 -- receiveEmail()
--- Spawns an email with the given mode, x & y position, dimensions, and color
+-- Spawns an email 
+
 local function receiveEmail(gameState)
+    --spawnEmail("fill", screen.width - 120, screen.height - globalOffsetY, emailBox.width, emailBox.height, {1, 1, 1})
     spawnEmail("fill", emailSpawnPoint.x, emailSpawnPoint.y, emailBox.width, emailBox.height, {1, 1, 1})
     spawnEmailEvent(gameState)
+    --globalOffsetY = globalOffsetY - (emailBox.height + emailBox.ySpacing)
 end
 
 -- spawnInitialEmails()
@@ -145,9 +156,13 @@ end
 -- Only gets called once at gamestart
 local function spawnInitialEmails()
     fillEmailPool()
+--local yOffset = 130
     for _ = 1, 4 do
+        --spawnEmail("fill", screen.width - 120, screen.height - yOffset, emailBox.width, emailBox.height, {1, 1, 1})
         spawnEmail("fill", emailSpawnPoint.x, emailSpawnPoint.y, emailBox.width, emailBox.height, {1, 1, 1})
+        --yOffset = yOffset - (emailBox.height + emailBox.ySpacing)
     end
+    --globalOffsetY = yOffset
 end
 
 -- handleEmailSelection()
@@ -164,6 +179,7 @@ local function handleEmailSelection(mouseX, mouseY, gameState)
         for _, email in ipairs(emails) do
             if scaledMouseX > email.x and scaledMouseX < email.x + email.width and
                scaledMouseY > email.y and scaledMouseY < email.y + email.height then
+
                 if love.timer.getTime() - gameState.lastClickTime < gameState.doubleClickDelay then
                     gameState.openedEmail = email
                     for i, t in ipairs(gameState.openedEmail.content["choices"]) do
@@ -173,9 +189,12 @@ local function handleEmailSelection(mouseX, mouseY, gameState)
                     fillEmailPool()
                     return
                 end
+
                 gameState.selectedEmail = email
+
                 gameState.offsetX = scaledMouseX - email.x
                 gameState.offsetY = scaledMouseY - email.y
+
                 gameState.lastClickTime = love.timer.getTime()
                 break
             end
@@ -193,6 +212,31 @@ local function handleDragging(mouseX, mouseY, gameState)
         -- Update email postion correctly
         gameState.selectedEmail.x = scaledMouseX - gameState.offsetX
         gameState.selectedEmail.y = scaledMouseY - gameState.offsetY
+
+        -- if ui.isOverTrashBin(gameState.selectedEmail) then
+        --     globalOffsetY = globalOffsetY + (emailBox.height + emailBox.ySpacing)
+        --     for i, email in ipairs(emails) do
+        --         if email == gameState.selectedEmail then
+        --             -- insert ignored code here
+        --             if not email.respond then
+        --                 for key, value in pairs(email.content.ignored) do
+        --                     playerState.playerChange(key, value)
+        --                 end
+        --                 print("email ignored")
+        --                 for k, v in pairs(playerState.getPlayerVarList()) do
+        --                     print(k.." = "..v)
+        --                 end
+        --             end
+        --             table.remove(emails, i)
+        --             for j = i, #emails do
+        --                 emails[j].y = emails[j].y - (emailBox.height + emailBox.ySpacing)
+        --             end
+        --             gameState.selectedEmail = nil
+        --             gameState.currency = gameState.currency + emailValue
+        --             break
+        --         end
+        --     end
+        -- end
     end
 end
 
@@ -210,8 +254,6 @@ local function drawEmails()
     end
 end
 
--- printEmail()
--- Print function for email content
 local function printEmail(email)
     scaleX = scaling.scaleX
     scaleY = scaling.scaleY
@@ -227,34 +269,55 @@ local function printEmail(email)
     end
 end
 
--- printEmailContent()
--- Print function for email content
 local function printEmailContent(email)
     scaleX = scaling.scaleX
     scaleY = scaling.scaleY
+
     local content = {}
     content = email["content"]
+    -- for section, content in ipairs(email) do
+    --     prereq, sender, subject, body, choices, ignored = unpack(content)
+    --     love.graphics.setColor(0, 0, 0)
+    --     love.graphics.printf(unpack(prereq), 50, 50, 120, "center")
+    --     love.graphics.printf(sender, 50, 100, 120, "center")
+    --     love.graphics.printf(subject, 50, 150, 120, "center")
+    --     love.graphics.printf(body, 50, 200, 120, "center")
+    --     love.graphics.printf(unpack(choices), 50, 250, 120, "center")
+    --     love.graphics.printf(unpack(ignored), 50, 300, 120, "center")
+
+
     love.graphics.setColor(0, 0, 0)
+    --love.graphics.printf("prereq: ", 50, 50, 120, "center")
+    --for k, v in pairs(content["prereq"]) do love.graphics.printf(k.." = "..v, 100, 50, 120, "center") end
     love.graphics.printf(content["sender"], 275 * scaleX, 100 * scaleY, 600 * scaleX, "left")
     love.graphics.printf(content["subject"], 275 * scaleX, 175 * scaleY, 600 * scaleX, "left")
     love.graphics.printf(content["body"], 125 * scaleX, 230 * scaleY, 600 * scaleX, "left")
+    --love.graphics.printf("choices: ", 50, 250, 120, "center")
     for i, choiceButton in ipairs(choiceButtons) do    
         drawChoiceButton(choiceButton)
     end
+    -- for i, t in ipairs(content["choices"]) do
+        -- local choiceButton = makeChoiceButton(100+((i-1)*150), 300, 120, 120, t)
+        -- drawChoiceButton(choiceButton)
+        -- for k, v in pairs(t["cPrereqs"]) do
+        --     love.graphics.printf(k.." = "..v, 100*i, 250, 120, "center")
+        -- end
+        -- love.graphics.printf(t["cBody"], 100*i, 300, 120, "center")
+        -- for k, v in pairs(t["cChanges"]) do
+        --     love.graphics.printf(k.." = "..v, 100*i, 350, 120, "center")
+        -- end
+    --love.graphics.printf("ignored: ", 50, 400, 120, "center")
+    --for k, v in pairs(content["ignored"]) do love.graphics.printf(k.." = "..v, 100, 400, 120, "center") end
+    
 end
 
--- makeChoiceButton()
--- Creates a choice button with the given x, y, choiceTable, and gameState
+
 function setAvailableColor()
     love.graphics.setColor(love.math.colorFromBytes(255, 255, 255, 255)) end
 
--- makeChoiceButton()
--- Creates a choice button with the given x, y, choiceTable, and gameState
 function setBlockedColor()
     love.graphics.setColor(love.math.colorFromBytes(188, 188, 188, 255)) end
 
--- makeChoiceButton()
--- Creates a choice button with the given x, y, choiceTable, and gameState
 function makeChoiceButton(x, y, choiceTable, gameState)
     local unlockFlag = true
     local prereqs = choiceTable.cPrereqs
@@ -262,6 +325,7 @@ function makeChoiceButton(x, y, choiceTable, gameState)
     local changes = choiceTable.cChanges
 
     if next(prereqs) then
+        --print("mcb test1")
         for key, value in pairs(prereqs) do
             if not playerCheck(key, value) then unlockFlag = false end
         end
@@ -282,9 +346,24 @@ function makeChoiceButton(x, y, choiceTable, gameState)
     }
 end
 
--- drawChoiceButton()
--- Draw function for choice buttons
 function drawChoiceButton(choiceButton)
+    -- local function setAvailableColor()
+    --     love.graphics.setColor(love.math.colorFromBytes(255, 255, 255, 255)) end
+    -- local function setBlockedColor()
+    --     love.graphics.setColor(love.math.colorFromBytes(188, 188, 188, 255)) end
+    -- local unlockFlag = true
+    -- local prereqs = choiceButton.choiceTable.cPrereqs
+    -- local body = choiceButton.choiceTable.cBody
+
+    -- if next(prereqs) ~= nil then
+    --     for i, prereq in prereqs do 
+    --         if not playerCheck(prereqs) then unlockFlag = false
+    --         end
+    --     end
+    -- end
+
+    -- if gameState.getOpenedEmail().respond == true then unlockFlag = false end
+
     if choiceButton.unlockFlag then setAvailableColor() else setBlockedColor() end
     love.graphics.rectangle("fill", choiceButton.x * scaleX, choiceButton.y * scaleY, buttonWidth * scaleX, buttonHeight * scaleY)
     love.graphics.setColor(0,0,0)
