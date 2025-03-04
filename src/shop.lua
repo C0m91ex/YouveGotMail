@@ -3,7 +3,6 @@
 local ui = require("src.ui")
 local email = require("src.email")
 local scaling = require("src.scaling")
-local ui = require("src.utils")
 
 -- Shop Button Images
 shopButtonNormal = love.graphics.newImage('assets/inbox/Shop Button.png')
@@ -22,7 +21,7 @@ items.item1 = {
     price = 10,
     inflation = 8,
     name = "Concentrated Encryption",
-    description = "Emails give more money when they are deleted",
+    description = "Emails give more money when they are deleted, thanks to the interns. The emails encrypt themselves further now, whatever that means.",
     modifier = 1,
     effect = function()
         email.updateEmailValue(items.item1.modifier)
@@ -32,7 +31,7 @@ items.item2 = {
     price = 20,
     inflation = 5,
     name = "Data Scraping",
-    description = "Get a bit of money when emails come in.",
+    description = "Get a bit of money when emails come in; thank you, interns. Something about emails scraping a bit of data from all the networks they pass to get to you.",
     modifier = 1,
     effect = function()
         email.updateSpawnValue(items.item2.modifier)
@@ -42,7 +41,7 @@ items.item3 = {
     price = 30,
     inflation = 15,
     name = "Net Speedrouting",
-    description = "Emails come in faster.",
+    description = "Emails come in faster. I didn't bother asking the interns why this time.",
     modifier = email.getSpawnPeriod()/10,
     effect = function()
         email.setSpawnPeriod(email.getSpawnPeriod() - items.item3.modifier)
@@ -206,18 +205,18 @@ function isShopItemHovered(x, y)
                 shop.hoverPopup.text =
                     "Item Name: " .. items.item1.name .. "\n\n" ..
                     "Price: Starting price: $10, $8 increase for whenever\nthe item is purchased again.\n\n" ..
-                    "Description: Increase deletion value by 1."
+                    "Description: "..items.item1.description
             elseif shop.hoveredItem == shopItem then
                 if index == 2 then
                     shop.hoverPopup.text =
                         "Item Name: " .. items.item2.name .. "\n\n" ..
                         "Price: Starting price: $15, $5 increase when the\nitem is purchased again.\n\n" ..
-                        "Description: Passively generate money when\nemails come in."
+                        "Description: "..items.item2.description
                 elseif index == 3 then
                     shop.hoverPopup.text =
                         "Item Name: " .. items.item3.name .. "\n\n" ..
                         "Price: Starting price: $30, $15 increase for\nwhenever the item is purchased again.\n\n" ..
-                        "Description: Increase the spawn rate of emails."
+                        "Description: "..items.item3.description
                 end
             end            
 
