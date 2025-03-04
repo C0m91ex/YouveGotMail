@@ -2,12 +2,15 @@
 -- Login page manager
 local login = {}
 
+-- local variables
 local username = ""
 local password = ""
 local activeField = nil
 local buttonX, buttonY, buttonWidth, buttonHeight = 50, 350, 100, 40 -- Shifted left 150px, down 100px
 local font
 
+-- start()
+-- Initiates the login screen scene (terminates when login is completed)
 function login.start()
     love.keyboard.setKeyRepeat(true)
     
@@ -27,6 +30,8 @@ function login.start()
     love.keyboard.setKeyRepeat(false)
 end
 
+-- load()
+-- Load function for loading the login screen
 function login.load()
     font = love.graphics.newFont(14)
     login.completed = false
@@ -34,6 +39,8 @@ function login.load()
     love.window.setMode(800, 450, { resizable = false })
 end
 
+-- draw()
+-- Draws the login screen
 function login.draw()
     love.graphics.draw(login.background, 0, 0)
 
@@ -67,7 +74,8 @@ function login.draw()
     love.graphics.setColor(1, 1, 1)
 end
 
-
+-- handleEvent()
+-- Handles events for the login screen
 function login.handleEvent(e, a, b, c)
     if e == "mousereleased" then
         if b >= 220 and b <= 250 then -- Adjusted for new position

@@ -5,7 +5,7 @@ local ui = require("src.ui")
 local shop = require("src.shop")
 local scaling = require("src.scaling")
 
--- global vars
+-- local variables
 local start = love.timer.getTime()
 local gameState = {
     currency = 0,
@@ -18,41 +18,58 @@ local gameState = {
     shopButtonOpen = false,
     lastTime = start
 }
-
 local shopButtonNormal = love.graphics.newImage('assets/inbox/Shop Button.png')
 local shopButtonHovered = love.graphics.newImage('assets/inbox/Shop Button Hover.png')
 local shopButtonClicked = love.graphics.newImage('assets/inbox/Shop Button Click.png')
 
+-- global variables
 shopButtonImage = shopButtonNormal
+
+-- isEmailOpened()
+-- Access function for email 'opened' status
+function gameState.isEmailOpened() return gameState.openedEmail end
+
+-- isShopOpened()
+-- Access function for shop 'opened' status
+function gameState.isShopOpened() return gameState.shopButtonOpen end
+
+-- getOpenedEmail()
+-- Getter function for opened email
+function gameState.getOpenedEmail() return gameState.openedEmail end
+
+-- getCurrency()
+-- Getter function for currency
+function gameState.getCurrency() return gameState.currency end
 
 -- load()
 -- Load function for the gameState, calls ui.loadAssets() & email.spawnInitialEmails()
 -- Handles loading UI assets and the initial email spawning
 function gameState.load()
     scaling.loadWindow()
-    
     ui.loadAssets()
-    
     shop.setUpShop()
-
     email.spawnInitialEmails()
 end
 
+-- setShopButtonClicked()
 -- Function to change the button image when clicked
 function shop.setShopButtonClicked()
     shopButtonImage = shopButtonClicked
 end
 
+-- isShopButtonClicked()
 -- Function to change the button image when hovered
 function shop.setShopButtonHovered()
     shopButtonImage = shopButtonHovered
 end
 
+-- resetShopButton()
 -- Function to reset button to normal
 function shop.resetShopButton()
     shopButtonImage = shopButtonNormal
 end
 
+-- update()
 -- Update function for gameState, calls email.handleEmailselection & email.handleDragging
 -- Handles mouse interaction player actions in regards to current gamestate
 function gameState.update(dt)
@@ -114,13 +131,10 @@ function gameState.handleMouseRelease(x, y, button)
     end
 end
 
+-- handleMousePress()
+-- Mouse click handler
 function gameState.addMoney(value)
     gameState.currency = gameState.currency + value
 end
-
-function gameState.isEmailOpened() return gameState.openedEmail end
-function gameState.getOpenedEmail() return gameState.openedEmail end
-function gameState.getCurrency() return gameState.currency end
-function gameState.isShopOpened() return gameState.shopButtonOpen end
 
 return gameState
