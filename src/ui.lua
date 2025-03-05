@@ -7,6 +7,7 @@ local scaleX, scaleY = 1, 1
 local desktopWidth, desktopHeight = love.window.getDesktopDimensions()
 local trashBin = { x = (love.graphics.getWidth() / 2 - 370) * scaling.scaleX, y = (love.graphics.getHeight() / 2 - 240) * scaling.scaleY, width = 157, height = 157, color = {1, 0, 0} }
 local xButton = { x = (love.graphics.getWidth() / 2 + 1150), y = (love.graphics.getHeight() / 2 - 302), width = 50, height = 18}
+local floatingTexts = {}
 local inboxBackground
 local loginBackground
 local emailBackground
@@ -39,6 +40,8 @@ local function loadAssets()
     timerFont = love.graphics.newFont("assets/fonts/Roboto-Medium.ttf", timerFontSize)
 
     emailCountFont = love.graphics.newFont("assets/fonts/Roboto-Medium.ttf", emailCountFontSize)
+
+    floatingTextsFont = love.graphics.newFont("assets/fonts/Roboto-Medium.ttf", 25)
 end
 
 -- drawBackground()
@@ -69,6 +72,39 @@ local function drawXButton()
     love.graphics.rectangle("fill", xButton.x * scaling.scaleX, xButton.y * scaling.scaleY, xButton.width * scaling.scaleX, xButton.height * scaling.scaleY)
 end
 ]]--
+
+local function addFloatingText(x, y, text)
+    table.insert(floatingTexts, {
+        x = x,
+        y = y,
+        text = text,
+        alpha = 1,      -- opacity (1 = fully visible, 0 = invisible)
+        velocityY = -30 -- speed of upward movement
+    })
+end
+
+local function updateFloatingTexts(dt)
+    for i = #floatingTexts, 1, -1 do
+        local ft = floatingTexts[i]
+        ft.y = ft.y + ft.velocityY * dt -- Move up
+        ft.alpha = ft.alpha - 0.5 * dt  -- Fade out
+
+        -- Remove when fully faded
+        if ft.alpha <= 0 then
+            table.remove(floatingTexts, i)
+        end
+    end
+end
+
+local function drawFloatingTexts()
+    love.graphics.setFont(floatingTextsFont)
+    for _, ft in ipairs(floatingTexts) do
+        love.graphics.setColor(1, 1, 1, ft.alpha) -- set text color with alpha
+        love.graphics.print(ft.text, ft.x, ft.y)
+    end
+    love.graphics.setColor(1, 1, 1, 1)            -- Reset color to avoid affecting other elements
+    love.graphics.setFont(mainFont)               -- restores back to main font
+end
 
 
 -- drawScore()
@@ -191,6 +227,9 @@ end
 return {
     loadWindow = loadWindow,
     loadAssets = loadAssets,
+    addFloatingText = addFloatingText,
+    updateFloatingTexts = updateFloatingTexts,
+    drawFloatingTexts = drawFloatingTexts,
     drawBackground = drawBackground,
     drawTrashBin = drawTrashBin,
     drawXButton = drawXButton,

@@ -364,6 +364,9 @@ function deleteEmail(gameState)
                 gameState.currency = gameState.currency + emailValue
                 sounds.emailDelete:stop()
                 sounds.emailDelete:play()
+
+                local mouseX, mouseY = love.mouse.getPosition()
+                ui.addFloatingText(mouseX, mouseY, emailValue)
                 break
             end
         end

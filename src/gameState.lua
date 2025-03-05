@@ -89,6 +89,8 @@ function gameState.update(dt)
             shop.resetShopButton()
         end
     end
+
+    ui.updateFloatingTexts(dt)
 end
 
 -- handleMouseRelease()
