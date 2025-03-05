@@ -63,11 +63,12 @@ local function drawTrashBin()
     love.graphics.draw(trashBinIcon, trashBin.x, trashBin.y, 0, scaleX, scaleY)
 end
 
-
+--[[
 local function drawXButton()
     love.graphics.setColor(1, 0, 0)
     love.graphics.rectangle("fill", xButton.x * scaling.scaleX, xButton.y * scaling.scaleY, xButton.width * scaling.scaleX, xButton.height * scaling.scaleY)
 end
+]]--
 
 
 -- drawScore()
