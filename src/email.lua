@@ -291,6 +291,8 @@ function drawChoiceButton(choiceButton)
     love.graphics.printf(choiceButton.body, choiceButton.x * scaleX, choiceButton.y * scaleY, buttonWidth * scaleX, "center")
 end
 
+-- isEmailChoiceClicked()
+-- Checks if an email choice has been clicked
 function emailResponded(gameState)
     gameState.getOpenedEmail().respond = true
     for i, choiceButton in ipairs(choiceButtons) do
@@ -298,6 +300,8 @@ function emailResponded(gameState)
     end
 end
 
+-- isEmailChoiceClicked()
+-- Checks if an email choice has been clicked
 local function isEmailChoiceClicked(x, y, gameState)
     for _, choiceButton in ipairs(choiceButtons) do
         local changes = choiceButton.changes
@@ -319,10 +323,14 @@ local function isEmailChoiceClicked(x, y, gameState)
     end
 end
 
+-- choiceReset()
+-- Resets the choice buttons
 function choiceReset()
     choiceButtons = {}
 end
 
+-- deleteEmail()
+-- Deletes the selected email
 function deleteEmail(gameState)
     if gameState.selectedEmail then
         globalOffsetY = globalOffsetY + (emailBox.height + emailBox.ySpacing)
@@ -362,21 +370,18 @@ function deleteEmail(gameState)
     end
 end
 
+-- moveEmailsDown()
+-- Moves all emails down
 function moveEmailsDown()
     for i, email in ipairs(emails) do
-        -- emails[i].y = emails[i].originY + (emailBox.height + emailBox.ySpacing)
-        -- emails[i].y = emails[i].originY
         updateOrigin(email, email.x, email.y + (emailBox.height + emailBox.ySpacing))
         moveToOrigin(email)
-        --emails[i].originX = emails[i].x emails[i].originY = emails[i].y
     end
 end
 
+-- moveEmailsUp()
+-- Moves all emails up
 function moveEmailsUp(email)
-    -- if not email.emailAbove then
-    --     updateOrigin(email, email.x, email.y - (emailBox.height + emailBox.ySpacing))
-    --     moveToOrigin(email)
-    -- end
     if email.emailBelow then
             updateOrigin(email.emailBelow, email.emailBelow.x, email.emailBelow.y - (emailBox.height + emailBox.ySpacing))
             moveToOrigin(email.emailBelow)
@@ -384,6 +389,8 @@ function moveEmailsUp(email)
     end
 end
 
+-- resetOrigin()
+-- Resets the origin of the email
 function resetOrigin(email)
     if email.emailAbove then
         email.originX = email.emailAbove.originX
@@ -394,16 +401,22 @@ function resetOrigin(email)
     end
 end
 
+-- updateOrigin()
+-- Updates the origin of the email
 function updateOrigin(email, x, y)
     email.originX = x
     email.originY = y
 end
 
+-- moveToOrigin()
+-- Moves the email to its origin
 function moveToOrigin(email)
     email.x = email.originX
     email.y = email.originY
 end
 
+-- snapBack()
+-- Snaps the email back to its origin
 function snapBack(gameState)
     if gameState.selectedEmail then
         resetOrigin(gameState.selectedEmail)

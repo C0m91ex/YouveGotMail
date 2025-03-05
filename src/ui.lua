@@ -6,7 +6,7 @@ local scaling = require("src.scaling")
 local scaleX, scaleY = 1, 1
 local desktopWidth, desktopHeight = love.window.getDesktopDimensions()
 local trashBin = { x = (love.graphics.getWidth() / 2 - 370) * scaling.scaleX, y = (love.graphics.getHeight() / 2 - 240) * scaling.scaleY, width = 157, height = 157, color = {1, 0, 0} }
-local xButton = { x = (love.graphics.getWidth() / 2 + 1093) * scaling.scaleX, y = (love.graphics.getHeight() / 2 - 302) * scaling.scaleY, width = 50 * scaling.scaleX, height = 18 * scaling.scaleY}
+local xButton = { x = (love.graphics.getWidth() / 2 + 1150), y = (love.graphics.getHeight() / 2 - 302), width = 50, height = 18}
 local inboxBackground
 local loginBackground
 local emailBackground
@@ -66,9 +66,10 @@ end
 --[[
 local function drawXButton()
     love.graphics.setColor(1, 0, 0)
-    love.graphics.rectangle("fill", xButton.x, xButton.y, xButton.width, xButton.height)
+    love.graphics.rectangle("fill", xButton.x * scaling.scaleX, xButton.y * scaling.scaleY, xButton.width * scaling.scaleX, xButton.height * scaling.scaleY)
 end
 ]]--
+
 
 -- drawScore()
 -- Draws the score counter label
@@ -148,8 +149,8 @@ local function isBackButtonClicked(x, y)
 end
 
 local function isXButtonClicked(x, y)
-    return  x > xButton.x and x < xButton.x + xButton.width and
-            y > xButton.y and y < xButton.y + xButton.height
+    return  x > xButton.x * scaling.scaleX and x < xButton.x * scaling.scaleX + xButton.width * scaling.scaleX and
+            y > xButton.y * scaling.scaleY and y < xButton.y * scaling.scaleY + xButton.height * scaling.scaleY
 end
 
 
