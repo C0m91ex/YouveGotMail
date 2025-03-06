@@ -74,16 +74,19 @@ end
 -- Handles mouse interaction player actions in regards to current gamestate
 function gameState.update(dt)
     ui.updateFloatingTexts(dt)
-    if gameState.openedEmail then return end
-    email.autospawnEmail(email, gameState)
     local mouseX, mouseY = love.mouse.getPosition()
+    if gameState.openedEmail then
+        email.isEmailChoiceHovered(mouseX, mouseY, gameState)
+        return
+    end
+    email.autospawnEmail(email, gameState)
+    
     if love.mouse.isDown(1) then
         email.handleEmailSelection(mouseX, mouseY, gameState)
         email.handleDragging(mouseX, mouseY, gameState)
     else
         gameState.selectedEmail = nil
         shop.isShopItemHovered(mouseX, mouseY)
-        --shop.isShopButtonHovered(mouseX, mouseY)
         if shop.isShopButtonHovered(mouseX, mouseY) and not gameState.openedEmail then
             shop.setShopButtonHovered()
         else

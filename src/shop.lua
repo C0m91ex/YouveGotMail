@@ -151,7 +151,7 @@ local function drawShopItems()
 
     -- Draw popup if hovering over an item
     if shop.hoveredItem then
-        ui.hoverPopup(shop.hoverPopup.text, nil, nil, nil, nil, nil, nil, nil)
+        ui.hoverPopup(shop.hoverPopup.text, nil, nil, nil, nil, nil, nil, nil, nil)
     end
 end
 

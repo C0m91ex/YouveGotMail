@@ -203,7 +203,7 @@ end
 
 -- Creates a popup near where the mouse position is hovering so long as text is provided
 -- All other fields are optional and will set to default values if not provided
-function hoverPopup(text, textColor, red, green, blue, alpha, width, height)
+local function hoverPopup(text, textColor, red, green, blue, alpha, width, height, align)
     if text == nil then return end
     if textColor == nil then textColor = {0, 0, 0} end
     if red == nil then red = 0.678 end
@@ -212,10 +212,25 @@ function hoverPopup(text, textColor, red, green, blue, alpha, width, height)
     if alpha == nil then alpha = 0.5 end
     if width == nil then width = 360 end
     if height == nil then height = 180 end
+    if align == nil then align = "bl" end
 
     local mouseX, mouseY = love.mouse.getPosition()
-    local popupX = mouseX - width - 10
-    local popupY = mouseY + 10
+    local popupX = 0
+    local popupY = 0
+
+    if align == "bl" then
+        popupX = mouseX - width - 10
+        popupY = mouseY + 10
+    elseif align == "br" then
+        popupX = mouseX + 10
+        popupY = mouseY + 10
+    elseif align == "tl" then
+        popupX = mouseX - width - 10
+        popupY = mouseY - height - 10 
+    elseif align == "tr" then
+        popupX = mouseX + 10
+        popupY = mouseY - height - 10
+    end 
     
     love.graphics.setColor(red, green, blue, alpha)
     love.graphics.rectangle("fill", popupX, popupY, width, height)

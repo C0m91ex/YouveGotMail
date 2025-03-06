@@ -22,6 +22,9 @@ local emailValue = 1
 local choiceButtons = {}
 local spawnPeriod = 5                                                                           -- Email spawning
 local spawnValue = 0
+
+local hoverPopup = { x = 0, y = 0, visible = false }
+
 local screen =                                                                                  -- UI/Screen stuff
     { width = love.graphics.getWidth() / 2, height = love.graphics.getHeight() / 2 } 
 local buttonWidth = 175
@@ -241,15 +244,31 @@ local function printEmailContent(email)
     for i, choiceButton in ipairs(choiceButtons) do    
         drawChoiceButton(choiceButton)
     end
+    if hoverPopup.visible then
+        ui.hoverPopup(hoverPopup.text, nil, nil, nil, nil, nil, nil, nil, "tr")
+    end
+    -- for i, t in ipairs(content["choices"]) do
+        -- local choiceButton = makeChoiceButton(100+((i-1)*150), 300, 120, 120, t)
+        -- drawChoiceButton(choiceButton)
+        -- for k, v in pairs(t["cPrereqs"]) do
+        --     love.graphics.printf(k.." = "..v, 100*i, 250, 120, "center")
+        -- end
+        -- love.graphics.printf(t["cBody"], 100*i, 300, 120, "center")
+        -- for k, v in pairs(t["cChanges"]) do
+        --     love.graphics.printf(k.." = "..v, 100*i, 350, 120, "center")
+        -- end
+    --love.graphics.printf("ignored: ", 50, 400, 120, "center")
+    --for k, v in pairs(content["ignored"]) do love.graphics.printf(k.." = "..v, 100, 400, 120, "center") end
+    
 end
 
--- makeChoiceButton()
--- Creates a choice button with the given x, y, choiceTable, and gameState
+
 function setAvailableColor()
     love.graphics.setColor(love.math.colorFromBytes(255, 255, 255, 255)) end
 
--- makeChoiceButton()
--- Creates a choice button with the given x, y, choiceTable, and gameState
+function setHoverColor()
+    love.graphics.setColor(love.math.colorFromBytes(220, 220, 220, 255)) end
+
 function setBlockedColor()
     love.graphics.setColor(love.math.colorFromBytes(188, 188, 188, 255)) end
 
@@ -285,7 +304,35 @@ end
 -- drawChoiceButton()
 -- Draw function for choice buttons
 function drawChoiceButton(choiceButton)
-    if choiceButton.unlockFlag then setAvailableColor() else setBlockedColor() end
+    scaleX = scaling.scaleX
+    scaleY = scaling.scaleY
+    x,y = love.mouse.getPosition()
+    -- local function setAvailableColor()
+    --     love.graphics.setColor(love.math.colorFromBytes(255, 255, 255, 255)) end
+    -- local function setBlockedColor()
+    --     love.graphics.setColor(love.math.colorFromBytes(188, 188, 188, 255)) end
+    -- local unlockFlag = true
+    -- local prereqs = choiceButton.choiceTable.cPrereqs
+    -- local body = choiceButton.choiceTable.cBody
+
+    -- if next(prereqs) ~= nil then
+    --     for i, prereq in prereqs do 
+    --         if not playerCheck(prereqs) then unlockFlag = false
+    --         end
+    --     end
+    -- end
+
+    -- if gameState.getOpenedEmail().respond == true then unlockFlag = false end
+
+    if choiceButton.unlockFlag then
+        setAvailableColor()
+        if x > choiceButton.x * scaleX and x < choiceButton.x * scaleX + buttonWidth * scaleX and
+           y > choiceButton.y * scaleY and y < choiceButton.y * scaleY + buttonHeight * scaleY then
+            setHoverColor()
+        end
+    else 
+        setBlockedColor()
+    end
     love.graphics.rectangle("fill", choiceButton.x * scaleX, choiceButton.y * scaleY, buttonWidth * scaleX, buttonHeight * scaleY)
     love.graphics.setColor(0,0,0)
     love.graphics.printf(choiceButton.body, choiceButton.x * scaleX, choiceButton.y * scaleY, buttonWidth * scaleX, "center")
@@ -323,6 +370,80 @@ local function isEmailChoiceClicked(x, y, gameState)
                 sounds.pickChoice:play()
             end
         end
+    end
+end
+
+local function printChoiceButtonPrereqs(choiceButton)
+    if next(choiceButton.prereqs) then
+        local returnString = ""
+        for prereqKey, prereqString in pairs(choiceButton.prereqs) do
+            local value = tonumber(string.match(prereqString, "[%+%-]?%d+")) --thanks chatGPT
+            local operator = string.match(prereqString, "[<>~!=]*")
+            --print("operator is "..(operator))
+
+            if operator == "<" then
+                returnString = returnString.."having "..tostring(prereqKey).." less than ".. tostring(value).."\n"
+            elseif operator == "<=" then
+                returnString = returnString.."having "..tostring(prereqKey).." less than ".. tostring(value).."\n"
+            elseif operator == ">" then
+                returnString = returnString.."having "..tostring(prereqKey).." greater than ".. tostring(value).."\n"
+            elseif operator == ">=" then
+                returnString = returnString.."having "..tostring(prereqKey).." greater than ".. tostring(value).."\n"
+            elseif operator == "~" or operator == "~=" or operator == "!" or operator == "!=" then
+                returnString = returnString.."not having "..tostring(prereqKey).." equal to ".. tostring(value).."\n"
+            else
+                returnString = returnString.."having "..tostring(prereqKey).." equal to ".. tostring(value).."\n"
+            end
+        end
+    return tostring(returnString)
+    end
+end
+
+local function isEmailChoiceHovered(x, y, gameState)
+    for _, choiceButton in ipairs(choiceButtons) do
+        if x > choiceButton.x * scaling.scaleX and x < choiceButton.x * scaling.scaleX + buttonWidth * scaling.scaleX and
+           y > choiceButton.y * scaling.scaleY and y < choiceButton.y * scaling.scaleY + buttonHeight * scaling.scaleY then
+            hoverPopup.x = (x - 120) * scaling.scaleX 
+            hoverPopup.y = (y + 10) * scaling.scaleY 
+            -- shop.hoverPopup.text = "Hello world" 
+            if not gameState.getOpenedEmail().respond then
+                if not choiceButton.unlockFlag then
+                    hoverPopup.text = "You can unlock this by\n"..printChoiceButtonPrereqs(choiceButton)
+                    hoverPopup.visible = true
+                elseif next(choiceButton.prereqs) then
+                    hoverPopup.text = "You've unlocked this by\n"..printChoiceButtonPrereqs(choiceButton)
+                    hoverPopup.visible = true
+                end
+            end
+            return
+        end
+    end
+    hoverPopup.visible = false
+end
+
+local function printChoiceButtonPrereqs(choiceButton)
+    if next(choiceButton.prereqs) then
+        local returnString = ""
+        for prereqKey, prereqString in pairs(choiceButton.prereqs) do
+            local value = tonumber(string.match(prereqString, "[%+%-]?%d+")) --thanks chatGPT
+            local operator = string.match(prereqString, "[<>~!=]*")
+            --print("operator is "..(operator))
+
+            if operator == "<" then
+                returnString = returnString.."having "..tostring(prereqKey).." less than ".. tostring(value).."\n"
+            elseif operator == "<=" then
+                returnString = returnString.."having "..tostring(prereqKey).." less than ".. tostring(value).."\n"
+            elseif operator == ">" then
+                returnString = returnString.."having "..tostring(prereqKey).." greater than ".. tostring(value).."\n"
+            elseif operator == ">=" then
+                returnString = returnString.."having "..tostring(prereqKey).." greater than ".. tostring(value).."\n"
+            elseif operator == "~" or operator == "~=" or operator == "!" or operator == "!=" then
+                returnString = returnString.."not having "..tostring(prereqKey).." equal to ".. tostring(value).."\n"
+            else
+                returnString = returnString.."having "..tostring(prereqKey).." equal to ".. tostring(value).."\n"
+            end
+        end
+    return tostring(returnString)
     end
 end
 
@@ -446,6 +567,7 @@ return {
     printEmailContent = printEmailContent,
     fillEmailPool = fillEmailPool,
     isEmailChoiceClicked = isEmailChoiceClicked,
+    isEmailChoiceHovered = isEmailChoiceHovered,
     choiceReset = choiceReset,
     deleteEmail = deleteEmail,
     moveEmailsDown = moveEmailsDown,
