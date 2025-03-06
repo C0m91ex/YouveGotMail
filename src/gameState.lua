@@ -73,6 +73,7 @@ end
 -- Update function for gameState, calls email.handleEmailselection & email.handleDragging
 -- Handles mouse interaction player actions in regards to current gamestate
 function gameState.update(dt)
+    ui.updateFloatingTexts(dt)
     if gameState.openedEmail then return end
     email.autospawnEmail(email, gameState)
     local mouseX, mouseY = love.mouse.getPosition()
@@ -89,8 +90,6 @@ function gameState.update(dt)
             shop.resetShopButton()
         end
     end
-
-    ui.updateFloatingTexts(dt)
 end
 
 -- handleMouseRelease()
