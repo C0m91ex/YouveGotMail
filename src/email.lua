@@ -310,7 +310,7 @@ local function isEmailChoiceClicked(x, y, gameState)
             y > choiceButton.y * scaling.scaleY and y < choiceButton.y * scaling.scaleY + buttonHeight * scaling.scaleY then
                 for key, value in pairs(changes) do
                     
-                    ui.addFloatingText(choiceButton.x * scaling.scaleX, choiceButton.y * scaling.scaleY, playerState.playerChange(key, value))
+                    ui.addFloatingText((choiceButton.x + math.random(-300, 300)) * scaling.scaleX, (choiceButton.y - math.random(0, 100)) * scaling.scaleY, playerState.playerChange(key, value))
                     print("choice clicked "..key.." "..value)
                     for k, v in pairs(playerState.getPlayerVarList()) do
                         print(k.." = "..v)
@@ -367,7 +367,7 @@ function deleteEmail(gameState)
                 sounds.emailDelete:play()
 
                 local mouseX, mouseY = love.mouse.getPosition()
-                ui.addFloatingText(mouseX, mouseY, emailValue)
+                ui.addFloatingText(mouseX, mouseY, "+"..emailValue)
                 break
             end
         end
