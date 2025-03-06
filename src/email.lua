@@ -15,7 +15,7 @@ local defaultEmail = {                                                          
     choices = {},
     ignored = {}
 }
-local emailBase = file.loadEmailFile('data/EmailBase.csv')                                      
+local emailBase = file.loadEmailFile('data/EmailBase.csv')                            
 local emailPool = {}
 local emails = {} 
 local emailValue = 1

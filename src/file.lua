@@ -34,7 +34,15 @@ local function loadEmailFile(filename)
 	return emails --table of tables of each line
 end
 
+local function serializeStateTest(table)
+	local testString = utils.tableToString(table)
+	local testTable = {}
+	utils.updateTableFromString(testTable, testString)
+	return testTable
+end
+
 return {
     csvLineToEmail = csvLineToEmail,
-	loadEmailFile = loadEmailFile
+	loadEmailFile = loadEmailFile,
+	serializeStateTest = serializeStateTest
 }

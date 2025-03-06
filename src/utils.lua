@@ -18,6 +18,18 @@ function utils.updateTableFromString(table, string)
     return table
 end
 
+function utils.tableToString(table)
+    local returnString = "{"
+    if next(table) then
+        for key, value in pairs(table) do
+            returnString = returnString..tostring(key).." = "..tostring(value)
+            if next(table) then returnString = returnString..", " end
+        end
+    end
+    returnString = returnString.."}"
+    return returnString
+end
+
 function utils.createChoiceTableFromString(choiceTable, string)
     --print(string)
     print("createChoiceTableFromString test")
