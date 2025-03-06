@@ -48,23 +48,30 @@ function playerChange(changeKey, changeValue)
     --print("playerChange test")
     local value = tonumber(string.match(changeValue, "[%+%-]?%d+")) --thanks chatGPT
     local operator = string.match(changeValue, "[%+%-%*=]*")
+    local newOp = ""
     --print("operator is "..(operator))
 
     if operator == "+=" then
+        newOp = "+"
         if not playerVars[changeKey] then playerVars[changeKey] = 0 + tonumber(value)
         else playerVars[changeKey] = (tonumber(playerVars[changeKey]) + tonumber(value))
         end
     elseif operator == "-=" then
+        newOp = "-"
         if not playerVars[changeKey] then playerVars[changeKey] = 0 - tonumber(value)
         else playerVars[changeKey] = (tonumber(playerVars[changeKey]) - tonumber(value))
         end
     elseif operator == "*=" then
+        newOp = "*"
         if not playerVars[changeKey] then playerVars[changeKey] = 0 * tonumber(value)
         else playerVars[changeKey] = (tonumber(playerVars[changeKey]) * tonumber(value))
         end
     else
+        newOp = "="
         playerVars[changeKey] = tonumber(value)
     end
+
+    return changeKey.." "..newOp..""..value
 end
 
 return {

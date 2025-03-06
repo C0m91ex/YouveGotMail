@@ -77,13 +77,13 @@ function love.draw()
         ui.drawTrashBin()
         email.drawEmails()
         --ui.drawXButton()
-        ui.drawFloatingTexts()
 
         shop.drawShopTitle()
         if gameState.isShopOpened() then
             shop.drawShopItems()
         end
     end
+    ui.drawFloatingTexts()
 end
 
 -- mousereleased()
