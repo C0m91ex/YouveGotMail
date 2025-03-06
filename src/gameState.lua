@@ -16,6 +16,7 @@ local gameState = {
     lastClickTime = 0,
     doubleClickDelay = 0.3,
     shopButtonOpen = false,
+    statsBarOpen = false,
     lastTime = start
 }
 local shopButtonNormal = love.graphics.newImage('assets/inbox/Shop Button.png')
@@ -32,6 +33,10 @@ function gameState.isEmailOpened() return gameState.openedEmail end
 -- isShopOpened()
 -- Access function for shop 'opened' status
 function gameState.isShopOpened() return gameState.shopButtonOpen end
+
+-- isStatsBarOpened()
+-- Access function for stat 'opened' status
+function gameState.isStatsBarOpened() return gameState.statsBarOpen end
 
 -- getOpenedEmail()
 -- Getter function for opened email
@@ -109,13 +114,21 @@ function gameState.handleMouseRelease(x, y, button)
         end
 
         -- Toggle shop button state
-        if shop.isShopButtonClicked(x, y) and not gameState.openedEmail then
+        if shop.isShopButtonClicked(x, y) and not gameState.openedEmail and not gameState.statsBarOpen then
             if not gameState.shopButtonOpen then
                 gameState.shopButtonOpen = true
                 shop.setShopButtonClicked()  -- Change to clicked image
             else
                 gameState.shopButtonOpen = false
                 shop.resetShopButton()  -- Reset to normal image
+            end
+        end
+
+        if ui.isStatsButtonClicked(x, y) and not gameState.openedEmail and not gameState.shopButtonOpen then
+            if not gameState.statsBarOpen then
+                gameState.statsBarOpen = true
+            else
+                gameState.statsBarOpen = false
             end
         end
 

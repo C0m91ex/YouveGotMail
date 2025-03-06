@@ -78,9 +78,14 @@ function love.draw()
         email.drawEmails()
         --ui.drawXButton()
 
+        ui.drawStatsButton()
+        if gameState.isStatsBarOpened() then
+           ui.drawStatsBar()
+        end
+
         shop.drawShopTitle()
         if gameState.isShopOpened() then
-            shop.drawShopItems()
+           shop.drawShopItems()
         end
     end
     ui.drawFloatingTexts()

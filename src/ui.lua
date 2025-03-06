@@ -7,6 +7,7 @@ local scaleX, scaleY = 1, 1
 local desktopWidth, desktopHeight = love.window.getDesktopDimensions()
 local trashBin = { x = (love.graphics.getWidth() / 2 - 370) * scaling.scaleX, y = (love.graphics.getHeight() / 2 - 240) * scaling.scaleY, width = 157, height = 157, color = {1, 0, 0} }
 local xButton = { x = (love.graphics.getWidth() / 2 + 1150), y = (love.graphics.getHeight() / 2 - 302), width = 50, height = 18}
+local statsButton = { x = (love.graphics.getWidth() / 2 + 995), y = (love.graphics.getHeight() / 2 - 120), width = 204, height = 66 }
 local floatingTexts = {}
 local inboxBackground
 local loginBackground
@@ -72,6 +73,20 @@ local function drawXButton()
     love.graphics.rectangle("fill", xButton.x * scaling.scaleX, xButton.y * scaling.scaleY, xButton.width * scaling.scaleX, xButton.height * scaling.scaleY)
 end
 ]]--
+
+local function drawStatsButton()
+    love.graphics.setColor(1, 0, 0)
+    love.graphics.rectangle("fill", statsButton.x * scaling.scaleX, statsButton.y * scaling.scaleY, statsButton.width * scaling.scaleX, statsButton.height * scaling.scaleY)
+end
+
+local function drawStatsBar()
+    love.graphics.setColor(0.616, 0.671, 0.788, 1)
+    love.graphics.rectangle("fill", statsButton.x * scaleX, (statsButton.y + 66) * scaleY, statsButton.width * scaleX, 680 * scaleY)
+
+    love.graphics.setColor(0.9, 0.9, 0.9)
+    love.graphics.rectangle("fill", (statsButton.x + 18) * scaleX, (statsButton.y + 85) * scaleY, statsButton.width - 2 * scaleX, 680 * scaleY)
+
+end
 
 local function addFloatingText(x, y, text)
     table.insert(floatingTexts, {
@@ -184,6 +199,13 @@ local function isBackButtonClicked(x, y)
     return x > 10 and x < 110 and y > 10 and y < 50
 end
 
+local function isStatsButtonClicked(x, y)
+    scaleX = scaling.scaleX
+    scaleY = scaling.scaleY
+    return  x > statsButton.x * scaleX and x < statsButton.x * scaleX + statsButton.width * scaleX and
+            y > statsButton.y * scaleY and y < statsButton.y * scaleY + statsButton.height * scaleY
+end
+
 local function isXButtonClicked(x, y)
     return  x > xButton.x * scaling.scaleX and x < xButton.x * scaling.scaleX + xButton.width * scaling.scaleX and
             y > xButton.y * scaling.scaleY and y < xButton.y * scaling.scaleY + xButton.height * scaling.scaleY
@@ -245,6 +267,8 @@ return {
     addFloatingText = addFloatingText,
     updateFloatingTexts = updateFloatingTexts,
     drawFloatingTexts = drawFloatingTexts,
+    drawStatsButton = drawStatsButton,
+    drawStatsBar = drawStatsBar,
     drawBackground = drawBackground,
     drawTrashBin = drawTrashBin,
     drawXButton = drawXButton,
@@ -253,6 +277,7 @@ return {
     drawTimer = drawTimer,
     drawOpenedEmail = drawOpenedEmail,
     isBackButtonClicked = isBackButtonClicked,
+    isStatsButtonClicked = isStatsButtonClicked,
     isXButtonClicked = isXButtonClicked,
     isOverTrashBin = isOverTrashBin,
     hoverPopup = hoverPopup
