@@ -309,7 +309,8 @@ local function isEmailChoiceClicked(x, y, gameState)
             if x > choiceButton.x * scaling.scaleX and x < choiceButton.x * scaling.scaleX + buttonWidth * scaling.scaleX and
             y > choiceButton.y * scaling.scaleY and y < choiceButton.y * scaling.scaleY + buttonHeight * scaling.scaleY then
                 for key, value in pairs(changes) do
-                    playerState.playerChange(key, value)
+                    
+                    ui.addFloatingText(choiceButton.x * scaling.scaleX, choiceButton.y * scaling.scaleY, playerState.playerChange(key, value))
                     print("choice clicked "..key.." "..value)
                     for k, v in pairs(playerState.getPlayerVarList()) do
                         print(k.." = "..v)

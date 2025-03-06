@@ -67,6 +67,7 @@ function love.draw()
     local currentSecond = math.floor(love.timer.getTime())
     ui.drawEmailCount(email.getLengthEmails())
     ui.drawTimer(currentSecond)
+    ui.drawFloatingTexts()
 
     -- Checks if current gamestate is in email opened state or not
     if gameState.isEmailOpened() then
@@ -77,7 +78,6 @@ function love.draw()
         ui.drawTrashBin()
         email.drawEmails()
         --ui.drawXButton()
-        ui.drawFloatingTexts()
 
         shop.drawShopTitle()
         if gameState.isShopOpened() then
