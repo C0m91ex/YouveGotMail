@@ -22,6 +22,8 @@ local gameState = {
 local shopButtonNormal = love.graphics.newImage('assets/inbox/Shop Button.png')
 local shopButtonHovered = love.graphics.newImage('assets/inbox/Shop Button Hover.png')
 local shopButtonClicked = love.graphics.newImage('assets/inbox/Shop Button Click.png')
+local statsButtonNormal = love.graphics.newImage('assets/inbox/Stats Button.png')
+local statsButtonHover = love.graphics.newImage('assets/inbox/Stats Button Hover.png')
 
 -- global variables
 shopButtonImage = shopButtonNormal
