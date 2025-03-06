@@ -308,13 +308,15 @@ local function isEmailChoiceClicked(x, y, gameState)
         if (choiceButton.unlockFlag) then
             if x > choiceButton.x * scaling.scaleX and x < choiceButton.x * scaling.scaleX + buttonWidth * scaling.scaleX and
             y > choiceButton.y * scaling.scaleY and y < choiceButton.y * scaling.scaleY + buttonHeight * scaling.scaleY then
+                local i = 0
                 for key, value in pairs(changes) do
                     
-                    ui.addFloatingText((choiceButton.x + math.random(-300, 300)) * scaling.scaleX, (choiceButton.y - math.random(0, 100)) * scaling.scaleY, playerState.playerChange(key, value))
+                    ui.addFloatingText((choiceButton.x + math.random(-10, 300)) * scaling.scaleX, (choiceButton.y - math.random(0, 100) - (i*20)) * scaling.scaleY, playerState.playerChange(key, value))
                     print("choice clicked "..key.." "..value)
                     for k, v in pairs(playerState.getPlayerVarList()) do
                         print(k.." = "..v)
                     end
+                    i = i+1
                 end
                 emailResponded(gameState)
                 sounds.pickChoice:stop()
