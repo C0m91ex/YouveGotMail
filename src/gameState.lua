@@ -16,14 +16,18 @@ local gameState = {
     lastClickTime = 0,
     doubleClickDelay = 0.3,
     shopButtonOpen = false,
+    statsBarOpen = false,
     lastTime = start
 }
 local shopButtonNormal = love.graphics.newImage('assets/inbox/Shop Button.png')
 local shopButtonHovered = love.graphics.newImage('assets/inbox/Shop Button Hover.png')
 local shopButtonClicked = love.graphics.newImage('assets/inbox/Shop Button Click.png')
+local statsButtonNormal = love.graphics.newImage('assets/inbox/Stats Button.png')
+local statsButtonHovered = love.graphics.newImage('assets/inbox/Hover Stats Button.png')
 
 -- global variables
 shopButtonImage = shopButtonNormal
+statsButtonImage = statsButtonNormal
 
 -- isEmailOpened()
 -- Access function for email 'opened' status
@@ -32,6 +36,10 @@ function gameState.isEmailOpened() return gameState.openedEmail end
 -- isShopOpened()
 -- Access function for shop 'opened' status
 function gameState.isShopOpened() return gameState.shopButtonOpen end
+
+-- isStatsBarOpened()
+-- Access function for stat 'opened' status
+function gameState.isStatsBarOpened() return gameState.statsBarOpen end
 
 -- getOpenedEmail()
 -- Getter function for opened email
@@ -69,6 +77,24 @@ function shop.resetShopButton()
     shopButtonImage = shopButtonNormal
 end
 
+--[[
+function stats.setStatsButtonClicked()
+    statsButtonImage = statsButtonClicked
+end
+]]
+
+-- setStatsButtonHovered()
+-- Function to change the button image when hovered
+function gameState.setStatsButtonHovered()
+    statsButtonImage = statsButtonHovered
+end
+
+-- resetStatsButton()
+-- Function to reset button to normal
+function gameState.resetStatsButton()
+    statsButtonImage = statsButtonNormal
+end
+
 -- update()
 -- Update function for gameState, calls email.handleEmailselection & email.handleDragging
 -- Handles mouse interaction player actions in regards to current gamestate
@@ -92,6 +118,12 @@ function gameState.update(dt)
         else
             shop.resetShopButton()
         end
+
+        if ui.isStatsButtonHovered(mouseX, mouseY) and not gameState.openedEmail then
+            gameState.setStatsButtonHovered()
+        else
+            gameState.resetStatsButton()
+        end
     end
 end
 
@@ -109,13 +141,23 @@ function gameState.handleMouseRelease(x, y, button)
         end
 
         -- Toggle shop button state
-        if shop.isShopButtonClicked(x, y) and not gameState.openedEmail then
+        if shop.isShopButtonClicked(x, y) and not gameState.openedEmail and not gameState.statsBarOpen then
             if not gameState.shopButtonOpen then
                 gameState.shopButtonOpen = true
                 shop.setShopButtonClicked()  -- Change to clicked image
             else
                 gameState.shopButtonOpen = false
                 shop.resetShopButton()  -- Reset to normal image
+            end
+        end
+
+        if ui.isStatsButtonClicked(x, y) and not gameState.openedEmail and not gameState.shopButtonOpen then
+            if not gameState.statsBarOpen then
+                gameState.statsBarOpen = true
+                --stats.setStatsButtonClicked()
+            else
+                gameState.statsBarOpen = false
+                gameState.resetStatsButton()
             end
         end
 
