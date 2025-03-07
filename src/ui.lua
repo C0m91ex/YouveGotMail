@@ -1,6 +1,7 @@
 -- ui.lua --
 -- UI handling implemenation
 local scaling = require("src.scaling")
+local playerState = require("src.playerState")
 
 -- global vars
 local scaleX, scaleY = 1, 1
@@ -43,6 +44,8 @@ local function loadAssets()
     emailCountFont = love.graphics.newFont("assets/fonts/Roboto-Medium.ttf", emailCountFontSize)
 
     floatingTextsFont = love.graphics.newFont("assets/fonts/Roboto-Medium.ttf", 25)
+
+    statsFont = love.graphics.newFont("assets/fonts/Roboto-Medium.ttf", 20)
 end
 
 -- drawBackground()
@@ -74,18 +77,35 @@ local function drawXButton()
 end
 ]]--
 
+-- drawStatsButton()
+-- Draws the stats button to the game
 local function drawStatsButton()
-    love.graphics.setColor(1, 0, 0)
-    love.graphics.rectangle("fill", statsButton.x * scaling.scaleX, statsButton.y * scaling.scaleY, statsButton.width * scaling.scaleX, statsButton.height * scaling.scaleY)
+    love.graphics.setColor(1, 1, 1)
+    love.graphics.draw(statsButtonImage, statsButton.x * scaling.scaleX, statsButton.y * scaling.scaleY, 0, scaling.scaleX, scaling.scaleY)
 end
 
+-- drawStatsBar()
+-- Draws the stats of the player's choices
 local function drawStatsBar()
     love.graphics.setColor(0.616, 0.671, 0.788, 1)
-    love.graphics.rectangle("fill", statsButton.x * scaleX, (statsButton.y + 66) * scaleY, statsButton.width * scaleX, 680 * scaleY)
+    love.graphics.rectangle("fill", statsButton.x * scaling.scaleX, (statsButton.y + 66) * scaling.scaleY, statsButton.width * scaling.scaleX, 680 * scaling.scaleY)
 
     love.graphics.setColor(0.9, 0.9, 0.9)
-    love.graphics.rectangle("fill", (statsButton.x + 18) * scaleX, (statsButton.y + 85) * scaleY, statsButton.width - 2 * scaleX, 680 * scaleY)
+    love.graphics.rectangle("fill", (statsButton.x + 18) * scaling.scaleX, (statsButton.y + 85) * scaling.scaleY, statsButton.width - 2 * scaling.scaleX, 680 * scaling.scaleY)
 
+    love.graphics.setColor(1, 1, 1)
+    -- itterator; itteratre through getPlayerVarList()
+    -- for key, vlaue, inpairs getPlayerVarList()
+    -- have a constant for where the top of the list is
+    -- have one for margins
+    love.graphics.setFont(statsFont)
+    local i = 85
+    for key, value in pairs(playerState.getPlayerVarList()) do
+        love.graphics.printf(tostring(key)..": "..tostring(value), (statsButton.x + 18) * scaling.scaleX, (statsButton.y + i) * scaling.scaleY, 250, "left")
+
+        i = i + 25
+    end
+    love.graphics.setFont(mainFont)
 end
 
 local function addFloatingText(x, y, text)
@@ -206,6 +226,13 @@ local function isStatsButtonClicked(x, y)
             y > statsButton.y * scaleY and y < statsButton.y * scaleY + statsButton.height * scaleY
 end
 
+local function isStatsButtonHovered(x, y)
+    scaleX = scaling.scaleX
+    scaleY = scaling.scaleY
+    return  x > statsButton.x * scaleX and x < statsButton.x * scaleX + statsButton.width * scaleX and
+            y > statsButton.y * scaleY and y < statsButton.y * scaleY + statsButton.height * scaleY
+end
+
 local function isXButtonClicked(x, y)
     return  x > xButton.x * scaling.scaleX and x < xButton.x * scaling.scaleX + xButton.width * scaling.scaleX and
             y > xButton.y * scaling.scaleY and y < xButton.y * scaling.scaleY + xButton.height * scaling.scaleY
@@ -278,6 +305,7 @@ return {
     drawOpenedEmail = drawOpenedEmail,
     isBackButtonClicked = isBackButtonClicked,
     isStatsButtonClicked = isStatsButtonClicked,
+    isStatsButtonHovered = isStatsButtonHovered,
     isXButtonClicked = isXButtonClicked,
     isOverTrashBin = isOverTrashBin,
     hoverPopup = hoverPopup
