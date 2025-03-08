@@ -16,14 +16,23 @@ local gameState = {
     lastClickTime = 0,
     doubleClickDelay = 0.3,
     shopButtonOpen = false,
+    statsBarOpen = false,
     lastTime = start
 }
 local shopButtonNormal = love.graphics.newImage('assets/inbox/Shop Button.png')
 local shopButtonHovered = love.graphics.newImage('assets/inbox/Shop Button Hover.png')
 local shopButtonClicked = love.graphics.newImage('assets/inbox/Shop Button Click.png')
 
+local statsButtonNormal = love.graphics.newImage('assets/inbox/Stats Button.png')
+local statsButtonHovered = love.graphics.newImage('assets/inbox/Hover Stats Button.png')
+
+local trashBinNormal = love.graphics.newImage('assets/inbox/Trash Bin.png')
+local trashBinHovered = love.graphics.newImage('assets/inbox/Hover Trash Bin.png')
+
 -- global variables
 shopButtonImage = shopButtonNormal
+statsButtonImage = statsButtonNormal
+trashBinImage = trashBinNormal
 
 -- isEmailOpened()
 -- Access function for email 'opened' status
@@ -32,6 +41,10 @@ function gameState.isEmailOpened() return gameState.openedEmail end
 -- isShopOpened()
 -- Access function for shop 'opened' status
 function gameState.isShopOpened() return gameState.shopButtonOpen end
+
+-- isStatsBarOpened()
+-- Access function for stat 'opened' status
+function gameState.isStatsBarOpened() return gameState.statsBarOpen end
 
 -- getOpenedEmail()
 -- Getter function for opened email
@@ -69,6 +82,32 @@ function shop.resetShopButton()
     shopButtonImage = shopButtonNormal
 end
 
+--[[
+function stats.setStatsButtonClicked()
+    statsButtonImage = statsButtonClicked
+end
+]]
+
+-- setStatsButtonHovered()
+-- Function to change the button image when hovered
+function gameState.setStatsButtonHovered()
+    statsButtonImage = statsButtonHovered
+end
+
+-- resetStatsButton()
+-- Function to reset button to normal
+function gameState.resetStatsButton()
+    statsButtonImage = statsButtonNormal
+end
+
+function gameState.setTrashBinHovered()
+    trashBinImage = trashBinHovered
+end
+
+function gameState.resetTrashBin()
+    trashBinImage = trashBinNormal
+end
+
 -- update()
 -- Update function for gameState, calls email.handleEmailselection & email.handleDragging
 -- Handles mouse interaction player actions in regards to current gamestate
@@ -84,6 +123,15 @@ function gameState.update(dt)
     if love.mouse.isDown(1) then
         email.handleEmailSelection(mouseX, mouseY, gameState)
         email.handleDragging(mouseX, mouseY, gameState)
+
+        -- checks to see if the player is holding an email and is over the trash bin.
+        -- If so, change the trash bin icon to the opened lid one, otherwise reset back to the normal icon
+        if ui.isOverTrashBin(mouseX, mouseY) and gameState.selectedEmail and not gameState.openedEmail then
+            gameState.setTrashBinHovered()
+
+        else
+            gameState.resetTrashBin()
+        end
     else
         gameState.selectedEmail = nil
         shop.isShopItemHovered(mouseX, mouseY)
@@ -92,6 +140,15 @@ function gameState.update(dt)
         else
             shop.resetShopButton()
         end
+
+        if ui.isStatsButtonHovered(mouseX, mouseY) and not gameState.openedEmail then
+            gameState.setStatsButtonHovered()
+        else
+            gameState.resetStatsButton()
+        end
+
+        gameState.resetTrashBin()
+
     end
 end
 
@@ -109,13 +166,23 @@ function gameState.handleMouseRelease(x, y, button)
         end
 
         -- Toggle shop button state
-        if shop.isShopButtonClicked(x, y) and not gameState.openedEmail then
+        if shop.isShopButtonClicked(x, y) and not gameState.openedEmail and not gameState.statsBarOpen then
             if not gameState.shopButtonOpen then
                 gameState.shopButtonOpen = true
                 shop.setShopButtonClicked()  -- Change to clicked image
             else
                 gameState.shopButtonOpen = false
                 shop.resetShopButton()  -- Reset to normal image
+            end
+        end
+
+        if ui.isStatsButtonClicked(x, y) and not gameState.openedEmail and not gameState.shopButtonOpen then
+            if not gameState.statsBarOpen then
+                gameState.statsBarOpen = true
+                --stats.setStatsButtonClicked()
+            else
+                gameState.statsBarOpen = false
+                gameState.resetStatsButton()
             end
         end
 

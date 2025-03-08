@@ -1,12 +1,14 @@
 -- ui.lua --
 -- UI handling implemenation
 local scaling = require("src.scaling")
+local playerState = require("src.playerState")
 
 -- global vars
 local scaleX, scaleY = 1, 1
 local desktopWidth, desktopHeight = love.window.getDesktopDimensions()
 local trashBin = { x = (love.graphics.getWidth() / 2 - 370) * scaling.scaleX, y = (love.graphics.getHeight() / 2 - 240) * scaling.scaleY, width = 157, height = 157, color = {1, 0, 0} }
 local xButton = { x = (love.graphics.getWidth() / 2 + 1150), y = (love.graphics.getHeight() / 2 - 302), width = 50, height = 18}
+local statsButton = { x = (love.graphics.getWidth() / 2 + 995), y = (love.graphics.getHeight() / 2 - 120), width = 204, height = 66 }
 local floatingTexts = {}
 local inboxBackground
 local loginBackground
@@ -30,7 +32,7 @@ local function loadAssets()
     inboxBackground = love.graphics.newImage('assets/inbox/Inbox Background.png')
     loginBackground = love.graphics.newImage('assets/main_menu/Login Background.png')
     emailBackground = love.graphics.newImage('assets/read_email/Read Email Background.png')
-    trashBinIcon = love.graphics.newImage('assets/inbox/Trash Bin.png')
+    trashBinIcon = trashBinImage
     
     -- fonts --
     mainFont = love.graphics.newFont("assets/fonts/Roboto-Medium.ttf", 15)
@@ -42,6 +44,8 @@ local function loadAssets()
     emailCountFont = love.graphics.newFont("assets/fonts/Roboto-Medium.ttf", emailCountFontSize)
 
     floatingTextsFont = love.graphics.newFont("assets/fonts/Roboto-Medium.ttf", 25)
+
+    statsFont = love.graphics.newFont("assets/fonts/Roboto-Medium.ttf", 20)
 end
 
 -- drawBackground()
@@ -63,7 +67,7 @@ end
 local function drawTrashBin()
     --love.graphics.setColor(trashBin.color)
     --love.graphics.rectangle("fill", trashBin.x, trashBin.y, trashBin.width, trashBin.height)
-    love.graphics.draw(trashBinIcon, trashBin.x, trashBin.y, 0, scaleX, scaleY)
+    love.graphics.draw(trashBinImage, trashBin.x, trashBin.y, 0, scaleX, scaleY)
 end
 
 --[[
@@ -72,6 +76,37 @@ local function drawXButton()
     love.graphics.rectangle("fill", xButton.x * scaling.scaleX, xButton.y * scaling.scaleY, xButton.width * scaling.scaleX, xButton.height * scaling.scaleY)
 end
 ]]--
+
+-- drawStatsButton()
+-- Draws the stats button to the game
+local function drawStatsButton()
+    love.graphics.setColor(1, 1, 1)
+    love.graphics.draw(statsButtonImage, statsButton.x * scaling.scaleX, statsButton.y * scaling.scaleY, 0, scaling.scaleX, scaling.scaleY)
+end
+
+-- drawStatsBar()
+-- Draws the stats of the player's choices
+local function drawStatsBar()
+    love.graphics.setColor(0.616, 0.671, 0.788, 1)
+    love.graphics.rectangle("fill", statsButton.x * scaling.scaleX, (statsButton.y + 66) * scaling.scaleY, statsButton.width * scaling.scaleX, 680 * scaling.scaleY)
+
+    love.graphics.setColor(0.9, 0.9, 0.9)
+    love.graphics.rectangle("fill", (statsButton.x + 18) * scaling.scaleX, (statsButton.y + 85) * scaling.scaleY, statsButton.width - 2 * scaling.scaleX, 680 * scaling.scaleY)
+
+    love.graphics.setColor(1, 1, 1)
+    -- itterator; itteratre through getPlayerVarList()
+    -- for key, vlaue, inpairs getPlayerVarList()
+    -- have a constant for where the top of the list is
+    -- have one for margins
+    love.graphics.setFont(statsFont)
+    local i = 85
+    for key, value in pairs(playerState.getPlayerVarList()) do
+        love.graphics.printf(tostring(key)..": "..tostring(value), (statsButton.x + 18) * scaling.scaleX, (statsButton.y + i) * scaling.scaleY, 250, "left")
+
+        i = i + 25
+    end
+    love.graphics.setFont(mainFont)
+end
 
 local function addFloatingText(x, y, text)
     table.insert(floatingTexts, {
@@ -184,6 +219,20 @@ local function isBackButtonClicked(x, y)
     return x > 10 and x < 110 and y > 10 and y < 50
 end
 
+local function isStatsButtonClicked(x, y)
+    scaleX = scaling.scaleX
+    scaleY = scaling.scaleY
+    return  x > statsButton.x * scaleX and x < statsButton.x * scaleX + statsButton.width * scaleX and
+            y > statsButton.y * scaleY and y < statsButton.y * scaleY + statsButton.height * scaleY
+end
+
+local function isStatsButtonHovered(x, y)
+    scaleX = scaling.scaleX
+    scaleY = scaling.scaleY
+    return  x > statsButton.x * scaleX and x < statsButton.x * scaleX + statsButton.width * scaleX and
+            y > statsButton.y * scaleY and y < statsButton.y * scaleY + statsButton.height * scaleY
+end
+
 local function isXButtonClicked(x, y)
     return  x > xButton.x * scaling.scaleX and x < xButton.x * scaling.scaleX + xButton.width * scaling.scaleX and
             y > xButton.y * scaling.scaleY and y < xButton.y * scaling.scaleY + xButton.height * scaling.scaleY
@@ -197,8 +246,8 @@ end
 --            email.y > trashBin.y and email.y < trashBin.y + trashBin.height
 -- end
 local function isOverTrashBin(x, y)
-    return x > trashBin.x and x < trashBin.x + trashBin.width and
-           y > trashBin.y and y < trashBin.y + trashBin.height
+    return x > trashBin.x * scaling.scaleX and x < trashBin.x * scaling.scaleX+ trashBin.width * scaling.scaleX and
+           y > trashBin.y * scaling.scaleY and y < trashBin.y * scaling.scaleY + trashBin.height * scaling.scaleY
 end
 
 -- Creates a popup near where the mouse position is hovering so long as text is provided
@@ -245,6 +294,8 @@ return {
     addFloatingText = addFloatingText,
     updateFloatingTexts = updateFloatingTexts,
     drawFloatingTexts = drawFloatingTexts,
+    drawStatsButton = drawStatsButton,
+    drawStatsBar = drawStatsBar,
     drawBackground = drawBackground,
     drawTrashBin = drawTrashBin,
     drawXButton = drawXButton,
@@ -253,6 +304,8 @@ return {
     drawTimer = drawTimer,
     drawOpenedEmail = drawOpenedEmail,
     isBackButtonClicked = isBackButtonClicked,
+    isStatsButtonClicked = isStatsButtonClicked,
+    isStatsButtonHovered = isStatsButtonHovered,
     isXButtonClicked = isXButtonClicked,
     isOverTrashBin = isOverTrashBin,
     hoverPopup = hoverPopup
