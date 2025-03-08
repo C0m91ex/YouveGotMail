@@ -47,6 +47,7 @@ items.item3 = {
         email.setSpawnPeriod(email.getSpawnPeriod() - items.item3.modifier)
         items.item3.modifier = email.getSpawnPeriod()/10
         print(email.getSpawnPeriod())
+        ui.addFloatingText((love.graphics.getWidth() / 2 - 910) * scaling.scaleX, (love.graphics.getHeight() / 2 - 180) * scaling.scaleY,"Spawn period: "..string.format("%.2f", email.getSpawnPeriod()))
     end
 }
 

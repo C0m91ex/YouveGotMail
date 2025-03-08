@@ -22,12 +22,17 @@ local gameState = {
 local shopButtonNormal = love.graphics.newImage('assets/inbox/Shop Button.png')
 local shopButtonHovered = love.graphics.newImage('assets/inbox/Shop Button Hover.png')
 local shopButtonClicked = love.graphics.newImage('assets/inbox/Shop Button Click.png')
+
 local statsButtonNormal = love.graphics.newImage('assets/inbox/Stats Button.png')
 local statsButtonHovered = love.graphics.newImage('assets/inbox/Hover Stats Button.png')
+
+local trashBinNormal = love.graphics.newImage('assets/inbox/Trash Bin.png')
+local trashBinHovered = love.graphics.newImage('assets/inbox/Hover Trash Bin.png')
 
 -- global variables
 shopButtonImage = shopButtonNormal
 statsButtonImage = statsButtonNormal
+trashBinImage = trashBinNormal
 
 -- isEmailOpened()
 -- Access function for email 'opened' status
@@ -95,6 +100,14 @@ function gameState.resetStatsButton()
     statsButtonImage = statsButtonNormal
 end
 
+function gameState.setTrashBinHovered()
+    trashBinImage = trashBinHovered
+end
+
+function gameState.resetTrashBin()
+    trashBinImage = trashBinNormal
+end
+
 -- update()
 -- Update function for gameState, calls email.handleEmailselection & email.handleDragging
 -- Handles mouse interaction player actions in regards to current gamestate
@@ -110,6 +123,15 @@ function gameState.update(dt)
     if love.mouse.isDown(1) then
         email.handleEmailSelection(mouseX, mouseY, gameState)
         email.handleDragging(mouseX, mouseY, gameState)
+
+        -- checks to see if the player is holding an email and is over the trash bin.
+        -- If so, change the trash bin icon to the opened lid one, otherwise reset back to the normal icon
+        if ui.isOverTrashBin(mouseX, mouseY) and gameState.selectedEmail and not gameState.openedEmail then
+            gameState.setTrashBinHovered()
+
+        else
+            gameState.resetTrashBin()
+        end
     else
         gameState.selectedEmail = nil
         shop.isShopItemHovered(mouseX, mouseY)
@@ -124,6 +146,9 @@ function gameState.update(dt)
         else
             gameState.resetStatsButton()
         end
+
+        gameState.resetTrashBin()
+
     end
 end
 

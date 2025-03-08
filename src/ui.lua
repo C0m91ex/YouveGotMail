@@ -32,7 +32,7 @@ local function loadAssets()
     inboxBackground = love.graphics.newImage('assets/inbox/Inbox Background.png')
     loginBackground = love.graphics.newImage('assets/main_menu/Login Background.png')
     emailBackground = love.graphics.newImage('assets/read_email/Read Email Background.png')
-    trashBinIcon = love.graphics.newImage('assets/inbox/Trash Bin.png')
+    trashBinIcon = trashBinImage
     
     -- fonts --
     mainFont = love.graphics.newFont("assets/fonts/Roboto-Medium.ttf", 15)
@@ -67,7 +67,7 @@ end
 local function drawTrashBin()
     --love.graphics.setColor(trashBin.color)
     --love.graphics.rectangle("fill", trashBin.x, trashBin.y, trashBin.width, trashBin.height)
-    love.graphics.draw(trashBinIcon, trashBin.x, trashBin.y, 0, scaleX, scaleY)
+    love.graphics.draw(trashBinImage, trashBin.x, trashBin.y, 0, scaleX, scaleY)
 end
 
 --[[
@@ -246,8 +246,8 @@ end
 --            email.y > trashBin.y and email.y < trashBin.y + trashBin.height
 -- end
 local function isOverTrashBin(x, y)
-    return x > trashBin.x and x < trashBin.x + trashBin.width and
-           y > trashBin.y and y < trashBin.y + trashBin.height
+    return x > trashBin.x * scaling.scaleX and x < trashBin.x * scaling.scaleX+ trashBin.width * scaling.scaleX and
+           y > trashBin.y * scaling.scaleY and y < trashBin.y * scaling.scaleY + trashBin.height * scaling.scaleY
 end
 
 -- Creates a popup near where the mouse position is hovering so long as text is provided
