@@ -51,4 +51,51 @@ function utils.createChoiceTableFromString(choiceTable, string)
     return choiceTable
 end
 
+function utils.choiceToString(choiceTable)
+    -- local prereqs = choiceTable.cPrereqs
+    -- local body = choiceTable.cBody
+    -- local changes = choiceTable.cChanges
+    --"(choices: {{(cPrereqs: {}),(cBody: Not right now),(cChanges:{mom=-=1,dad=-=1})}})"
+    local choiceString = ""
+    choiceString = choiceString.."{(cPrereqs: "
+    choiceString = choiceString..utils.tableToString(choiceTable.cPrereqs)
+    choiceString = choiceString.."),(cBody: "
+    choiceString = choiceString..tostring(choiceTable.cBody)
+    choiceString = choiceString.."),(cChanges: "
+    choiceString = choiceString..utils.tableToString(choiceTable.cChanges)
+    choiceString = choiceString..")}"
+    return choiceString
+end
+
+function utils.choiceListToString(choiceList)
+    --(choices: {})
+    local returnList = "{"
+    if next(choiceList) then
+        for i, choice in ipairs(choiceList) do
+            returnList = returnList..utils.choiceToString(choice)
+        end
+    end
+    returnList = returnList.."}"
+    return returnList
+end
+
+function utils.emailToString(emailContentTable)
+    --(prereq: {}),(sender: test@email.com),(subject: This is a test!),"(body: Do not be alarmed, instead be amazed.)",(choices: {}),(ignored: {})
+    local emailString = ""
+    emailString = emailString.."\"(prereq: "
+    emailString = emailString..utils.tableToString(emailContentTable.prereq)
+    emailString = emailString..")\",\"(sender: "
+    emailString = emailString..tostring(emailContentTable.sender)
+    emailString = emailString..")\",\"(subject: "
+    emailString = emailString..tostring(emailContentTable.subject)
+    emailString = emailString..")\",\"(body: "
+    emailString = emailString..tostring(emailContentTable.body)
+    emailString = emailString..")\",\"(choices: "
+    emailString = emailString..utils.choiceListToString(emailContentTable.choices)
+    emailString = emailString..")\",\"(ignored: "
+    emailString = emailString..utils.tableToString(emailContentTable.ignored)
+    emailString = emailString..")\""
+    return emailString
+end
+
 return utils

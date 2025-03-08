@@ -41,8 +41,23 @@ local function serializeStateTest(table)
 	return testTable
 end
 
+local function serializeEmailTest(email)
+	local testString = utils.emailToString(email)
+	local testEmail = {
+		prereq = {},
+		sender = "if you see this it didn't work",
+		subject = "Pelase clik thia linkl!!!",
+		body = "spam hehe",
+		choices = {},
+		ignored = {}
+	}
+	testEmail = csvLineToEmail(testString)
+	return testEmail
+end
+
 return {
     csvLineToEmail = csvLineToEmail,
 	loadEmailFile = loadEmailFile,
-	serializeStateTest = serializeStateTest
+	serializeStateTest = serializeStateTest,
+	serializeEmailTest = serializeEmailTest
 }

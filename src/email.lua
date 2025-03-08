@@ -83,6 +83,7 @@ local function getNextEmailContent()
     local emailContent = {}
     if next(emailPool) ~= nil then
         emailContent = table.remove(emailPool)
+        file.serializeEmailTest(emailContent)
     else
         emailContent = spam.generateRandomSpamEmail()
     end
