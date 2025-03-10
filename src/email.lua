@@ -15,8 +15,8 @@ local defaultEmail = {                                                          
     choices = {},
     ignored = {}
 }
-local emailBase = {}--file.loadEmailFile('data/EmailBase.csv')                            
-local emailPool = {}
+-- local emailBase = {}--file.loadEmailFile('data/EmailBase.csv')                            
+-- local emailPool = {}
 local emails = {} 
 local emailValue = 1
 local choiceButtons = {}
@@ -34,12 +34,6 @@ local globalOffsetY = 0
 local emailSpawnPoint = 
     {x = (screen.width - 100) * scaling.scaleX, y = (screen.height - 100) * scaling.scaleY} 
 local emailBox = {width = 1080, height = 50, ySpacing = 20}                                     -- Email box dimensions 
-
---getters and setters
-
-local function getEmailBase() return emailBase end
-
-local function setEmailBase(filename) emailBase = file.loadEmailFile(filename) end
 
 -- getSpawnPeriod()
 -- Access function for email spawnPeriod
@@ -85,10 +79,10 @@ end
 
 -- getNextEmailContent()
 -- Returns the next email content from the email pool
-local function getNextEmailContent()
+local function getNextEmailContent(targetPool)
     local emailContent = {}
-    if next(emailPool) ~= nil then
-        emailContent = table.remove(emailPool)
+    if next(targetPool) ~= nil then
+        emailContent = table.remove(targetPool)
         file.serializeEmailTest(emailContent)
     else
         emailContent = spam.generateRandomSpamEmail()
@@ -104,8 +98,10 @@ end
 
 -- spawnEmail()
 -- Spawns an email with the given mode, x & y position, dimensions, and color
-local function spawnEmail(mode, x, y, width, height, color, content)
+local function spawnEmail(mode, x, y, width, height, color, targetPool, content)
+    fillEmailPool()
     moveEmailsDown()
+    if targetPool == nil then targetPool = emailPool end
     local emailToAdd = {
         mode = mode,
         x = x,
@@ -117,16 +113,17 @@ local function spawnEmail(mode, x, y, width, height, color, content)
         width = width,
         height = height,
         color = color,
-        content = getNextEmailContent(),
+        targetPool = targetPool,
+        content = {},
         respond = false
     }
+    emailToAdd.content = getNextEmailContent(emailToAdd.targetPool)
     local _, topEmail = next(emails)
     if topEmail then
         emailToAdd.emailBelow = topEmail
         topEmail.emailAbove = emailToAdd
     end
     table.insert(emails, 1, emailToAdd)
-    fillEmailPool()
 end
 
 -- updateEmailValue()
@@ -153,10 +150,9 @@ end
 -- spawnInitialEmails()
 -- Spawns the initial 9 emails for the gamestart setup
 -- Only gets called once at gamestart
-local function spawnInitialEmails()
-    fillEmailPool()
-    for _ = 1, 4 do
-        spawnEmail("fill", emailSpawnPoint.x, emailSpawnPoint.y, emailBox.width, emailBox.height, {1, 1, 1})
+local function spawnInitialEmails(amount, targetPool)
+    for _ = 1, amount do
+        spawnEmail("fill", emailSpawnPoint.x, emailSpawnPoint.y, emailBox.width, emailBox.height, {1, 1, 1}, targetPool)
     end
 end
 
@@ -558,9 +554,28 @@ function snapBack(gameState)
     end
 end
 
+--getters and setters
+
+local function getEmailBase() return emailBase end
+local function setEmailBase(filename) emailBase = file.loadEmailFile(filename) end
+
+local function getEmailPool() return emailPool end
+local function setEmailPool(filename) emailPool = file.loadEmailFile(filename) end
+
+local function getEmailInbox()
+    local emailInbox = {}
+    for i, email in ipairs(emails) do
+        table.insert(emailInbox, email.content)
+    end
+    return emailInbox
+end
+
+local function setEmailInbox(filename)
+    emailInbox = file.loadEmailFile(filename)
+    spawnInitialEmails(#emailInbox, emailInbox)
+end
+
 return {
-    getEmailBase = getEmailBase,
-    setEmailBase = setEmailBase,
     getSpawnPeriod = getSpawnPeriod,
     setSpawnPeriod = setSpawnPeriod,
     autospawnEmail = autospawnEmail,
@@ -584,5 +599,11 @@ return {
     resetOrigin = resetOrigin,
     updateOrigin = updateOrigin,
     moveToOrigin = moveToOrigin,
-    snapBack = snapBack
+    snapBack = snapBack,
+    getEmailBase = getEmailBase,
+    setEmailBase = setEmailBase,
+    getEmailPool = getEmailPool,
+    setEmailPool = setEmailPool,
+    getEmailInbox = getEmailInbox,
+    setEmailInbox = setEmailInbox
 }

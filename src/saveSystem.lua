@@ -5,26 +5,57 @@ local utils = require("src.utils")
 
 local saveSystem = {}
 
-function saveSystem.createSavefile()
-    local savefileString = ""
-    savefileString = savefileString..utils.emailBaseToString(email.getEmailBase())
-    return savefileString
+function saveSystem.saveEmailBase()
+    local emailBaseString = ""
+    emailBaseString = emailBaseString..utils.emailListToString(email.getEmailBase())
+    return emailBaseString
 end
 
-function saveSystem.autoSave(filename)
+function saveSystem.saveEmailPool()
+    local emailPoolString = ""
+    emailPoolString = emailPoolString..utils.emailListToString(email.getEmailPool())
+    return emailPoolString
+end
+
+function saveSystem.saveEmailInbox()
+    local emailInboxString = ""
+    emailInboxString = emailInboxString..utils.emailListToString(email.getEmailInbox())
+    return emailInboxString
+end
+
+function saveSystem.createSavefile(saveFolderName)
+    success, message = love.filesystem.write(saveFolderName.."/EmailBase.csv", saveSystem.saveEmailBase())
+    if success then 
+        print ('EmailBase created')
+    else 
+        print ('EmailBase not created: '..message)
+    end
+    success, message = love.filesystem.write(saveFolderName.."/EmailPool.csv", saveSystem.saveEmailPool())
+    if success then 
+        print ('EmailPool created')
+    else 
+        print ('EmailPool not created: '..message)
+    end
+    success, message = love.filesystem.write(saveFolderName.."/EmailInbox.csv", saveSystem.saveEmailInbox())
+    if success then 
+        print ('EmailInbox created')
+    else 
+        print ('EmailInbox not created: '..message)
+    end
+end
+
+function saveSystem.autoSave()
     print("autosave test")
     print(love.filesystem.getIdentity())
-    success, message = love.filesystem.write(filename, saveSystem.createSavefile())
-    if success then 
-        print ('file created')
-    else 
-        print ('file not created: '..message)
-    end
+    love.filesystem.createDirectory("autosave")
+    saveSystem.createSavefile("autosave")
 end
 
 function saveSystem.autoLoad()
     print("autoload test")
-    email.setEmailBase("EmailBase.csv")
+    email.setEmailBase("autosave/EmailBase.csv")
+    email.setEmailPool("autosave/EmailPool.csv")
+    email.setEmailInbox("autosave/EmailInbox.csv")
 end
 
 function saveSystem.load()

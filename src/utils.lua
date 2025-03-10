@@ -98,12 +98,12 @@ function utils.emailToString(emailContentTable)
     return emailString
 end
 
-function utils.emailBaseToString(emailBaseTable)
-    local emailBaseString = ""
-    for i, email in ipairs(emailBaseTable) do
-        emailBaseString = emailBaseString..utils.emailToString(email).."\r\n"
+function utils.emailListToString(emailListTable)
+    local emailListString = ""
+    for i, email in ipairs(emailListTable) do
+        emailListString = emailListString..utils.emailToString(email).."\r\n"
     end
-    return emailBaseString
+    return emailListString
 end
 
 return utils

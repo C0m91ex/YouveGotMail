@@ -16,7 +16,7 @@ local shop = {
 
 shop.hoverPopup = { x = 0, y = 0, visible = false }
 
-local itemsAmount = {}
+local itemAmounts = {}
 
 local items = {
     {name = "Concentrated Encryption",
@@ -58,6 +58,8 @@ local shopTitle = { x = (love.graphics.getWidth() / 2 + 995), y = (love.graphics
 
 --getters and setters
 local function getShopItems() return shopItems end
+local function getItemAmounts() return itemAmounts end
+local function setItemAmounts(amounts) itemAmounts = amounts end 
 
 -- Table used as the bone structure for shop items
 local function createShopItem(mode, x, y, width, height, color, itemTable)
@@ -70,16 +72,18 @@ local function createShopItem(mode, x, y, width, height, color, itemTable)
         color = color,
         itemTable = itemTable
     })
-    itemsAmount[itemTable.name] = 0
 end
 
-local function updateItemsAmount(shopItem)
-    itemsAmount[shopItem.itemTable.name] = itemsAmount[shopItem.itemTable.name] + 1
+local function updateItemAmounts(shopItem)
+    if itemAmounts[shopItem.itemTable.name] then itemAmounts[shopItem.itemTable.name] = (itemAmounts[shopItem.itemTable.name] + 1) or 1
+    else itemAmounts[shopItem.itemTable.name] = 1 end
+    print(itemAmounts[shopItem.itemTable.name])
 end
 
     -- Shop item setup --
 -- local numberOfShopItems = 3
 local function setUpShop()
+    shopItems = {}
     -- shopIcon = love.graphics.newImage('assets/inbox/Shop Button.png')
     shopIcon = shopButtonImage
     -- Make sure when increasing this variable to set up name and price for the added items to the shop
@@ -102,15 +106,10 @@ local function setUpShop()
     -- shopItems[3].itemTable.price = items.item3.price
 end
 
-local function resetShopItems()
-    shopItems = {}
-    setUpShop()
-end
-
 local function loadShopItems()
     resetShopItems()
     for _, shopItem in ipairs(shopItems) do
-        local amount = itemsAmount[shopItem.itemTable.name]
+        local amount = itemAmounts[shopItem.itemTable.name]
         for i=1, amount do
             itemEffects(shopItem)
         end
@@ -204,7 +203,7 @@ local function isShopItemClicked(x, y, gameState)
             if gameState.currency >= shopItem.itemTable.price then
                 gameState.currency = gameState.currency - shopItem.itemTable.price
                 itemEffects(shopItem)
-                updateItemsAmount(shopItem)
+                updateItemAmounts(shopItem)
                 sounds.powerUp:stop()
                 sounds.powerUp:play()
             end
@@ -253,8 +252,12 @@ end
 -- local 
 
 return {
+    getShopItems = getShopItems,
+    getItemAmounts = getItemAmounts,
+    setItemAmounts = setItemAmounts,
     createShopItem = createShopItem,
     setUpShop = setUpShop,
+    loadShopItems = loadShopItems,
     drawShopTitle = drawShopTitle,
     drawShopItems = drawShopItems,
     itemEffects = itemEffects,

@@ -61,7 +61,7 @@ function gameState.load()
     scaling.loadWindow()
     ui.loadAssets()
     shop.setUpShop()
-    email.spawnInitialEmails()
+    --email.spawnInitialEmails()
 end
 
 -- setShopButtonClicked()
