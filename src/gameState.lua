@@ -4,6 +4,7 @@ local email = require("src.email")
 local ui = require("src.ui")
 local shop = require("src.shop")
 local scaling = require("src.scaling")
+local utils = require("src.utils")
 
 -- local variables
 local start = love.timer.getTime()
@@ -207,5 +208,11 @@ end
 function gameState.addMoney(value)
     gameState.currency = gameState.currency + value
 end
+
+function gameState.getGameState() return gameState end
+function gameState.setGameState(newGameState)
+    utils.updateTableFromString(gameState, newGameState)
+end
+
 
 return gameState
