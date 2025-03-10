@@ -118,16 +118,22 @@ function login.handleEvent(e, a, b, c)
             login.playRandomKeySound()
         end
     elseif e == "keypressed" then
-        if c == "backspace" then
-            if activeField == "username" then
-                username = username:sub(1, -2)
-                login.playRandomKeySound()
-            elseif activeField == "password" then
+        if a == "backspace" then
+            if activeField == "username" and #username > 0 then
+                username = username:sub(1, -2) 
+                login.playRandomKeySound() 
+            elseif activeField == "password" and #password > 0 then
                 password = password:sub(1, -2)
                 login.playRandomKeySound()
             end
-        elseif c == "return" and #username > 0 and #username <= 16 and #password > 0 and #password <= 16 then
+        elseif a == "return" and #username > 0 and #username <= 16 and #password > 0 and #password <= 16 then
             login.completed = true
+        elseif a == "tab" then
+            if activeField == "username" then
+                activeField = "password"
+            else
+                activeField = "username"
+            end
         end
     end
 end
