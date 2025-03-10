@@ -212,6 +212,12 @@ end
 function gameState.getGameState() return gameState end
 function gameState.setGameState(newGameState)
     utils.updateTableFromString(gameState, newGameState)
+    gameState.currency = tonumber(gameState.currency)
+    gameState.offsetX = tonumber(gameState.offsetX)
+    gameState.offsetY = tonumber(gameState.offsetY)
+    gameState.lastClickTime = tonumber(gameState.lastClickTime)
+    gameState.doubleClickDelay = tonumber(gameState.doubleClickDelay)
+    gameState.lastTime = tonumber(gameState.lastTime)
 end
 
 
