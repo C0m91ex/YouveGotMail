@@ -20,8 +20,8 @@ local lastSecond = math.floor(start)
 -- load()
 -- Load function, calls gamestate.load()
 function love.load()
-    login.load()    -- Requires login scene to be loaded first
-    login.start() 
+    -- login.load()    -- Requires login scene to be loaded first
+    -- login.start() 
 
     -- tutorial.load()  -- Requires tutorial scene to be loaded first
     -- tutorial.start() -- NOT IMPLEMENTED
@@ -103,8 +103,8 @@ end
 -- https://love2d.org/wiki/love.keypressed
 function love.keypressed(key, scancode, isrepeat)
     if key == "escape" then
-        saveSystem.autoSave("EmailBase.csv")
-        --love.event.quit()
+        --saveSystem.autoSave("EmailBase.csv")
+        love.event.quit()
     end
     if key == "space" then
         email.receiveEmail(gameState)

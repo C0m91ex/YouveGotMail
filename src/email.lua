@@ -37,9 +37,9 @@ local emailBox = {width = 1080, height = 50, ySpacing = 20}                     
 
 --getters and setters
 
-function getEmailBase() return emailBase end
+local function getEmailBase() return emailBase end
 
-function setEmailBase(filename) emailBase = file.loadEmailFile(filename) end
+local function setEmailBase(filename) emailBase = file.loadEmailFile(filename) end
 
 -- getSpawnPeriod()
 -- Access function for email spawnPeriod
