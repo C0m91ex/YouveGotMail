@@ -15,7 +15,7 @@ local defaultEmail = {                                                          
     choices = {},
     ignored = {}
 }
-local emailBase = file.loadEmailFile('data/EmailBase.csv')                            
+local emailBase = {}--file.loadEmailFile('data/EmailBase.csv')                            
 local emailPool = {}
 local emails = {} 
 local emailValue = 1
@@ -34,6 +34,12 @@ local globalOffsetY = 0
 local emailSpawnPoint = 
     {x = (screen.width - 100) * scaling.scaleX, y = (screen.height - 100) * scaling.scaleY} 
 local emailBox = {width = 1080, height = 50, ySpacing = 20}                                     -- Email box dimensions 
+
+--getters and setters
+
+function getEmailBase() return emailBase end
+
+function setEmailBase(filename) emailBase = file.loadEmailFile(filename) end
 
 -- getSpawnPeriod()
 -- Access function for email spawnPeriod
@@ -553,6 +559,8 @@ function snapBack(gameState)
 end
 
 return {
+    getEmailBase = getEmailBase,
+    setEmailBase = setEmailBase,
     getSpawnPeriod = getSpawnPeriod,
     setSpawnPeriod = setSpawnPeriod,
     autospawnEmail = autospawnEmail,
