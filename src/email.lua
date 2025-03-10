@@ -13,7 +13,8 @@ local defaultEmail = {                                                          
     subject = "Pelase clik thia linkl!!!",
     body = "spam hehe",
     choices = {},
-    ignored = {}
+    ignored = {},
+    respond = false
 }
 -- local emailBase = {}--file.loadEmailFile('data/EmailBase.csv')                            
 -- local emailPool = {}
@@ -102,6 +103,7 @@ local function spawnEmail(mode, x, y, width, height, color, targetPool, content)
     fillEmailPool()
     moveEmailsDown()
     if targetPool == nil then targetPool = emailPool end
+    if content == nil then content = getNextEmailContent(targetPool) end
     local emailToAdd = {
         mode = mode,
         x = x,
@@ -114,10 +116,8 @@ local function spawnEmail(mode, x, y, width, height, color, targetPool, content)
         height = height,
         color = color,
         targetPool = targetPool,
-        content = {},
-        respond = false
+        content = content
     }
-    emailToAdd.content = getNextEmailContent(emailToAdd.targetPool)
     local _, topEmail = next(emails)
     if topEmail then
         emailToAdd.emailBelow = topEmail
@@ -290,7 +290,7 @@ function makeChoiceButton(x, y, choiceTable, gameState)
         
     end
 
-    if gameState.getOpenedEmail().respond == true then unlockFlag = false end
+    if gameState.getOpenedEmail().content.respond == true then unlockFlag = false end
 
     return {
         x = x + 10,
@@ -325,7 +325,7 @@ function drawChoiceButton(choiceButton)
     --     end
     -- end
 
-    -- if gameState.getOpenedEmail().respond == true then unlockFlag = false end
+    -- if gameState.getOpenedEmail().content.respond == true then unlockFlag = false end
 
     if choiceButton.unlockFlag then
         setAvailableColor()
@@ -344,7 +344,7 @@ end
 -- isEmailChoiceClicked()
 -- Checks if an email choice has been clicked
 function emailResponded(gameState)
-    gameState.getOpenedEmail().respond = true
+    gameState.getOpenedEmail().content.respond = true
     for i, choiceButton in ipairs(choiceButtons) do
         choiceButton.unlockFlag = false
     end
@@ -409,7 +409,7 @@ local function isEmailChoiceHovered(x, y, gameState)
             hoverPopup.x = (x - 120) * scaling.scaleX 
             hoverPopup.y = (y + 10) * scaling.scaleY 
             -- shop.hoverPopup.text = "Hello world" 
-            if not gameState.getOpenedEmail().respond then
+            if not gameState.getOpenedEmail().content.respond then
                 if not choiceButton.unlockFlag then
                     hoverPopup.text = "You can unlock this by\n"..printChoiceButtonPrereqs(choiceButton)
                     hoverPopup.visible = true
@@ -464,7 +464,7 @@ function deleteEmail(gameState)
         for i, email in ipairs(emails) do
             if email == gameState.selectedEmail then
                 -- insert ignored code here
-                if not email.respond then
+                if not email.content.respond then
                     for key, value in pairs(email.content.ignored) do
                         playerState.playerChange(key, value)
                     end

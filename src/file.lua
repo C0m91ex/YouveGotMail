@@ -7,7 +7,8 @@ local utils = require("src.utils")
 local function csvLineToEmail(line)
 	local email = {prereq = {}, sender = "", subject = "", body = "", choices = {}, ignored = {}}
 	local emailPat = '.*%(prereq: (.*)%).*,.*%(sender: (.*)%).*,.*%(subject: (.*)%).*,.*%(body: (.*)%).*,.*%(choices: (.*)%).*,.*%(ignored: (.*)%)'
-    local quotePat = '%"(.-)%",'
+    local respondPat = '.*%(respond: true%).*'
+	local quotePat = '%"(.-)%",'
     local quoteMark = "\"\""
     local flag = false;
 
@@ -19,7 +20,8 @@ local function csvLineToEmail(line)
 		utils.createChoiceTableFromString(email["choices"], choicesString)
 		utils.updateTableFromString(email["ignored"], ignoredString)
 	end
-
+	if string.find(line, respondPat) then email["respond"] = true
+	else email["respond"] = false end
 	return email
 end
 

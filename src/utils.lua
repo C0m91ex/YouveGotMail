@@ -94,6 +94,8 @@ function utils.emailToString(emailContentTable)
     emailString = emailString..utils.choiceListToString(emailContentTable.choices)
     emailString = emailString..")\",\"(ignored: "
     emailString = emailString..utils.tableToString(emailContentTable.ignored)
+    emailString = emailString..")\",\"(respond: "
+    emailString = emailString..tostring(emailContentTable.respond)
     emailString = emailString..")\""
     return emailString
 end
