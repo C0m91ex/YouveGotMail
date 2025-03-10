@@ -146,6 +146,7 @@ end
 -- Draws the score counter label
 local currencyCountMultiplier = 0
 local function drawCurrency(currency)
+    currency = tonumber(currency)
     if currency >= 1000 * 10^currencyCountMultiplier then
         currencyFontSize = currencyFontSize - 3
         currencyFont = love.graphics.newFont(currencyFontSize)

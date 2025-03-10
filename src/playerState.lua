@@ -1,7 +1,12 @@
-local playerVars = {mom = 4, dad = 3}
+local file = require("src.file")
+local utils = require("src.utils")
 
-local function getPlayerVarList()
-    return playerVars
+local playerVars = {mom = 4, dad = 3}
+playerVars = file.serializeStateTest(playerVars)
+
+local function getPlayerVarList() return playerVars end
+local function setPlayerVarList(newPlayerVars)
+    utils.updateTableFromString(playerVars, newPlayerVars)
 end
 
 local function getPlayerMultiVars(...)
@@ -77,6 +82,7 @@ end
 return {
     playerVars,
     getPlayerVarList = getPlayerVarList,
+    setPlayerVarList = setPlayerVarList,
     getPlayerMultiVars = getPlayerMultiVars,
     getPlayerSingleVar = getPlayerSingleVar,
     setPlayerVar = setPlayerVar,

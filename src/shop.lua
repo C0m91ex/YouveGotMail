@@ -16,49 +16,53 @@ local shop = {
 
 shop.hoverPopup = { x = 0, y = 0, visible = false }
 
-local items = {}
-items.item1 = {
+local itemAmounts = {}
+
+local items = {
+    {name = "Concentrated Encryption",
     price = 10,
     inflation = 8,
-    name = "Concentrated Encryption",
     description = "Emails give more money when they are deleted, thanks to the interns. The emails encrypt themselves further now, whatever that means.",
     modifier = 1,
-    effect = function()
-        email.updateEmailValue(items.item1.modifier)
+    effect = function(modifier)
+        email.updateEmailValue(modifier)
     end
-}
-items.item2 = {
+    },
+    {name = "Data Scraping",
     price = 20,
     inflation = 5,
-    name = "Data Scraping",
     description = "Get a bit of money when emails come in; thank you, interns. Something about emails scraping a bit of data from all the networks they pass to get to you.",
     modifier = 1,
-    effect = function()
-        email.updateSpawnValue(items.item2.modifier)
+    effect = function(modifier)
+        email.updateSpawnValue(modifier)
     end
-}
-items.item3 = {
+    },
+    {name = "Net Speedrouting",
     price = 30,
     inflation = 15,
-    name = "Net Speedrouting",
     description = "Emails come in faster. I didn't bother asking the interns why this time.",
-    modifier = email.getSpawnPeriod()/10,
-    effect = function()
-        email.setSpawnPeriod(email.getSpawnPeriod() - items.item3.modifier)
-        items.item3.modifier = email.getSpawnPeriod()/10
+    modifier = 10,
+    effect = function(modifier)
+        email.setSpawnPeriod(email.getSpawnPeriod() - email.getSpawnPeriod()/modifier)
         print(email.getSpawnPeriod())
         ui.addFloatingText((love.graphics.getWidth() / 2 - 910) * scaling.scaleX, (love.graphics.getHeight() / 2 - 180) * scaling.scaleY,"Spawn period: "..string.format("%.2f", email.getSpawnPeriod()))
     end
+    }
 }
+local shopItems = {}
 
 local scaleX, scaleY = 1, 1
 
 local shopTitle = { x = (love.graphics.getWidth() / 2 + 995), y = (love.graphics.getHeight() / 2 - 220), width = 204, height = 66 }
 -- Functions --
 
+--getters and setters
+local function getShopItems() return shopItems end
+local function getItemAmounts() return itemAmounts end
+local function setItemAmounts(amounts) itemAmounts = amounts end 
+
 -- Table used as the bone structure for shop items
-local shopItems ={}
-local function createShopItem(mode, x, y, width, height, color)
+local function createShopItem(mode, x, y, width, height, color, itemTable)
     table.insert(shopItems, {
         mode = mode,
         x = x,
@@ -66,38 +70,50 @@ local function createShopItem(mode, x, y, width, height, color)
         width = width,
         height = height,
         color = color,
-        itemTable = {}
+        itemTable = itemTable
     })
 end
 
-local function updateShopItem(shopItem, item)
-    item.price = item.price + item.inflation
-    shopItem.itemTable.name = item.name
-    shopItem.itemTable.price = item.price
+local function updateItemAmounts(shopItem)
+    if itemAmounts[shopItem.itemTable.name] then itemAmounts[shopItem.itemTable.name] = (itemAmounts[shopItem.itemTable.name] + 1) or 1
+    else itemAmounts[shopItem.itemTable.name] = 1 end
+    print(itemAmounts[shopItem.itemTable.name])
 end
 
     -- Shop item setup --
-local numberOfShopItems = 3
+-- local numberOfShopItems = 3
 local function setUpShop()
+    shopItems = {}
     -- shopIcon = love.graphics.newImage('assets/inbox/Shop Button.png')
     shopIcon = shopButtonImage
     -- Make sure when increasing this variable to set up name and price for the added items to the shop
-    for _ = 1, numberOfShopItems do
+    for _, itemTable in ipairs(items) do
         -- createShopItem(mode, x, y, width, height, color)
-        createShopItem("fill", shopTitle.x + 15, shopTitle.y + shop.shopOffsetY, 175, 70, {0.855, 0.855, 0.855})
+        print("setupShopTest")
+        createShopItem("fill", shopTitle.x + 15, shopTitle.y + shop.shopOffsetY, 175, 70, {0.855, 0.855, 0.855}, itemTable)
         shop.shopOffsetY = shop.shopOffsetY + 90
     end
 
     -- setting the name and price for item 1
-    shopItems[1].itemTable.name = items.item1.name
-    shopItems[1].itemTable.price = items.item1.price
+    -- shopItems[1].itemTable.name = items.item1.name
+    -- shopItems[1].itemTable.price = items.item1.price
 
-    -- setting the name and price for item 2
-    shopItems[2].itemTable.name = items.item2.name
-    shopItems[2].itemTable.price = items.item2.price
+    -- -- setting the name and price for item 2
+    -- shopItems[2].itemTable.name = items.item2.name
+    -- shopItems[2].itemTable.price = items.item2.price
     
-    shopItems[3].itemTable.name = items.item3.name
-    shopItems[3].itemTable.price = items.item3.price
+    -- shopItems[3].itemTable.name = items.item3.name
+    -- shopItems[3].itemTable.price = items.item3.price
+end
+
+local function loadShopItems()
+    resetShopItems()
+    for _, shopItem in ipairs(shopItems) do
+        local amount = itemAmounts[shopItem.itemTable.name]
+        for i=1, amount do
+            itemEffects(shopItem)
+        end
+    end
 end
 
 local function isShopButtonClicked(x, y)
@@ -157,20 +173,23 @@ local function drawShopItems()
 end
 
 
-local function itemEffects(item)
-    if item == 1 then
-        print("Item 1 effect.")
-        items.item1.effect()
-        updateShopItem(shopItems[1], items.item1)
-    elseif item == 2 then
-        print("Item 2 effect.")
-        items.item2.effect()
-        updateShopItem(shopItems[2], items.item2)
-    elseif item == 3 then
-        print("Item 3 effect.")
-        items.item3.effect()
-        updateShopItem(shopItems[3], items.item3)
-    end
+local function itemEffects(shopItem)
+    print("Item "..tostring(shopItem.itemTable.name).." effect.")
+    shopItem.itemTable.effect(shopItem.itemTable.modifier)
+    shopItem.itemTable.price = shopItem.itemTable.price + shopItem.itemTable.inflation
+    -- if item == 1 then
+    --     print("Item 1 effect.")
+    --     items.item1.effect()
+    --     updateShopItem(shopItems[1], items.item1)
+    -- elseif item == 2 then
+    --     print("Item 2 effect.")
+    --     items.item2.effect()
+    --     updateShopItem(shopItems[2], items.item2)
+    -- elseif item == 3 then
+    --     print("Item 3 effect.")
+    --     items.item3.effect()
+    --     updateShopItem(shopItems[3], items.item3)
+    -- end
 end
 
 local function isShopItemClicked(x, y, gameState)
@@ -183,7 +202,8 @@ local function isShopItemClicked(x, y, gameState)
 
             if gameState.currency >= shopItem.itemTable.price then
                 gameState.currency = gameState.currency - shopItem.itemTable.price
-                itemEffects(_)
+                itemEffects(shopItem)
+                updateItemAmounts(shopItem)
                 sounds.powerUp:stop()
                 sounds.powerUp:play()
             end
@@ -202,24 +222,24 @@ function isShopItemHovered(x, y)
             shop.hoverPopup.x = (x - 120) * scaleX 
             shop.hoverPopup.y = (y + 10) * scaleY 
             -- shop.hoverPopup.text = "Hello world" 
-            if index == 1 then
-                shop.hoverPopup.text =
-                    "Item Name: " .. items.item1.name .. "\n\n" ..
-                    "Price: Starting price: $10, $8 increase for whenever\nthe item is purchased again.\n\n" ..
-                    "Description: "..items.item1.description
-            elseif shop.hoveredItem == shopItem then
-                if index == 2 then
-                    shop.hoverPopup.text =
-                        "Item Name: " .. items.item2.name .. "\n\n" ..
-                        "Price: Starting price: $15, $5 increase when the\nitem is purchased again.\n\n" ..
-                        "Description: "..items.item2.description
-                elseif index == 3 then
-                    shop.hoverPopup.text =
-                        "Item Name: " .. items.item3.name .. "\n\n" ..
-                        "Price: Starting price: $30, $15 increase for\nwhenever the item is purchased again.\n\n" ..
-                        "Description: "..items.item3.description
-                end
-            end            
+            -- if index == 1 then
+            --     shop.hoverPopup.text =
+            --         "Item Name: " .. items.item1.name .. "\n\n" ..
+            --         "Price: Starting price: $10, $8 increase for whenever\nthe item is purchased again.\n\n" ..
+            --         "Description: "..items.item1.description
+            -- elseif shop.hoveredItem == shopItem then
+            --     if index == 2 then
+            --         shop.hoverPopup.text =
+            --             "Item Name: " .. items.item2.name .. "\n\n" ..
+            --             "Price: Starting price: $15, $5 increase when the\nitem is purchased again.\n\n" ..
+            --             "Description: "..items.item2.description
+            --     elseif index == 3 then
+            --         shop.hoverPopup.text =
+            --             "Item Name: " .. items.item3.name .. "\n\n" ..
+            --             "Price: Starting price: $30, $15 increase for\nwhenever the item is purchased again.\n\n" ..
+            --             "Description: "..items.item3.description
+            --     end
+            -- end            
 
             shop.hoverPopup.visible = true
             return
@@ -232,8 +252,12 @@ end
 -- local 
 
 return {
+    getShopItems = getShopItems,
+    getItemAmounts = getItemAmounts,
+    setItemAmounts = setItemAmounts,
     createShopItem = createShopItem,
     setUpShop = setUpShop,
+    loadShopItems = loadShopItems,
     drawShopTitle = drawShopTitle,
     drawShopItems = drawShopItems,
     itemEffects = itemEffects,

@@ -13,10 +13,11 @@ local defaultEmail = {                                                          
     subject = "Pelase clik thia linkl!!!",
     body = "spam hehe",
     choices = {},
-    ignored = {}
+    ignored = {},
+    respond = false
 }
-local emailBase = file.loadEmailFile('data/EmailBase.csv')                                      
-local emailPool = {}
+-- local emailBase = {}--file.loadEmailFile('data/EmailBase.csv')                            
+-- local emailPool = {}
 local emails = {} 
 local emailValue = 1
 local choiceButtons = {}
@@ -79,10 +80,11 @@ end
 
 -- getNextEmailContent()
 -- Returns the next email content from the email pool
-local function getNextEmailContent()
+local function getNextEmailContent(targetPool)
     local emailContent = {}
-    if next(emailPool) ~= nil then
-        emailContent = table.remove(emailPool)
+    if next(targetPool) ~= nil then
+        emailContent = table.remove(targetPool)
+        file.serializeEmailTest(emailContent)
     else
         emailContent = spam.generateRandomSpamEmail()
     end
@@ -97,8 +99,11 @@ end
 
 -- spawnEmail()
 -- Spawns an email with the given mode, x & y position, dimensions, and color
-local function spawnEmail(mode, x, y, width, height, color, content)
+local function spawnEmail(mode, x, y, width, height, color, targetPool, content)
+    fillEmailPool()
     moveEmailsDown()
+    if targetPool == nil then targetPool = emailPool end
+    if content == nil then content = getNextEmailContent(targetPool) end
     local emailToAdd = {
         mode = mode,
         x = x,
@@ -110,8 +115,8 @@ local function spawnEmail(mode, x, y, width, height, color, content)
         width = width,
         height = height,
         color = color,
-        content = getNextEmailContent(),
-        respond = false
+        targetPool = targetPool,
+        content = content
     }
     local _, topEmail = next(emails)
     if topEmail then
@@ -119,7 +124,6 @@ local function spawnEmail(mode, x, y, width, height, color, content)
         topEmail.emailAbove = emailToAdd
     end
     table.insert(emails, 1, emailToAdd)
-    fillEmailPool()
 end
 
 -- updateEmailValue()
@@ -146,10 +150,9 @@ end
 -- spawnInitialEmails()
 -- Spawns the initial 9 emails for the gamestart setup
 -- Only gets called once at gamestart
-local function spawnInitialEmails()
-    fillEmailPool()
-    for _ = 1, 4 do
-        spawnEmail("fill", emailSpawnPoint.x, emailSpawnPoint.y, emailBox.width, emailBox.height, {1, 1, 1})
+local function spawnInitialEmails(amount, targetPool)
+    for _ = 1, amount do
+        spawnEmail("fill", emailSpawnPoint.x, emailSpawnPoint.y, emailBox.width, emailBox.height, {1, 1, 1}, targetPool)
     end
 end
 
@@ -287,7 +290,7 @@ function makeChoiceButton(x, y, choiceTable, gameState)
         
     end
 
-    if gameState.getOpenedEmail().respond == true then unlockFlag = false end
+    if gameState.getOpenedEmail().content.respond == true then unlockFlag = false end
 
     return {
         x = x + 10,
@@ -322,7 +325,7 @@ function drawChoiceButton(choiceButton)
     --     end
     -- end
 
-    -- if gameState.getOpenedEmail().respond == true then unlockFlag = false end
+    -- if gameState.getOpenedEmail().content.respond == true then unlockFlag = false end
 
     if choiceButton.unlockFlag then
         setAvailableColor()
@@ -341,7 +344,7 @@ end
 -- isEmailChoiceClicked()
 -- Checks if an email choice has been clicked
 function emailResponded(gameState)
-    gameState.getOpenedEmail().respond = true
+    gameState.getOpenedEmail().content.respond = true
     for i, choiceButton in ipairs(choiceButtons) do
         choiceButton.unlockFlag = false
     end
@@ -406,7 +409,7 @@ local function isEmailChoiceHovered(x, y, gameState)
             hoverPopup.x = (x - 120) * scaling.scaleX 
             hoverPopup.y = (y + 10) * scaling.scaleY 
             -- shop.hoverPopup.text = "Hello world" 
-            if not gameState.getOpenedEmail().respond then
+            if not gameState.getOpenedEmail().content.respond then
                 if not choiceButton.unlockFlag then
                     hoverPopup.text = "You can unlock this by\n"..printChoiceButtonPrereqs(choiceButton)
                     hoverPopup.visible = true
@@ -461,7 +464,7 @@ function deleteEmail(gameState)
         for i, email in ipairs(emails) do
             if email == gameState.selectedEmail then
                 -- insert ignored code here
-                if not email.respond then
+                if not email.content.respond then
                     for key, value in pairs(email.content.ignored) do
                         playerState.playerChange(key, value)
                     end
@@ -551,6 +554,27 @@ function snapBack(gameState)
     end
 end
 
+--getters and setters
+
+local function getEmailBase() return emailBase end
+local function setEmailBase(filename) emailBase = file.loadEmailFile(filename) end
+
+local function getEmailPool() return emailPool end
+local function setEmailPool(filename) emailPool = file.loadEmailFile(filename) end
+
+local function getEmailInbox()
+    local emailInbox = {}
+    for i, email in ipairs(emails) do
+        table.insert(emailInbox, email.content)
+    end
+    return emailInbox
+end
+
+local function setEmailInbox(filename)
+    emailInbox = file.loadEmailFile(filename)
+    spawnInitialEmails(#emailInbox, emailInbox)
+end
+
 return {
     getSpawnPeriod = getSpawnPeriod,
     setSpawnPeriod = setSpawnPeriod,
@@ -575,5 +599,11 @@ return {
     resetOrigin = resetOrigin,
     updateOrigin = updateOrigin,
     moveToOrigin = moveToOrigin,
-    snapBack = snapBack
+    snapBack = snapBack,
+    getEmailBase = getEmailBase,
+    setEmailBase = setEmailBase,
+    getEmailPool = getEmailPool,
+    setEmailPool = setEmailPool,
+    getEmailInbox = getEmailInbox,
+    setEmailInbox = setEmailInbox
 }

@@ -8,6 +8,7 @@ local file = require("src.file")
 local shop = require("src.shop")
 local playerState = require("src.playerState")
 local login = require("src.login")
+local saveSystem = require("src.saveSystem")
 
 -- global variables
 sounds = {}
@@ -15,13 +16,12 @@ sounds = {}
 -- local variables
 local start = love.timer.getTime()      -- Timer related
 local lastSecond = math.floor(start)  
-local csv = {}                          -- Email data
 
 -- load()
 -- Load function, calls gamestate.load()
 function love.load()
-    login.load()    -- Requires login scene to be loaded first
-    login.start() 
+    -- login.load()    -- Requires login scene to be loaded first
+    -- login.start() 
 
     -- tutorial.load()  -- Requires tutorial scene to be loaded first
     -- tutorial.start() -- NOT IMPLEMENTED
@@ -32,9 +32,10 @@ function love.load()
         resizable = true,
         fullscreen = true
     })
-
+    
     gameState.load()
-    csv = file.loadEmailFile("data/EmailBase.csv")
+    saveSystem.load()
+    
 
     -- Audio set-up
     sounds.emailDelete = love.audio.newSource("assets/sounds/email-delete.mp3", "static")
@@ -103,7 +104,8 @@ end
 -- https://love2d.org/wiki/love.keypressed
 function love.keypressed(key, scancode, isrepeat)
     if key == "escape" then
-       love.event.quit()
+        saveSystem.autoSave()
+        love.event.quit()
     end
     if key == "space" then
         email.receiveEmail(gameState)

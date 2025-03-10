@@ -4,6 +4,7 @@ local email = require("src.email")
 local ui = require("src.ui")
 local shop = require("src.shop")
 local scaling = require("src.scaling")
+local utils = require("src.utils")
 
 -- local variables
 local start = love.timer.getTime()
@@ -61,7 +62,7 @@ function gameState.load()
     scaling.loadWindow()
     ui.loadAssets()
     shop.setUpShop()
-    email.spawnInitialEmails()
+    --email.spawnInitialEmails()
 end
 
 -- setShopButtonClicked()
@@ -207,5 +208,17 @@ end
 function gameState.addMoney(value)
     gameState.currency = gameState.currency + value
 end
+
+function gameState.getGameState() return gameState end
+function gameState.setGameState(newGameState)
+    utils.updateTableFromString(gameState, newGameState)
+    gameState.currency = tonumber(gameState.currency)
+    gameState.offsetX = tonumber(gameState.offsetX)
+    gameState.offsetY = tonumber(gameState.offsetY)
+    gameState.lastClickTime = tonumber(gameState.lastClickTime)
+    gameState.doubleClickDelay = tonumber(gameState.doubleClickDelay)
+    gameState.lastTime = tonumber(gameState.lastTime)
+end
+
 
 return gameState
