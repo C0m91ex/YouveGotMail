@@ -11,6 +11,7 @@ local xButton = { x = (love.graphics.getWidth() / 2 + 1150), y = (love.graphics.
 local statsButton = { x = (love.graphics.getWidth() / 2 + 995), y = (love.graphics.getHeight() / 2 - 120), width = 204, height = 66 }
 local settingsButton = { x = (love.graphics.getWidth() / 2), y = (love.graphics.getHeight() / 2), width = 100, height = 100 }
 local resetButton = { x = (love.graphics.getWidth() / 2 - 350), y = (love.graphics.getHeight() / 2 + 400), width = 50, height = 50 }
+local optionsButton = { x = (love.graphics.getWidth() / 2), y = (love.graphics.getHeight() / 2), width = 197, height = 50 }
 local floatingTexts = {}
 local inboxBackground
 local loginBackground
