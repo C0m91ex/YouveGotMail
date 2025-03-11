@@ -31,7 +31,7 @@ local function loadEmailFile(filename)
 	print("loadEmailFile test")
 	local emails = {}
 	for line in love.filesystem.lines(filename) do
-		table.insert(emails, 1, csvLineToEmail(line))
+		table.insert(emails, csvLineToEmail(line))
 	end
 	return emails --table of tables of each line
 end

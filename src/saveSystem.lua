@@ -116,6 +116,7 @@ function saveSystem.load()
         saveSystem.createNewSave("autosave")
     end
     saveSystem.autoLoad()
+    email.fillEmailPool()
 end
 
 -- resetGame()

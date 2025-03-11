@@ -63,6 +63,8 @@ end
 -- fillEmailPool()
 -- Fills the email pool with emails that meet the prereqs
 local function fillEmailPool()
+    local removed = 0
+    local toRemove = {}
     for i, emailContent in ipairs(emailBase) do
         local prereq = emailContent["prereq"]
         local prereqCheckFlag = true
@@ -73,8 +75,12 @@ local function fillEmailPool()
         end
         if prereqCheckFlag then
             table.insert(emailPool, emailContent)
-            table.remove(emailBase, i)
+            toRemove[i] = removed
+            removed = removed+1
         end
+    end
+    for key, value in pairs(toRemove) do
+        table.remove(emailBase, key - value)
     end
 end
 
@@ -83,7 +89,7 @@ end
 local function getNextEmailContent(targetPool)
     local emailContent = {}
     if next(targetPool) ~= nil then
-        emailContent = table.remove(targetPool)
+        emailContent = table.remove(targetPool, 1)
         file.serializeEmailTest(emailContent)
     else
         emailContent = spam.generateRandomSpamEmail()
@@ -100,7 +106,6 @@ end
 -- spawnEmail()
 -- Spawns an email with the given mode, x & y position, dimensions, and color
 local function spawnEmail(mode, x, y, width, height, color, targetPool, content)
-    fillEmailPool()
     moveEmailsDown()
     if targetPool == nil then targetPool = emailPool end
     if content == nil then content = getNextEmailContent(targetPool) end
@@ -176,7 +181,6 @@ local function handleEmailSelection(mouseX, mouseY, gameState)
                         local choiceButton = makeChoiceButton(115+((i-1)*(buttonWidth+25)), 775, t, gameState)
                         table.insert(choiceButtons, choiceButton)
                     end
-                    fillEmailPool()
                     return
                 end
                 gameState.selectedEmail = email
@@ -344,6 +348,7 @@ end
 -- isEmailChoiceClicked()
 -- Checks if an email choice has been clicked
 function emailResponded(gameState)
+    fillEmailPool()
     gameState.getOpenedEmail().content.respond = true
     for i, choiceButton in ipairs(choiceButtons) do
         choiceButton.unlockFlag = false
