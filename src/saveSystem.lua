@@ -118,4 +118,35 @@ function saveSystem.load()
     saveSystem.autoLoad()
 end
 
+-- resetGame()
+-- loops through and deletes all saves in the autosave directory
+function saveSystem.resetGame()
+    local saveFolderName = "autosave"
+
+    -- Check if the autosave folder exists
+    if love.filesystem.getInfo(saveFolderName) then
+        -- Loop through all save files and remove them
+        for _, fileName in ipairs(saveSystem.saveFileNames) do
+            local filePath = saveFolderName..fileName
+            if love.filesystem.getInfo(filePath) then
+                love.filesystem.remove(filePath)
+            end
+        end
+
+        -- Deletes the autosave directory
+        love.filesystem.remove(saveFolderName)
+    end
+
+    -- Recreate the save folder and initialize a fresh save
+    saveSystem.createNewSave(saveFolderName)
+
+    -- Reload the game state from the fresh save
+    saveSystem.load()
+
+    -- Restart the game to fully refresh everything
+    love.event.quit("restart")
+
+    print("Game reset")
+end
+
 return saveSystem
