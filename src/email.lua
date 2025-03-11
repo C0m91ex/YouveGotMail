@@ -565,7 +565,7 @@ local function setEmailPool(filename) emailPool = file.loadEmailFile(filename) e
 local function getEmailInbox()
     local emailInbox = {}
     for i, email in ipairs(emails) do
-        table.insert(emailInbox, email.content)
+        table.insert(emailInbox, 1, email.content)
     end
     return emailInbox
 end
