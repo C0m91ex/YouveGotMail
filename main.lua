@@ -14,7 +14,7 @@ local saveSystem = require("src.saveSystem")
 sounds = {}
 
 -- local variables
-start = love.timer.getTime()      -- Timer related
+-- start = love.timer.getTime()      -- Timer related
 --local lastSecond = math.floor(start)  
 
 -- load()
@@ -56,7 +56,9 @@ end
 -- update()
 -- Update function, calls gameState.update()
 function love.update(dt)
-    gameState.update(dt)
+    if login.completed then
+        gameState.update(dt)
+    end
 end
 
 -- draw()
@@ -65,7 +67,7 @@ function love.draw()
     ui.drawBackground()
 
     -- Timer & e-mail delete (money) counter
-    local currentSecond = math.floor(love.timer.getTime()-start)
+    local currentSecond = math.floor(love.timer.getTime()-gameState.start)
     ui.drawEmailCount(email.getLengthEmails())
     ui.drawTimer(currentSecond)
 

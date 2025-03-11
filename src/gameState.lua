@@ -7,7 +7,7 @@ local scaling = require("src.scaling")
 local utils = require("src.utils")
 
 -- local variables
-local start = love.timer.getTime()
+--local start = love.timer.getTime()
 local gameState = {
     currency = 0,
     selectedEmail = nil,
@@ -18,7 +18,8 @@ local gameState = {
     doubleClickDelay = 0.3,
     shopButtonOpen = false,
     statsBarOpen = false,
-    lastTime = start
+    start = 0,
+    lastTime = 0
 }
 local shopButtonNormal = love.graphics.newImage('assets/inbox/Shop Button.png')
 local shopButtonHovered = love.graphics.newImage('assets/inbox/Shop Button Hover.png')
@@ -59,6 +60,8 @@ function gameState.getCurrency() return gameState.currency end
 -- Load function for the gameState, calls ui.loadAssets() & email.spawnInitialEmails()
 -- Handles loading UI assets and the initial email spawning
 function gameState.load()
+    gameState.start = love.timer.getTime()
+    gameState.lastTime = gameState.start
     scaling.loadWindow()
     ui.loadAssets()
     shop.setUpShop()
