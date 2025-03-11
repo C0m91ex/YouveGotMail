@@ -216,7 +216,7 @@ function gameState.setGameState(newGameState)
     gameState.currency = tonumber(gameState.currency)
     gameState.offsetX = tonumber(gameState.offsetX)
     gameState.offsetY = tonumber(gameState.offsetY)
-    gameState.lastClickTime = tonumber(gameState.lastClickTime)
+    gameState.lastClickTime = 0
     gameState.doubleClickDelay = tonumber(gameState.doubleClickDelay)
     gameState.lastTime = tonumber(gameState.lastTime)
 end
