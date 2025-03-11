@@ -1,7 +1,7 @@
 local file = require("src.file")
 local utils = require("src.utils")
 
-local playerVars = {mom = 4, dad = 3}
+local playerVars = {mom = 0, dad = 0}
 playerVars = file.serializeStateTest(playerVars)
 
 local function getPlayerVarList() return playerVars end
