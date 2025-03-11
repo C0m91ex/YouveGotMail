@@ -14,8 +14,8 @@ local saveSystem = require("src.saveSystem")
 sounds = {}
 
 -- local variables
-local start = love.timer.getTime()      -- Timer related
-local lastSecond = math.floor(start)  
+--local start = love.timer.getTime()      -- Timer related
+--local lastSecond = math.floor(start)  
 
 -- load()
 -- Load function, calls gamestate.load()
@@ -77,6 +77,7 @@ function love.draw()
         ui.drawCurrency(gameState.getCurrency())
         ui.drawTrashBin()
         email.drawEmails()
+        --ui.drawResetButton()
         --ui.drawXButton()
 
         ui.drawStatsButton()
@@ -112,5 +113,9 @@ function love.keypressed(key, scancode, isrepeat)
     end
     if key == "=" then
         gameState.currency = gameState.currency + 100
+    end
+
+    if key == "r" then
+        saveSystem.resetGame()
     end
  end
