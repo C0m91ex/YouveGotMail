@@ -5,6 +5,7 @@ local ui = require("src.ui")
 local shop = require("src.shop")
 local scaling = require("src.scaling")
 local utils = require("src.utils")
+local setting = require("src.setting")
 
 -- local variables
 local start = love.timer.getTime()
@@ -18,6 +19,7 @@ local gameState = {
     doubleClickDelay = 0.3,
     shopButtonOpen = false,
     statsBarOpen = false,
+    optionsOpen = false,
     lastTime = start
 }
 local shopButtonNormal = love.graphics.newImage('assets/inbox/Shop Button.png')
@@ -30,10 +32,29 @@ local statsButtonHovered = love.graphics.newImage('assets/inbox/Hover Stats Butt
 local trashBinNormal = love.graphics.newImage('assets/inbox/Trash Bin.png')
 local trashBinHovered = love.graphics.newImage('assets/inbox/Hover Trash Bin.png')
 
+local optionsButtonNormal = love.graphics.newImage('assets/options/Options Button.png')
+local optionsButtonHovered = love.graphics.newImage('assets/options/Hover Options Button.png')
+
+local optionsBackButtonNormal = love.graphics.newImage('assets/options/Back Button.png')
+local optionsBackButtonHovered = love.graphics.newImage('assets/options/Hover Back Button.png')
+
+local restartButtonNormal = love.graphics.newImage('assets/options/Restart Button.png')
+local restartButtonHovered = love.graphics.newImage('assets/options/Hover Restart Button.png')
+
+local decreaseVolumeNormal = love.graphics.newImage('assets/options/Decrease Volume.png')
+local decreaseVolumeHovered = love.graphics.newImage('assets/options/Hover Decrease Volume.png')
+local increaseVolumeNormal = love.graphics.newImage('assets/options/Increase Volume.png')
+local increaseVolumeHovered = love.graphics.newImage('assets/options/Hover Increase Volume.png')
+
 -- global variables
 shopButtonImage = shopButtonNormal
 statsButtonImage = statsButtonNormal
 trashBinImage = trashBinNormal
+optionsButtonImage = optionsButtonNormal
+optionsBackButtonImage = optionsBackButtonNormal
+restartButtonImage = restartButtonNormal
+masterDecreaseVolumeImage = decreaseVolumeNormal
+masterIncreaseVolumeImage = increaseVolumeNormal
 
 -- isEmailOpened()
 -- Access function for email 'opened' status
@@ -46,6 +67,10 @@ function gameState.isShopOpened() return gameState.shopButtonOpen end
 -- isStatsBarOpened()
 -- Access function for stat 'opened' status
 function gameState.isStatsBarOpened() return gameState.statsBarOpen end
+
+-- isOptionsOpened()
+-- Access function for options 'opened' status
+function gameState.isOptionsOpened() return gameState.optionsOpen end
 
 -- getOpenedEmail()
 -- Getter function for opened email
@@ -61,6 +86,7 @@ function gameState.getCurrency() return gameState.currency end
 function gameState.load()
     scaling.loadWindow()
     ui.loadAssets()
+    setting.loadAssets()
     shop.setUpShop()
     --email.spawnInitialEmails()
 end
@@ -109,6 +135,38 @@ function gameState.resetTrashBin()
     trashBinImage = trashBinNormal
 end
 
+function gameState.setOptionsButtonHovered()
+    optionsButtonImage = optionsButtonHovered
+end
+
+function gameState.resetOptionsButton()
+    optionsButtonImage = optionsButtonNormal
+end
+
+function gameState.setOptionsBackButtonHovered()
+    optionsBackButtonImage = optionsBackButtonHovered
+end
+
+function gameState.resetOptionsBackButton()
+    optionsBackButtonImage = optionsBackButtonNormal
+end
+
+function gameState.setRestartButtonHovered()
+    restartButtonImage = restartButtonHovered
+end
+
+function gameState.resetRestartButton()
+    restartButtonImage = restartButtonNormal
+end
+
+function gameState.setMasterDownButtonHovered()
+    masterDecreaseVolumeImage = decreaseVolumeHovered
+end
+
+function gameState.ResetMasterDownButton()
+    masterDecreaseVolumeImage = decreaseVolumeNormal
+end
+
 -- update()
 -- Update function for gameState, calls email.handleEmailselection & email.handleDragging
 -- Handles mouse interaction player actions in regards to current gamestate
@@ -146,6 +204,30 @@ function gameState.update(dt)
             gameState.setStatsButtonHovered()
         else
             gameState.resetStatsButton()
+        end
+
+        if setting.isOptionsButtonHovered(mouseX, mouseY) and not gameState.openedEmail then
+            gameState.setOptionsButtonHovered()
+        else
+            gameState.resetOptionsButton()
+        end
+
+        if setting.isOptionsBackButtonHovered(mouseX, mouseY) and not gameState.openedEmail then
+            gameState.setOptionsBackButtonHovered()
+        else
+            gameState.resetOptionsBackButton()
+        end
+
+        if setting.isRestartButtonHovered(mouseX, mouseY) and not gameState.openedEmail then
+            gameState.setRestartButtonHovered()
+        else
+            gameState.resetRestartButton()
+        end
+
+        if setting.isMasterDownButtonHovered(mouseX, mouseY) and not gameState.openedEmail then
+            gameState.setMasterDownButtonHovered()
+        else
+            gameState.ResetMasterDownButton()
         end
 
         gameState.resetTrashBin()
@@ -187,8 +269,25 @@ function gameState.handleMouseRelease(x, y, button)
             end
         end
 
+        if setting.isOptionsButtonClicked(x, y) and not gameState.openedEmail then 
+            if not gameState.optionsOpen then
+                gameState.optionsOpen = true
+            end
+        end
+
+        if setting.isOptionsBackButtonClicked(x, y) and not gameState.openedEmail then 
+            if gameState.optionsOpen then
+                gameState.optionsOpen = false
+            end
+        end
+
         if gameState.shopButtonOpen then
             shop.isShopItemClicked(x, y, gameState)
+        end
+
+        if setting.isRestartButtonClicked(x, y) and not gameState.openedEmail and gameState.optionsOpen then 
+            --saveSystem.resetGame()
+            print("reset game")
         end
 
         if ui.isXButtonClicked(x, y) then

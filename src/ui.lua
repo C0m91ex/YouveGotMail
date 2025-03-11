@@ -9,9 +9,6 @@ local desktopWidth, desktopHeight = love.window.getDesktopDimensions()
 local trashBin = { x = (love.graphics.getWidth() / 2 - 370) * scaling.scaleX, y = (love.graphics.getHeight() / 2 - 240) * scaling.scaleY, width = 157, height = 157, color = {1, 0, 0} }
 local xButton = { x = (love.graphics.getWidth() / 2 + 1150), y = (love.graphics.getHeight() / 2 - 302), width = 50, height = 18}
 local statsButton = { x = (love.graphics.getWidth() / 2 + 995), y = (love.graphics.getHeight() / 2 - 120), width = 204, height = 66 }
-local settingsButton = { x = (love.graphics.getWidth() / 2), y = (love.graphics.getHeight() / 2), width = 100, height = 100 }
-local resetButton = { x = (love.graphics.getWidth() / 2 - 350), y = (love.graphics.getHeight() / 2 + 400), width = 50, height = 50 }
-local optionsButton = { x = (love.graphics.getWidth() / 2), y = (love.graphics.getHeight() / 2), width = 197, height = 50 }
 local floatingTexts = {}
 local inboxBackground
 local loginBackground
@@ -84,13 +81,6 @@ end
 local function drawSettingButton()
     love.graphics.setColor(0.5, 0.5, 0.5)
     love.graphics.rectangle("fill", settingsButton.x * scaling.scaleX, settingsButton.y * scaling.scaleY, settingsButton.width * scaling.scaleX, settingsButton.height * scaling.scaleY)
-end
-]]--
-
---[[
-local function drawResetButton()
-    love.graphics.setColor(1, 0, 0)
-    love.graphics.rectangle("fill", resetButton.x * scaling.scaleX, resetButton.y * scaling.scaleY, resetButton.width * scaling.scaleX, resetButton.height * scaling.scaleY)
 end
 ]]--
 
@@ -320,7 +310,6 @@ return {
     drawFloatingTexts = drawFloatingTexts,
     drawStatsButton = drawStatsButton,
     drawStatsBar = drawStatsBar,
-    drawResetButton = drawResetButton,
     drawBackground = drawBackground,
     drawTrashBin = drawTrashBin,
     drawXButton = drawXButton,

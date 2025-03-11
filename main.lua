@@ -9,6 +9,7 @@ local shop = require("src.shop")
 local playerState = require("src.playerState")
 local login = require("src.login")
 local saveSystem = require("src.saveSystem")
+local setting = require("src.setting")
 
 -- global variables
 sounds = {}
@@ -77,8 +78,9 @@ function love.draw()
         ui.drawCurrency(gameState.getCurrency())
         ui.drawTrashBin()
         email.drawEmails()
-        --ui.drawResetButton()
         --ui.drawXButton()
+
+        setting.drawOptionsButton()
 
         ui.drawStatsButton()
         if gameState.isStatsBarOpened() then
@@ -88,6 +90,13 @@ function love.draw()
         shop.drawShopTitle()
         if gameState.isShopOpened() then
            shop.drawShopItems()
+        end
+
+        if gameState.isOptionsOpened() then
+            setting.drawOptionsBackground()
+            setting.drawOptionsBackButton()
+            setting.drawRestartButton()
+            setting.drawMasterVolume()
         end
     end
     ui.drawFloatingTexts()
