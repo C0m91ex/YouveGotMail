@@ -68,8 +68,9 @@ function love.draw()
 
     -- Timer & e-mail delete (money) counter
     local currentSecond = math.floor(love.timer.getTime()-gameState.start)
+    local timeTilSpawn = tonumber(string.format("%.2f",email.getSpawnPeriod()))
     ui.drawEmailCount(email.getLengthEmails())
-    ui.drawTimer(currentSecond)
+    ui.drawTimer(timeTilSpawn)
 
     -- Checks if current gamestate is in email opened state or not
     if gameState.isEmailOpened() then
