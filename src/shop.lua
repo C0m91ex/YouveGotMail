@@ -45,7 +45,7 @@ local items = {
     effect = function(modifier)
         email.setSpawnPeriod(email.getSpawnPeriod() - email.getSpawnPeriod()/modifier)
         print(email.getSpawnPeriod())
-        ui.addFloatingText((love.graphics.getWidth() / 2 - 910) * scaling.scaleX, (love.graphics.getHeight() / 2 - 180) * scaling.scaleY,"Spawn period: "..string.format("%.2f", email.getSpawnPeriod()))
+       -- ui.addFloatingText((love.graphics.getWidth() / 2 - 710) * scaling.scaleX, (love.graphics.getHeight() / 2 - 30) * scaling.scaleY,"+Email rate")
     end
     }
 }
