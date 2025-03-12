@@ -33,8 +33,8 @@ function love.load()
         fullscreen = true
     })
     
-    gameState.load()
     saveSystem.load()
+    gameState.load()
     
 
     -- Audio set-up

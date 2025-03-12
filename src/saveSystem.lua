@@ -4,9 +4,10 @@ local email = require("src.email")
 local utils = require("src.utils")
 local playerState = require("src.playerState")
 local gameState = require("src.gameState")
+local shop = require("src.shop")
 
 local saveSystem = {}
-saveSystem.saveFileNames = {"/EmailBase.csv","/EmailPool.csv","/EmailInbox.csv","/PlayerState.csv","/GameState.csv"}
+saveSystem.saveFileNames = {"/EmailBase.csv","/EmailPool.csv","/EmailInbox.csv","/PlayerState.csv","/GameState.csv","/ItemAmounts.csv"}
 saveSystem.initialEmailBase = "data/EmailBase.csv"
 
 function saveSystem.saveEmailBase()
@@ -39,6 +40,12 @@ function saveSystem.saveGameState()
     return gameStateString
 end
 
+function saveSystem.saveItemAmounts()
+    local itemAmountsString = ""
+    itemAmountsString = itemAmountsString..utils.tableToString(shop.getItemAmounts())
+    return itemAmountsString
+end
+
 function saveSystem.updateSaveFile(saveFolderName)
     success, message = love.filesystem.write(saveFolderName.."/EmailBase.csv", saveSystem.saveEmailBase())
     if success then 
@@ -69,6 +76,12 @@ function saveSystem.updateSaveFile(saveFolderName)
         print ('GameState created')
     else 
         print ('GameState not created: '..message)
+    end
+    success, message = love.filesystem.write(saveFolderName.."/ItemAmounts.csv", saveSystem.saveItemAmounts())
+    if success then 
+        print ('ItemAmounts created')
+    else 
+        print ('ItemAmounts not created: '..message)
     end
 end
 
@@ -109,6 +122,7 @@ function saveSystem.autoLoad()
     email.setEmailInbox("autosave/EmailInbox.csv")
     playerState.setPlayerVarList(love.filesystem.read("autosave/PlayerState.csv"))
     gameState.setGameState(love.filesystem.read("autosave/GameState.csv"))
+    shop.setItemAmounts(love.filesystem.read("autosave/ItemAmounts.csv"))
 end
 
 function saveSystem.load()
