@@ -20,6 +20,28 @@ local muteToggle = { x = (love.graphics.getWidth() / 2 + 410), y = (love.graphic
 local function loadAssets()
     optionsBackground = love.graphics.newImage('assets/options/Settings Background.png')
     optionBackButton = love.graphics.newImage('assets/options/Back Button.png')
+
+    -- Audio set-up
+    sounds.emailDelete = love.audio.newSource("assets/sounds/email-delete.mp3", "static")
+    sounds.pickChoice = love.audio.newSource("assets/sounds/pick-choice.mp3", "static")
+    sounds.powerUp = love.audio.newSource("assets/sounds/power-up.mp3", "static")
+    sounds.music = love.audio.newSource("assets/sounds/bgmMusic01.mp3", "stream")
+
+    sounds.masterVolume = 10
+    sounds.soundVolume = 10
+    sounds.musicVolume = 10
+    sounds.mute = 1
+
+    sounds.finalMusicVolume = sounds.masterVolume * sounds.musicVolume
+    sounds.finalFXVolume = sounds.masterVolume * sounds.soundVolume
+    
+    sounds.emailDelete:setVolume(0.8 * sounds.finalFXVolume)
+    sounds.pickChoice:setVolume(0.6 * sounds.finalFXVolume)
+    sounds.powerUp:setVolume(0.8 * sounds.finalFXVolume)
+    sounds.music:setVolume(0.4 * sounds.finalMusicVolume)
+    
+    sounds.music:setLooping(true)
+    sounds.music:play()
 end
 
 local function drawOptionsButton()
@@ -70,6 +92,16 @@ local function drawOptionsBackground()
 
     love.graphics.draw(optionsBackground, 0, 0, 0, optionsScaleX, optionsScaleY)
 end 
+
+local function updateVolume()
+    sounds.finalMusicVolume = sounds.mute * sounds.masterVolume * sounds.musicVolume
+    sounds.finalFXVolume = sounds.mute * sounds.masterVolume * sounds.soundVolume
+    
+    sounds.emailDelete:setVolume(0.8 * sounds.finalFXVolume)
+    sounds.pickChoice:setVolume(0.6 * sounds.finalFXVolume)
+    sounds.powerUp:setVolume(0.8 * sounds.finalFXVolume)
+    sounds.music:setVolume(0.4 * sounds.finalMusicVolume)
+end
 
 local function isOptionsButtonHovered(x, y)
     return  x > optionsButton.x * scaling.scaleX and x < optionsButton.x * scaling.scaleX + optionsButton.width * scaling.scaleX and
@@ -194,5 +226,6 @@ return {
     isSoundDownButtonClicked = isSoundDownButtonClicked,
     isSoundUpButtonHovered = isSoundUpButtonHovered,
     isSoundUpButtonClicked = isSoundUpButtonClicked,
-    isMuteButtonClicked = isMuteButtonClicked
+    isMuteButtonClicked = isMuteButtonClicked,
+    updateVolume = updateVolume
 }

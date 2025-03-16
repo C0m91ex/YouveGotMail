@@ -230,6 +230,7 @@ end
 -- Handles mouse interaction player actions in regards to current gamestate
 function gameState.update(dt)
     ui.updateFloatingTexts(dt)
+    setting.updateVolume()
     local mouseX, mouseY = love.mouse.getPosition()
     if gameState.openedEmail then
         email.isEmailChoiceHovered(mouseX, mouseY, gameState)
@@ -373,13 +374,51 @@ function gameState.handleMouseRelease(x, y, button)
             shop.isShopItemClicked(x, y, gameState)
         end
 
-        if setting.isMuteButtonClicked(x, y) and not gameState.openedEmail and not gameState.shopButtonOpen then
+        if setting.isMuteButtonClicked(x, y) and not gameState.openedEmail and gameState.optionsOpen then
             if not gameState.muteToggled then
                 gameState.muteToggled = true
+                sounds.mute = 0
                 gameState.muteToggleOn()
             else
                 gameState.muteToggled = false
+                sounds.mute = 1
                 gameState.muteToggleOff()
+            end
+        end
+
+        if setting.isMasterDownButtonClicked(x, y) and not gameState.openedEmail and gameState.optionsOpen then
+            if sounds.masterVolume > 0 then
+                sounds.masterVolume = sounds.masterVolume - 1
+            end
+        end
+
+        if setting.isMasterUpButtonClicked(x, y) and not gameState.openedEmail and gameState.optionsOpen then
+            if sounds.masterVolume < 10 then
+                sounds.masterVolume = sounds.masterVolume + 1
+            end
+        end
+
+        if setting.isMusicDownButtonClicked(x, y) and not gameState.openedEmail and gameState.optionsOpen then
+            if sounds.musicVolume > 0 then
+                sounds.musicVolume = sounds.musicVolume - 1
+            end
+        end
+
+        if setting.isMusicUpButtonClicked(x, y) and not gameState.openedEmail and gameState.optionsOpen then
+            if sounds.musicVolume < 10 then
+                sounds.musicVolume = sounds.musicVolume + 1
+            end
+        end
+
+        if setting.isSoundDownButtonClicked(x, y) and not gameState.openedEmail and gameState.optionsOpen then
+            if sounds.soundVolume > 0 then
+                sounds.soundVolume = sounds.soundVolume - 1
+            end
+        end
+
+        if setting.isSoundUpButtonClicked(x, y) and not gameState.openedEmail and gameState.optionsOpen then
+            if sounds.soundVolume < 10 then
+                sounds.soundVolume = sounds.soundVolume + 1
             end
         end
 
