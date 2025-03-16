@@ -19,6 +19,7 @@ local gameState = {
     doubleClickDelay = 0.3,
     shopButtonOpen = false,
     statsBarOpen = false,
+    start = start,
     optionsOpen = false,
     muteToggled = false,
     lastTime = start

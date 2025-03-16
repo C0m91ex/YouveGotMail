@@ -41,8 +41,9 @@ end
 -- update()
 -- Update function, calls gameState.update()
 function love.update(dt)
-  if login.completed then
-    gameState.update(dt)
+    if login.completed then
+        gameState.update(dt)
+    end
 end
 
 -- This is for the restart button found in the options menu
