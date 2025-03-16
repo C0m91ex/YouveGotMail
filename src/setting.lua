@@ -31,13 +31,13 @@ local function loadAssets()
     sounds.musicVolume = 10
     sounds.mute = 1
 
-    sounds.finalMusicVolume = sounds.mute * sounds.masterVolume * math.max(sounds.musicVolume, 0.01)
-    sounds.finalFXVolume = sounds.mute * sounds.masterVolume * math.max(sounds.soundVolume, 0.01)
+    sounds.finalMusicVolume = sounds.mute * sounds.masterVolume * sounds.musicVolume
+    sounds.finalFXVolume = sounds.mute * sounds.masterVolume * sounds.soundVolume
     
-    sounds.emailDelete:setVolume(0.4 * math.pow(sounds.finalFXVolume, 0.5))
-    sounds.pickChoice:setVolume(0.3 * math.pow(sounds.finalFXVolume, 0.5))
-    sounds.powerUp:setVolume(0.4 * math.pow(sounds.finalFXVolume, 0.5))
-    sounds.music:setVolume(0.1 * math.pow(sounds.finalMusicVolume, 0.5))
+    sounds.emailDelete:setVolume(0.4 * sounds.finalFXVolume)
+    sounds.pickChoice:setVolume(0.3 * sounds.finalFXVolume)
+    sounds.powerUp:setVolume(0.4 * sounds.finalFXVolume)
+    sounds.music:setVolume(0.1 * sounds.finalMusicVolume)
     
     sounds.music:setLooping(true)
     sounds.music:play()
@@ -93,13 +93,13 @@ local function drawOptionsBackground()
 end 
 
 local function updateVolume()
-    sounds.finalMusicVolume = sounds.mute * sounds.masterVolume * math.max(sounds.musicVolume, 0.01)
-    sounds.finalFXVolume = sounds.mute * sounds.masterVolume * math.max(sounds.soundVolume, 0.01)
+    sounds.finalMusicVolume = sounds.mute * sounds.masterVolume * sounds.musicVolume
+    sounds.finalFXVolume = sounds.mute * sounds.masterVolume * sounds.soundVolume
     
-    sounds.emailDelete:setVolume(0.4 * math.pow(sounds.finalFXVolume, 0.5))
-    sounds.pickChoice:setVolume(0.3 * math.pow(sounds.finalFXVolume, 0.5))
-    sounds.powerUp:setVolume(0.4 * math.pow(sounds.finalFXVolume, 0.5))
-    sounds.music:setVolume(0.1 * math.pow(sounds.finalMusicVolume, 0.5))
+    sounds.emailDelete:setVolume(0.4 * sounds.finalFXVolume)
+    sounds.pickChoice:setVolume(0.3 * sounds.finalFXVolume)
+    sounds.powerUp:setVolume(0.4 * sounds.finalFXVolume)
+    sounds.music:setVolume(0.1 * sounds.finalMusicVolume)
 end
 
 local function isOptionsButtonHovered(x, y)
