@@ -238,7 +238,7 @@ function gameState.update(dt)
     end
     email.autospawnEmail(email, gameState)
     
-    if love.mouse.isDown(1) then
+    if love.mouse.isDown(1) and not gameState.optionsOpen then
         email.handleEmailSelection(mouseX, mouseY, gameState)
         email.handleDragging(mouseX, mouseY, gameState)
 
@@ -253,28 +253,22 @@ function gameState.update(dt)
     else
         gameState.selectedEmail = nil
         shop.isShopItemHovered(mouseX, mouseY)
-        if shop.isShopButtonHovered(mouseX, mouseY) and not gameState.openedEmail then
+        if shop.isShopButtonHovered(mouseX, mouseY) and not gameState.openedEmail and not gameState.optionsOpen then
             shop.setShopButtonHovered()
         else
             shop.resetShopButton()
         end
 
-        if ui.isStatsButtonHovered(mouseX, mouseY) and not gameState.openedEmail then
+        if ui.isStatsButtonHovered(mouseX, mouseY) and not gameState.openedEmail and not gameState.optionsOpen then
             gameState.setStatsButtonHovered()
         else
             gameState.resetStatsButton()
         end
 
-        if setting.isOptionsButtonHovered(mouseX, mouseY) and not gameState.openedEmail then
+        if setting.isOptionsButtonHovered(mouseX, mouseY) and not gameState.openedEmail and not gameState.optionsOpen then
             gameState.setOptionsButtonHovered()
         else
             gameState.resetOptionsButton()
-        end
-
-        if setting.isOptionsBackButtonHovered(mouseX, mouseY) and not gameState.openedEmail then
-            gameState.setOptionsBackButtonHovered()
-        else
-            gameState.resetOptionsBackButton()
         end
 
         if setting.isRestartButtonHovered(mouseX, mouseY) and not gameState.openedEmail then
@@ -338,7 +332,7 @@ function gameState.handleMouseRelease(x, y, button)
         end
 
         -- Toggle shop button state
-        if shop.isShopButtonClicked(x, y) and not gameState.openedEmail and not gameState.statsBarOpen then
+        if shop.isShopButtonClicked(x, y) and not gameState.openedEmail and not gameState.statsBarOpen and not gameState.optionsOpen then
             if not gameState.shopButtonOpen then
                 gameState.shopButtonOpen = true
                 shop.setShopButtonClicked()  -- Change to clicked image
@@ -348,7 +342,7 @@ function gameState.handleMouseRelease(x, y, button)
             end
         end
 
-        if ui.isStatsButtonClicked(x, y) and not gameState.openedEmail and not gameState.shopButtonOpen then
+        if ui.isStatsButtonClicked(x, y) and not gameState.openedEmail and not gameState.shopButtonOpen and not gameState.optionsOpen then
             if not gameState.statsBarOpen then
                 gameState.statsBarOpen = true
                 --stats.setStatsButtonClicked()
@@ -422,7 +416,7 @@ function gameState.handleMouseRelease(x, y, button)
             end
         end
 
-        if ui.isXButtonClicked(x, y) then
+        if ui.isXButtonClicked(x, y) and not gameState.openedEmail and not gameState.optionsOpen then
             love.event.quit()
         end
 
