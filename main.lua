@@ -9,6 +9,7 @@ local shop = require("src.shop")
 local playerState = require("src.playerState")
 local login = require("src.login")
 local saveSystem = require("src.saveSystem")
+local setting = require("src.setting")
 
 -- global variables
 sounds = {}
@@ -35,22 +36,6 @@ function love.load()
     
     saveSystem.load()
     gameState.load()
-    
-
-    -- Audio set-up
-    sounds.emailDelete = love.audio.newSource("assets/sounds/email-delete.mp3", "static")
-    sounds.pickChoice = love.audio.newSource("assets/sounds/pick-choice.mp3", "static")
-    sounds.powerUp = love.audio.newSource("assets/sounds/power-up.mp3", "static")
-    sounds.music = love.audio.newSource("assets/sounds/bgmMusic01.mp3", "stream")
-
-    sounds.emailDelete:setVolume(0.8)
-    sounds.pickChoice:setVolume(0.6)
-    sounds.powerUp:setVolume(0.8)
-    sounds.music:setVolume(0.4)
-
-    sounds.music:setLooping(true)
-    sounds.music:play()
-
 end
 
 -- update()
@@ -58,6 +43,17 @@ end
 function love.update(dt)
     if login.completed then
         gameState.update(dt)
+    end
+end
+
+-- This is for the restart button found in the options menu
+-- placed here cause I was having looping issues and didn't want to bother figuring out a fix to get it to work in gameState.lua, lol
+function love.mousepressed( x, y, button)
+    if button == 1 then
+        if setting.isRestartButtonClicked(x, y) and not gameState.openedEmail and gameState.optionsOpen then 
+            saveSystem.resetGame()
+            print("reset game")
+        end
     end
 end
 
@@ -80,8 +76,9 @@ function love.draw()
         ui.drawCurrency(gameState.getCurrency())
         ui.drawTrashBin()
         email.drawEmails()
-        --ui.drawResetButton()
         --ui.drawXButton()
+
+        setting.drawOptionsButton()
 
         ui.drawStatsButton()
         if gameState.isStatsBarOpened() then
@@ -91,6 +88,17 @@ function love.draw()
         shop.drawShopTitle()
         if gameState.isShopOpened() then
            shop.drawShopItems()
+        end
+
+        if gameState.isOptionsOpened() then
+            setting.drawOptionsBackground()
+            setting.drawOptionsBackButton()
+            setting.drawRestartButton()
+            setting.drawMasterVolume()
+            setting.drawMusicVolume()
+            setting.drawSoundVolume()
+            setting.drawMuteToggle()
+            ui.drawOptionText()
         end
     end
     ui.drawFloatingTexts()

@@ -7,9 +7,9 @@ local file = require("src.file")
 local utils = require("src.utils")
 
 -- Shop Button Images
-shopButtonNormal = love.graphics.newImage('assets/inbox/Shop Button.png')
-shopButtonHover = love.graphics.newImage('assets/inbox/Shop Button Hover.png')
-shopButtonClicked = love.graphics.newImage('assets/inbox/Shop Button Click.png')
+--shopButtonNormal = love.graphics.newImage('assets/inbox/Shop Button.png')
+--shopButtonHover = love.graphics.newImage('assets/inbox/Shop Button Hover.png')
+--shopButtonClicked = love.graphics.newImage('assets/inbox/Shop Button Click.png')
 
 -- global vars
 local shop = {

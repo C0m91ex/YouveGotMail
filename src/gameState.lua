@@ -5,6 +5,7 @@ local ui = require("src.ui")
 local shop = require("src.shop")
 local scaling = require("src.scaling")
 local utils = require("src.utils")
+local setting = require("src.setting")
 
 -- local variables
 local start = love.timer.getTime()
@@ -19,6 +20,8 @@ local gameState = {
     shopButtonOpen = false,
     statsBarOpen = false,
     start = start,
+    optionsOpen = false,
+    muteToggled = false,
     lastTime = start
 }
 local shopButtonNormal = love.graphics.newImage('assets/inbox/Shop Button.png')
@@ -31,10 +34,37 @@ local statsButtonHovered = love.graphics.newImage('assets/inbox/Hover Stats Butt
 local trashBinNormal = love.graphics.newImage('assets/inbox/Trash Bin.png')
 local trashBinHovered = love.graphics.newImage('assets/inbox/Hover Trash Bin.png')
 
+local optionsButtonNormal = love.graphics.newImage('assets/options/Options Button.png')
+local optionsButtonHovered = love.graphics.newImage('assets/options/Hover Options Button.png')
+
+local optionsBackButtonNormal = love.graphics.newImage('assets/options/Back Button.png')
+local optionsBackButtonHovered = love.graphics.newImage('assets/options/Hover Back Button.png')
+
+local restartButtonNormal = love.graphics.newImage('assets/options/Restart Button.png')
+local restartButtonHovered = love.graphics.newImage('assets/options/Hover Restart Button.png')
+
+local decreaseVolumeNormal = love.graphics.newImage('assets/options/Decrease Volume.png')
+local decreaseVolumeHovered = love.graphics.newImage('assets/options/Hover Decrease Volume.png')
+local increaseVolumeNormal = love.graphics.newImage('assets/options/Increase Volume.png')
+local increaseVolumeHovered = love.graphics.newImage('assets/options/Hover Increase Volume.png')
+
+local muteOff = love.graphics.newImage('assets/options/Mute Off.png')
+local muteOn = love.graphics.newImage('assets/options/Mute On.png')
+
 -- global variables
 shopButtonImage = shopButtonNormal
 statsButtonImage = statsButtonNormal
 trashBinImage = trashBinNormal
+optionsButtonImage = optionsButtonNormal
+optionsBackButtonImage = optionsBackButtonNormal
+restartButtonImage = restartButtonNormal
+masterDecreaseVolumeImage = decreaseVolumeNormal
+masterIncreaseVolumeImage = increaseVolumeNormal
+musicDecreaseVolumeImage = decreaseVolumeNormal
+musicIncreaseVolumeImage = increaseVolumeNormal
+soundDecreaseVolumeImage = decreaseVolumeNormal
+soundIncreaseVolumeImage = increaseVolumeNormal
+muteImage = muteOff
 
 -- isEmailOpened()
 -- Access function for email 'opened' status
@@ -47,6 +77,10 @@ function gameState.isShopOpened() return gameState.shopButtonOpen end
 -- isStatsBarOpened()
 -- Access function for stat 'opened' status
 function gameState.isStatsBarOpened() return gameState.statsBarOpen end
+
+-- isOptionsOpened()
+-- Access function for options 'opened' status
+function gameState.isOptionsOpened() return gameState.optionsOpen end
 
 -- getOpenedEmail()
 -- Getter function for opened email
@@ -62,6 +96,7 @@ function gameState.getCurrency() return gameState.currency end
 function gameState.load()
     scaling.loadWindow()
     ui.loadAssets()
+    setting.loadAssets()
     shop.setUpShop()
     --email.spawnInitialEmails()
 end
@@ -110,11 +145,93 @@ function gameState.resetTrashBin()
     trashBinImage = trashBinNormal
 end
 
+function gameState.setOptionsButtonHovered()
+    optionsButtonImage = optionsButtonHovered
+end
+
+function gameState.resetOptionsButton()
+    optionsButtonImage = optionsButtonNormal
+end
+
+function gameState.setOptionsBackButtonHovered()
+    optionsBackButtonImage = optionsBackButtonHovered
+end
+
+function gameState.resetOptionsBackButton()
+    optionsBackButtonImage = optionsBackButtonNormal
+end
+
+function gameState.setRestartButtonHovered()
+    restartButtonImage = restartButtonHovered
+end
+
+function gameState.resetRestartButton()
+    restartButtonImage = restartButtonNormal
+end
+
+function gameState.setMasterDownButtonHovered()
+    masterDecreaseVolumeImage = decreaseVolumeHovered
+end
+
+function gameState.ResetMasterDownButton()
+    masterDecreaseVolumeImage = decreaseVolumeNormal
+end
+
+function gameState.setMasterUpButtonHovered()
+    masterIncreaseVolumeImage = increaseVolumeHovered
+end
+
+function gameState.resetMasterUpButton()
+    masterIncreaseVolumeImage = increaseVolumeNormal
+end
+
+function gameState.setMusicDownButtonHovered()
+    musicDecreaseVolumeImage = decreaseVolumeHovered
+end
+
+function gameState.resetMusicDownButton()
+    musicDecreaseVolumeImage = decreaseVolumeNormal
+end
+
+function gameState.setMusicUpButtonHovered()
+    musicIncreaseVolumeImage = increaseVolumeHovered
+end
+
+function gameState.resetMusicUpButton()
+    musicIncreaseVolumeImage = increaseVolumeNormal
+end
+
+function gameState.setSoundDownButtonHovered()
+    soundDecreaseVolumeImage = decreaseVolumeHovered
+end
+
+function gameState.resetSoundDownButton()
+    soundDecreaseVolumeImage = decreaseVolumeNormal
+end
+
+function gameState.setSoundUpButtonHovered()
+    soundIncreaseVolumeImage = increaseVolumeHovered
+end
+
+function gameState.resetsoundUpButton()
+    soundIncreaseVolumeImage = increaseVolumeNormal
+end
+
+function gameState.muteToggleOff()
+    muteImage = muteOff
+end
+
+function gameState.muteToggleOn()
+    muteImage = muteOn
+end
+
+
 -- update()
 -- Update function for gameState, calls email.handleEmailselection & email.handleDragging
 -- Handles mouse interaction player actions in regards to current gamestate
 function gameState.update(dt)
     ui.updateFloatingTexts(dt)
+    setting.updateVolume()
     local mouseX, mouseY = love.mouse.getPosition()
     if gameState.openedEmail then
         email.isEmailChoiceHovered(mouseX, mouseY, gameState)
@@ -122,7 +239,7 @@ function gameState.update(dt)
     end
     email.autospawnEmail(email, gameState)
     
-    if love.mouse.isDown(1) then
+    if love.mouse.isDown(1) and not gameState.optionsOpen then
         email.handleEmailSelection(mouseX, mouseY, gameState)
         email.handleDragging(mouseX, mouseY, gameState)
 
@@ -137,16 +254,70 @@ function gameState.update(dt)
     else
         gameState.selectedEmail = nil
         shop.isShopItemHovered(mouseX, mouseY)
-        if shop.isShopButtonHovered(mouseX, mouseY) and not gameState.openedEmail then
+        if shop.isShopButtonHovered(mouseX, mouseY) and not gameState.openedEmail and not gameState.optionsOpen then
             shop.setShopButtonHovered()
         else
             shop.resetShopButton()
         end
 
-        if ui.isStatsButtonHovered(mouseX, mouseY) and not gameState.openedEmail then
+        if ui.isStatsButtonHovered(mouseX, mouseY) and not gameState.openedEmail and not gameState.optionsOpen then
             gameState.setStatsButtonHovered()
         else
             gameState.resetStatsButton()
+        end
+
+        if setting.isOptionsButtonHovered(mouseX, mouseY) and not gameState.openedEmail and not gameState.optionsOpen then
+            gameState.setOptionsButtonHovered()
+        else
+            gameState.resetOptionsButton()
+        end
+
+        if setting.isOptionsBackButtonHovered(mouseX, mouseY) and not gameState.openedEmail and gameState.optionsOpen then
+            gameState.setOptionsBackButtonHovered()
+        else
+            gameState.resetOptionsBackButton()
+        end
+
+        if setting.isRestartButtonHovered(mouseX, mouseY) and not gameState.openedEmail then
+            gameState.setRestartButtonHovered()
+        else
+            gameState.resetRestartButton()
+        end
+
+        if setting.isMasterDownButtonHovered(mouseX, mouseY) and not gameState.openedEmail then
+            gameState.setMasterDownButtonHovered()
+        else
+            gameState.ResetMasterDownButton()
+        end
+
+        if setting.isMasterUpButtonHovered(mouseX, mouseY) and not gameState.openedEmail then
+            gameState.setMasterUpButtonHovered()
+        else
+            gameState.resetMasterUpButton()
+        end
+
+        if setting.isMusicDownButtonHovered(mouseX, mouseY) and not gameState.openedEmail then
+            gameState.setMusicDownButtonHovered()
+        else
+            gameState.resetMusicDownButton()
+        end
+
+        if setting.isMusicUpButtonHovered(mouseX, mouseY) and not gameState.openedEmail then
+            gameState.setMusicUpButtonHovered()
+        else
+            gameState.resetMusicUpButton()
+        end
+
+        if setting.isSoundDownButtonHovered(mouseX, mouseY) and not gameState.openedEmail then
+            gameState.setSoundDownButtonHovered()
+        else
+            gameState.resetSoundDownButton()
+        end
+
+        if setting.isSoundUpButtonHovered(mouseX, mouseY) and not gameState.openedEmail then
+            gameState.setSoundUpButtonHovered()
+        else
+            gameState.resetsoundUpButton()
         end
 
         gameState.resetTrashBin()
@@ -168,7 +339,7 @@ function gameState.handleMouseRelease(x, y, button)
         end
 
         -- Toggle shop button state
-        if shop.isShopButtonClicked(x, y) and not gameState.openedEmail and not gameState.statsBarOpen then
+        if shop.isShopButtonClicked(x, y) and not gameState.openedEmail and not gameState.statsBarOpen and not gameState.optionsOpen then
             if not gameState.shopButtonOpen then
                 gameState.shopButtonOpen = true
                 shop.setShopButtonClicked()  -- Change to clicked image
@@ -178,7 +349,7 @@ function gameState.handleMouseRelease(x, y, button)
             end
         end
 
-        if ui.isStatsButtonClicked(x, y) and not gameState.openedEmail and not gameState.shopButtonOpen then
+        if ui.isStatsButtonClicked(x, y) and not gameState.openedEmail and not gameState.shopButtonOpen and not gameState.optionsOpen then
             if not gameState.statsBarOpen then
                 gameState.statsBarOpen = true
                 --stats.setStatsButtonClicked()
@@ -188,11 +359,71 @@ function gameState.handleMouseRelease(x, y, button)
             end
         end
 
+        if setting.isOptionsButtonClicked(x, y) and not gameState.openedEmail then 
+            if not gameState.optionsOpen then
+                gameState.optionsOpen = true
+            end
+        end
+
+        if setting.isOptionsBackButtonClicked(x, y) and not gameState.openedEmail then 
+            if gameState.optionsOpen then
+                gameState.optionsOpen = false
+            end
+        end
+
         if gameState.shopButtonOpen then
             shop.isShopItemClicked(x, y, gameState)
         end
 
-        if ui.isXButtonClicked(x, y) then
+        if setting.isMuteButtonClicked(x, y) and not gameState.openedEmail and gameState.optionsOpen then
+            if not gameState.muteToggled then
+                gameState.muteToggled = true
+                sounds.mute = 0
+                gameState.muteToggleOn()
+            else
+                gameState.muteToggled = false
+                sounds.mute = 1
+                gameState.muteToggleOff()
+            end
+        end
+
+        if setting.isMasterDownButtonClicked(x, y) and not gameState.openedEmail and gameState.optionsOpen then
+            if sounds.masterVolume > 0 then
+                sounds.masterVolume = sounds.masterVolume - 1
+            end
+        end
+
+        if setting.isMasterUpButtonClicked(x, y) and not gameState.openedEmail and gameState.optionsOpen then
+            if sounds.masterVolume < 10 then
+                sounds.masterVolume = sounds.masterVolume + 1
+            end
+        end
+
+        if setting.isMusicDownButtonClicked(x, y) and not gameState.openedEmail and gameState.optionsOpen then
+            if sounds.musicVolume > 0 then
+                sounds.musicVolume = sounds.musicVolume - 1
+            end
+        end
+
+        if setting.isMusicUpButtonClicked(x, y) and not gameState.openedEmail and gameState.optionsOpen then
+            if sounds.musicVolume < 10 then
+                sounds.musicVolume = sounds.musicVolume + 1
+            end
+        end
+
+        if setting.isSoundDownButtonClicked(x, y) and not gameState.openedEmail and gameState.optionsOpen then
+            if sounds.soundVolume > 0 then
+                sounds.soundVolume = sounds.soundVolume - 1
+            end
+        end
+
+        if setting.isSoundUpButtonClicked(x, y) and not gameState.openedEmail and gameState.optionsOpen then
+            if sounds.soundVolume < 10 then
+                sounds.soundVolume = sounds.soundVolume + 1
+            end
+        end
+
+        if ui.isXButtonClicked(x, y) and not gameState.openedEmail and not gameState.optionsOpen then
             love.event.quit()
         end
 

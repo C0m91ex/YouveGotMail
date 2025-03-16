@@ -171,7 +171,7 @@ local function handleEmailSelection(mouseX, mouseY, gameState)
     local scaledMouseX = mouseX / scaleX
     local scaledMouseY = mouseY / scaleY
 
-    if not gameState.selectedEmail then
+    if not gameState.selectedEmail and not gameState.optionsOpen then
         for _, email in ipairs(emails) do
             if scaledMouseX > email.x and scaledMouseX < email.x + email.width and
                scaledMouseY > email.y and scaledMouseY < email.y + email.height then
