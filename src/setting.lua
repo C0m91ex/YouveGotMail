@@ -19,7 +19,6 @@ local muteToggle = { x = (love.graphics.getWidth() / 2 + 410), y = (love.graphic
 
 local function loadAssets()
     optionsBackground = love.graphics.newImage('assets/options/Settings Background.png')
-    optionBackButton = love.graphics.newImage('assets/options/Back Button.png')
 
     -- Audio set-up
     sounds.emailDelete = love.audio.newSource("assets/sounds/email-delete.mp3", "static")

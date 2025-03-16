@@ -272,6 +272,12 @@ function gameState.update(dt)
             gameState.resetOptionsButton()
         end
 
+        if setting.isOptionsBackButtonHovered(mouseX, mouseY) and not gameState.openedEmail and gameState.optionsOpen then
+            gameState.setOptionsBackButtonHovered()
+        else
+            gameState.resetOptionsBackButton()
+        end
+
         if setting.isRestartButtonHovered(mouseX, mouseY) and not gameState.openedEmail then
             gameState.setRestartButtonHovered()
         else
