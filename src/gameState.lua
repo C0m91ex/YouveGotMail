@@ -373,11 +373,6 @@ function gameState.handleMouseRelease(x, y, button)
             shop.isShopItemClicked(x, y, gameState)
         end
 
-        if setting.isRestartButtonClicked(x, y) and not gameState.openedEmail and gameState.optionsOpen then 
-            --saveSystem.resetGame()
-            print("reset game")
-        end
-
         if setting.isMuteButtonClicked(x, y) and not gameState.openedEmail and not gameState.shopButtonOpen then
             if not gameState.muteToggled then
                 gameState.muteToggled = true

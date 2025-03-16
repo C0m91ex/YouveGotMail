@@ -58,6 +58,17 @@ end
 -- Update function, calls gameState.update()
 function love.update(dt)
     gameState.update(dt)
+
+end
+
+-- placed here cause I was having looping issues and didn't want to bother figuring out a fix to get it to work in gameState.lua, lol
+function love.mousepressed( x, y, button)
+    if button == 1 then
+        if setting.isRestartButtonClicked(x, y) and not gameState.openedEmail and gameState.optionsOpen then 
+            saveSystem.resetGame()
+            print("reset game")
+        end
+    end
 end
 
 -- draw()

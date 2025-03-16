@@ -69,8 +69,7 @@ local function drawOptionsBackground()
     local optionsScaleY = windowHeight / optionsBackgroundHeight
 
     love.graphics.draw(optionsBackground, 0, 0, 0, optionsScaleX, optionsScaleY)
-end
-    
+end 
 
 local function isOptionsButtonHovered(x, y)
     return  x > optionsButton.x * scaling.scaleX and x < optionsButton.x * scaling.scaleX + optionsButton.width * scaling.scaleX and
