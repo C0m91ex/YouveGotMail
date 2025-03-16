@@ -97,6 +97,8 @@ function love.draw()
             setting.drawOptionsBackButton()
             setting.drawRestartButton()
             setting.drawMasterVolume()
+            setting.drawMusicVolume()
+            setting.drawSoundVolume()
         end
     end
     ui.drawFloatingTexts()

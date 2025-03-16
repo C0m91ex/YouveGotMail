@@ -55,6 +55,10 @@ optionsBackButtonImage = optionsBackButtonNormal
 restartButtonImage = restartButtonNormal
 masterDecreaseVolumeImage = decreaseVolumeNormal
 masterIncreaseVolumeImage = increaseVolumeNormal
+musicDecreaseVolumeImage = decreaseVolumeNormal
+musicIncreaseVolumeImage = increaseVolumeNormal
+soundDecreaseVolumeImage = decreaseVolumeNormal
+soundIncreaseVolumeImage = increaseVolumeNormal
 
 -- isEmailOpened()
 -- Access function for email 'opened' status
@@ -167,6 +171,46 @@ function gameState.ResetMasterDownButton()
     masterDecreaseVolumeImage = decreaseVolumeNormal
 end
 
+function gameState.setMasterUpButtonHovered()
+    masterIncreaseVolumeImage = increaseVolumeHovered
+end
+
+function gameState.resetMasterUpButton()
+    masterIncreaseVolumeImage = increaseVolumeNormal
+end
+
+function gameState.setMusicDownButtonHovered()
+    musicDecreaseVolumeImage = decreaseVolumeHovered
+end
+
+function gameState.resetMusicDownButton()
+    musicDecreaseVolumeImage = decreaseVolumeNormal
+end
+
+function gameState.setMusicUpButtonHovered()
+    musicIncreaseVolumeImage = increaseVolumeHovered
+end
+
+function gameState.resetMusicUpButton()
+    musicIncreaseVolumeImage = increaseVolumeNormal
+end
+
+function gameState.setSoundDownButtonHovered()
+    soundDecreaseVolumeImage = decreaseVolumeHovered
+end
+
+function gameState.resetSoundDownButton()
+    soundDecreaseVolumeImage = decreaseVolumeNormal
+end
+
+function gameState.setSoundUpButtonHovered()
+    soundIncreaseVolumeImage = increaseVolumeHovered
+end
+
+function gameState.resetsoundUpButton()
+    soundIncreaseVolumeImage = increaseVolumeNormal
+end
+
 -- update()
 -- Update function for gameState, calls email.handleEmailselection & email.handleDragging
 -- Handles mouse interaction player actions in regards to current gamestate
@@ -228,6 +272,36 @@ function gameState.update(dt)
             gameState.setMasterDownButtonHovered()
         else
             gameState.ResetMasterDownButton()
+        end
+
+        if setting.isMasterUpButtonHovered(mouseX, mouseY) and not gameState.openedEmail then
+            gameState.setMasterUpButtonHovered()
+        else
+            gameState.resetMasterUpButton()
+        end
+
+        if setting.isMusicDownButtonHovered(mouseX, mouseY) and not gameState.openedEmail then
+            gameState.setMusicDownButtonHovered()
+        else
+            gameState.resetMusicDownButton()
+        end
+
+        if setting.isMusicUpButtonHovered(mouseX, mouseY) and not gameState.openedEmail then
+            gameState.setMusicUpButtonHovered()
+        else
+            gameState.resetMusicUpButton()
+        end
+
+        if setting.isSoundDownButtonHovered(mouseX, mouseY) and not gameState.openedEmail then
+            gameState.setSoundDownButtonHovered()
+        else
+            gameState.resetSoundDownButton()
+        end
+
+        if setting.isSoundUpButtonHovered(mouseX, mouseY) and not gameState.openedEmail then
+            gameState.setSoundUpButtonHovered()
+        else
+            gameState.resetsoundUpButton()
         end
 
         gameState.resetTrashBin()
