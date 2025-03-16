@@ -3,6 +3,8 @@
 local ui = require("src.ui")
 local email = require("src.email")
 local scaling = require("src.scaling")
+local file = require("src.file")
+local utils = require("src.utils")
 
 -- Shop Button Images
 --shopButtonNormal = love.graphics.newImage('assets/inbox/Shop Button.png')
@@ -19,7 +21,8 @@ shop.hoverPopup = { x = 0, y = 0, visible = false }
 local itemAmounts = {}
 
 local items = {
-    {name = "Concentrated Encryption",
+    {id = "Encryption",
+    name = "Concentrated Encryption",
     price = 10,
     inflation = 8,
     description = "Emails give more money when they are deleted, thanks to the interns. The emails encrypt themselves further now, whatever that means.",
@@ -28,7 +31,8 @@ local items = {
         email.updateEmailValue(modifier)
     end
     },
-    {name = "Data Scraping",
+    {id = "Scraping",
+    name = "Data Scraping",
     price = 20,
     inflation = 5,
     description = "Get a bit of money when emails come in; thank you, interns. Something about emails scraping a bit of data from all the networks they pass to get to you.",
@@ -37,7 +41,8 @@ local items = {
         email.updateSpawnValue(modifier)
     end
     },
-    {name = "Net Speedrouting",
+    {id = "Speedrouting",
+    name = "Net Speedrouting",
     price = 30,
     inflation = 15,
     description = "Emails come in faster. I didn't bother asking the interns why this time.",
@@ -45,11 +50,12 @@ local items = {
     effect = function(modifier)
         email.setSpawnPeriod(email.getSpawnPeriod() - email.getSpawnPeriod()/modifier)
         print(email.getSpawnPeriod())
-        ui.addFloatingText((love.graphics.getWidth() / 2 - 910) * scaling.scaleX, (love.graphics.getHeight() / 2 - 180) * scaling.scaleY,"Spawn period: "..string.format("%.2f", email.getSpawnPeriod()))
+       -- ui.addFloatingText((love.graphics.getWidth() / 2 - 710) * scaling.scaleX, (love.graphics.getHeight() / 2 - 30) * scaling.scaleY,"+Email rate")
     end
     }
 }
 local shopItems = {}
+shopItems = file.serializeStateTest(shopItems)
 
 local scaleX, scaleY = 1, 1
 
@@ -59,7 +65,9 @@ local shopTitle = { x = (love.graphics.getWidth() / 2 + 995), y = (love.graphics
 --getters and setters
 local function getShopItems() return shopItems end
 local function getItemAmounts() return itemAmounts end
-local function setItemAmounts(amounts) itemAmounts = amounts end 
+local function setItemAmounts(newItemAmounts)
+    utils.updateTableFromString(itemAmounts, newItemAmounts)
+end
 
 -- Table used as the bone structure for shop items
 local function createShopItem(mode, x, y, width, height, color, itemTable)
@@ -75,14 +83,28 @@ local function createShopItem(mode, x, y, width, height, color, itemTable)
 end
 
 local function updateItemAmounts(shopItem)
-    if itemAmounts[shopItem.itemTable.name] then itemAmounts[shopItem.itemTable.name] = (itemAmounts[shopItem.itemTable.name] + 1) or 1
-    else itemAmounts[shopItem.itemTable.name] = 1 end
-    print(itemAmounts[shopItem.itemTable.name])
+    if itemAmounts[shopItem.itemTable.id] then itemAmounts[shopItem.itemTable.id] = (itemAmounts[shopItem.itemTable.id] + 1) or 1
+    else itemAmounts[shopItem.itemTable.id] = 1 end
+    print(itemAmounts[shopItem.itemTable.id])
+end
+
+function loadShopItems()
+    --resetShopItems()
+    print("loadShopItems")
+    for _, shopItem in ipairs(shopItems) do
+        if itemAmounts[shopItem.itemTable.id] then
+            local amount = tonumber(itemAmounts[shopItem.itemTable.id])
+            for i=1, amount do
+                itemEffects(shopItem)
+                print("loadShopItems")
+            end
+        end
+    end
 end
 
     -- Shop item setup --
 -- local numberOfShopItems = 3
-local function setUpShop()
+function setUpShop()
     shopItems = {}
     -- shopIcon = love.graphics.newImage('assets/inbox/Shop Button.png')
     shopIcon = shopButtonImage
@@ -93,7 +115,7 @@ local function setUpShop()
         createShopItem("fill", shopTitle.x + 15, shopTitle.y + shop.shopOffsetY, 175, 70, {0.855, 0.855, 0.855}, itemTable)
         shop.shopOffsetY = shop.shopOffsetY + 90
     end
-
+    loadShopItems()
     -- setting the name and price for item 1
     -- shopItems[1].itemTable.name = items.item1.name
     -- shopItems[1].itemTable.price = items.item1.price
@@ -104,16 +126,6 @@ local function setUpShop()
     
     -- shopItems[3].itemTable.name = items.item3.name
     -- shopItems[3].itemTable.price = items.item3.price
-end
-
-local function loadShopItems()
-    resetShopItems()
-    for _, shopItem in ipairs(shopItems) do
-        local amount = itemAmounts[shopItem.itemTable.name]
-        for i=1, amount do
-            itemEffects(shopItem)
-        end
-    end
 end
 
 local function isShopButtonClicked(x, y)
@@ -173,7 +185,7 @@ local function drawShopItems()
 end
 
 
-local function itemEffects(shopItem)
+function itemEffects(shopItem)
     print("Item "..tostring(shopItem.itemTable.name).." effect.")
     shopItem.itemTable.effect(shopItem.itemTable.modifier)
     shopItem.itemTable.price = shopItem.itemTable.price + shopItem.itemTable.inflation
@@ -240,7 +252,7 @@ function isShopItemHovered(x, y)
             --             "Description: "..items.item3.description
             --     end
             -- end            
-
+            createHoverText(shopItem)
             shop.hoverPopup.visible = true
             return
         end
@@ -249,7 +261,13 @@ function isShopItemHovered(x, y)
     shop.hoverPopup.visible = false
 end
 
--- local 
+function createHoverText(shopItem)
+    local hovertext =
+            "Item Name: "..tostring(shopItem.itemTable.name).."\n\n"..
+            "Price: $"..tostring(shopItem.itemTable.price)..", $"..tostring(shopItem.itemTable.inflation).." increase for\nwhenever the item is purchased again.\n\n"..
+            "Description: "..tostring(shopItem.itemTable.description)
+    shop.hoverPopup.text = hovertext
+end
 
 return {
     getShopItems = getShopItems,

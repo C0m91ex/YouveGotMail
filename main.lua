@@ -15,14 +15,14 @@ local setting = require("src.setting")
 sounds = {}
 
 -- local variables
-start = love.timer.getTime()      -- Timer related
+-- start = love.timer.getTime()      -- Timer related
 --local lastSecond = math.floor(start)  
 
 -- load()
 -- Load function, calls gamestate.load()
 function love.load()
-    -- login.load()    -- Requires login scene to be loaded first
-    -- login.start() 
+    login.load()    -- Requires login scene to be loaded first
+    login.start() 
 
     -- tutorial.load()  -- Requires tutorial scene to be loaded first
     -- tutorial.start() -- NOT IMPLEMENTED
@@ -34,17 +34,16 @@ function love.load()
         fullscreen = true
     })
     
-    gameState.load()
     saveSystem.load()
-
+    gameState.load()
 end
 
 -- update()
 -- Update function, calls gameState.update()
 function love.update(dt)
+  if login.completed then
     gameState.update(dt)
-
-end
+  end
 
 -- This is for the restart button found in the options menu
 -- placed here cause I was having looping issues and didn't want to bother figuring out a fix to get it to work in gameState.lua, lol
@@ -63,9 +62,10 @@ function love.draw()
     ui.drawBackground()
 
     -- Timer & e-mail delete (money) counter
-    local currentSecond = math.floor(love.timer.getTime()-start)
+    local currentSecond = math.floor(love.timer.getTime()-gameState.start)
+    local timeTilSpawn = tonumber(string.format("%.2f",email.getSpawnPeriod()))
     ui.drawEmailCount(email.getLengthEmails())
-    ui.drawTimer(currentSecond)
+    ui.drawTimer(timeTilSpawn)
 
     -- Checks if current gamestate is in email opened state or not
     if gameState.isEmailOpened() then

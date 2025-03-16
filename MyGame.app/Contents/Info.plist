@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plist version="1.0">
+<dict>
+    <key>CFBundleExecutable</key>
+    <string>love</string>
+    <key>CFBundleIdentifier</key>
+    <string>com.mygame</string>
+    <key>CFBundleName</key>
+    <string>MyGame</string>
+    <key>CFBundleVersion</key>
+    <string>1.0</string>
+    <key>CFBundlePackageType</key>
+    <string>APPL</string>
+</dict>
+</plist>
+EOL	
+
+# Done! Now you can test the .app
+

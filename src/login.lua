@@ -9,6 +9,9 @@ local activeField = nil
 local buttonX, buttonY, buttonWidth, buttonHeight = 50, 350, 100, 40 -- Shifted left 150px, down 100px
 local font
 
+-- global variables
+keySounds = {}
+
 -- start()
 -- Initiates the login screen scene (terminates when login is completed)
 function login.start()
@@ -37,6 +40,13 @@ function login.load()
     login.completed = false
     login.background = love.graphics.newImage("assets/main_menu/smaller.png")
     love.window.setMode(800, 450, { resizable = false })
+    keySounds.key1 = love.audio.newSource("assets/sounds/Key Presses/Key1.mp3", "static")
+    keySounds.key2 = love.audio.newSource("assets/sounds/Key Presses/Key2.mp3", "static")
+    keySounds.key3 = love.audio.newSource("assets/sounds/Key Presses/Key3.mp3", "static")
+    keySounds.key4 = love.audio.newSource("assets/sounds/Key Presses/Key4.mp3", "static")
+    keySounds.key5 = love.audio.newSource("assets/sounds/Key Presses/Key5.mp3", "static")
+    keySounds.key6 = love.audio.newSource("assets/sounds/Key Presses/Key6.mp3", "static")
+    keySounds.key7 = love.audio.newSource("assets/sounds/Key Presses/Key7.mp3", "static")
 end
 
 -- draw()
@@ -52,7 +62,6 @@ function login.draw()
     -- Username text input box w/ label
     love.graphics.print("Username:", 50, 200) -- Shifted left 150px, down 100px
     love.graphics.rectangle("line", 50, 220, 200, 30) -- Shifted
-    love.graphics.setColor(1, 1, 1) -- Reset to white for text
     love.graphics.print(username, 60, 227)
 
     -- Set text box color to black again
@@ -61,7 +70,6 @@ function login.draw()
     -- Password text input box w/ label
     love.graphics.print("Password:", 50, 260) -- Shifted
     love.graphics.rectangle("line", 50, 280, 200, 30) -- Shifted
-    love.graphics.setColor(1, 1, 1) -- Reset to white for text
     love.graphics.print(string.rep("*", #password), 60, 287) -- Mask password input
 
     love.graphics.setColor(0, 0, 0)
@@ -73,6 +81,20 @@ function login.draw()
 
     love.graphics.setColor(1, 1, 1)
 end
+
+function login.playRandomKeySound()
+    local sounds = {}
+    for _, sound in pairs(keySounds) do
+        table.insert(sounds, sound)
+    end
+
+    -- Randomly picks & plays a key sound
+    if #sounds > 0 then
+        local randomSound = sounds[love.math.random(#sounds)]
+        randomSound:play()
+    end
+end
+
 
 -- handleEvent()
 -- Handles events for the login screen
@@ -90,18 +112,28 @@ function login.handleEvent(e, a, b, c)
     elseif e == "textinput" then
         if activeField == "username" and #username < 16 then
             username = username .. a
+            login.playRandomKeySound()
         elseif activeField == "password" and #password < 16 then
             password = password .. a
+            login.playRandomKeySound()
         end
     elseif e == "keypressed" then
-        if c == "backspace" then
-            if activeField == "username" then
-                username = username:sub(1, -2)
-            elseif activeField == "password" then
+        if a == "backspace" then
+            if activeField == "username" and #username > 0 then
+                username = username:sub(1, -2) 
+                login.playRandomKeySound() 
+            elseif activeField == "password" and #password > 0 then
                 password = password:sub(1, -2)
+                login.playRandomKeySound()
             end
-        elseif c == "return" and #username > 0 and #username <= 16 and #password > 0 and #password <= 16 then
+        elseif a == "return" and #username > 0 and #username <= 16 and #password > 0 and #password <= 16 then
             login.completed = true
+        elseif a == "tab" then
+            if activeField == "username" then
+                activeField = "password"
+            else
+                activeField = "username"
+            end
         end
     end
 end
