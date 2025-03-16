@@ -15,6 +15,8 @@ local musicVolumeDown = { x = (love.graphics.getWidth() / 2 + 495), y = (love.gr
 local soundVolumeUp = { x = (love.graphics.getWidth() / 2 + 550), y = (love.graphics.getHeight() / 2 + 96), width = 41, height = 30 }
 local soundVolumeDown = { x = (love.graphics.getWidth() / 2 + 495), y = (love.graphics.getHeight() / 2 + 96), width = 41, height = 30 }
 
+local muteToggle = { x = (love.graphics.getWidth() / 2 + 410), y = (love.graphics.getHeight() / 2 + 150), width = 30, height = 30 }
+
 local function loadAssets()
     optionsBackground = love.graphics.newImage('assets/options/Settings Background.png')
     optionBackButton = love.graphics.newImage('assets/options/Back Button.png')
@@ -51,6 +53,11 @@ local function drawSoundVolume()
     love.graphics.setColor(1, 1, 1)
     love.graphics.draw(soundDecreaseVolumeImage, soundVolumeDown.x * scaling.scaleX, soundVolumeDown.y * scaling.scaleY, 0, scaling.scaleX, scaling.scaleY)
     love.graphics.draw(soundIncreaseVolumeImage, soundVolumeUp.x * scaling.scaleX, soundVolumeUp.y * scaling.scaleY, 0, scaling.scaleX, scaling.scaleY)
+end
+
+local function drawMuteToggle()
+    love.graphics.setColor(1, 1, 1)
+    love.graphics.draw(muteImage, muteToggle.x * scaling.scaleX, muteToggle.y * scaling.scaleY, 0, scaling.scaleX, scaling.scaleY)
 end
 
 local function drawOptionsBackground()
@@ -155,6 +162,11 @@ local function isSoundUpButtonClicked(x, y)
             y > soundVolumeUp.y * scaling.scaleY and y < soundVolumeUp.y * scaling.scaleY + soundVolumeUp.height * scaling.scaleY  
 end
 
+local function isMuteButtonClicked(x, y)
+    return  x > muteToggle.x * scaling.scaleX and x < muteToggle.x * scaling.scaleX + muteToggle.width * scaling.scaleX and
+            y > muteToggle.y * scaling.scaleY and y < muteToggle.y * scaling.scaleY + muteToggle.height * scaling.scaleY 
+end
+
 return {
     loadAssets = loadAssets,
     drawOptionsButton = drawOptionsButton,
@@ -164,6 +176,7 @@ return {
     drawMasterVolume = drawMasterVolume,
     drawMusicVolume = drawMusicVolume,
     drawSoundVolume = drawSoundVolume,
+    drawMuteToggle = drawMuteToggle,
     isOptionsButtonHovered = isOptionsButtonHovered,
     isOptionsButtonClicked = isOptionsButtonClicked,
     isOptionsBackButtonHovered = isOptionsBackButtonHovered,
@@ -181,5 +194,6 @@ return {
     isSoundDownButtonHovered = isSoundDownButtonHovered,
     isSoundDownButtonClicked = isSoundDownButtonClicked,
     isSoundUpButtonHovered = isSoundUpButtonHovered,
-    isSoundUpButtonClicked = isSoundUpButtonClicked
+    isSoundUpButtonClicked = isSoundUpButtonClicked,
+    isMuteButtonClicked = isMuteButtonClicked
 }

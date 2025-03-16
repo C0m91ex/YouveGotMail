@@ -99,6 +99,7 @@ function love.draw()
             setting.drawMasterVolume()
             setting.drawMusicVolume()
             setting.drawSoundVolume()
+            setting.drawMuteToggle()
         end
     end
     ui.drawFloatingTexts()

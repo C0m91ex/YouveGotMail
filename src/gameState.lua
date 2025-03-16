@@ -20,6 +20,7 @@ local gameState = {
     shopButtonOpen = false,
     statsBarOpen = false,
     optionsOpen = false,
+    muteToggled = false,
     lastTime = start
 }
 local shopButtonNormal = love.graphics.newImage('assets/inbox/Shop Button.png')
@@ -46,6 +47,9 @@ local decreaseVolumeHovered = love.graphics.newImage('assets/options/Hover Decre
 local increaseVolumeNormal = love.graphics.newImage('assets/options/Increase Volume.png')
 local increaseVolumeHovered = love.graphics.newImage('assets/options/Hover Increase Volume.png')
 
+local muteOff = love.graphics.newImage('assets/options/Mute Off.png')
+local muteOn = love.graphics.newImage('assets/options/Mute On.png')
+
 -- global variables
 shopButtonImage = shopButtonNormal
 statsButtonImage = statsButtonNormal
@@ -59,6 +63,7 @@ musicDecreaseVolumeImage = decreaseVolumeNormal
 musicIncreaseVolumeImage = increaseVolumeNormal
 soundDecreaseVolumeImage = decreaseVolumeNormal
 soundIncreaseVolumeImage = increaseVolumeNormal
+muteImage = muteOff
 
 -- isEmailOpened()
 -- Access function for email 'opened' status
@@ -211,6 +216,15 @@ function gameState.resetsoundUpButton()
     soundIncreaseVolumeImage = increaseVolumeNormal
 end
 
+function gameState.muteToggleOff()
+    muteImage = muteOff
+end
+
+function gameState.muteToggleOn()
+    muteImage = muteOn
+end
+
+
 -- update()
 -- Update function for gameState, calls email.handleEmailselection & email.handleDragging
 -- Handles mouse interaction player actions in regards to current gamestate
@@ -362,6 +376,16 @@ function gameState.handleMouseRelease(x, y, button)
         if setting.isRestartButtonClicked(x, y) and not gameState.openedEmail and gameState.optionsOpen then 
             --saveSystem.resetGame()
             print("reset game")
+        end
+
+        if setting.isMuteButtonClicked(x, y) and not gameState.openedEmail and not gameState.shopButtonOpen then
+            if not gameState.muteToggled then
+                gameState.muteToggled = true
+                gameState.muteToggleOn()
+            else
+                gameState.muteToggled = false
+                gameState.muteToggleOff()
+            end
         end
 
         if ui.isXButtonClicked(x, y) then
