@@ -43,7 +43,7 @@ end
 function love.update(dt)
   if login.completed then
     gameState.update(dt)
-  end
+end
 
 -- This is for the restart button found in the options menu
 -- placed here cause I was having looping issues and didn't want to bother figuring out a fix to get it to work in gameState.lua, lol
