@@ -9,9 +9,11 @@ local desktopWidth, desktopHeight = love.window.getDesktopDimensions()
 local trashBin = { x = (love.graphics.getWidth() / 2 - 370) * scaling.scaleX, y = (love.graphics.getHeight() / 2 - 240) * scaling.scaleY, width = 157, height = 157, color = {1, 0, 0} }
 local xButton = { x = (love.graphics.getWidth() / 2 + 1150), y = (love.graphics.getHeight() / 2 - 302), width = 50, height = 18}
 local statsButton = { x = (love.graphics.getWidth() / 2 + 995), y = (love.graphics.getHeight() / 2 - 120), width = 204, height = 66 }
-local settingsButton = { x = (love.graphics.getWidth() / 2), y = (love.graphics.getHeight() / 2), width = 100, height = 100 }
-local resetButton = { x = (love.graphics.getWidth() / 2 - 350), y = (love.graphics.getHeight() / 2 + 400), width = 50, height = 50 }
-local optionsButton = { x = (love.graphics.getWidth() / 2), y = (love.graphics.getHeight() / 2), width = 197, height = 50 }
+
+local masterVolumeText = {x = (love.graphics.getWidth() / 2 + 392), y = (love.graphics.getHeight() / 2 - 4)}
+local musicVolumeText = {x = (love.graphics.getWidth() / 2 + 392), y = (love.graphics.getHeight() / 2 + 47)}
+local soundVolumeText = {x = (love.graphics.getWidth() / 2 + 392), y = (love.graphics.getHeight() / 2 + 98)}
+
 local floatingTexts = {}
 local inboxBackground
 local loginBackground
@@ -49,6 +51,8 @@ local function loadAssets()
     floatingTextsFont = love.graphics.newFont("assets/fonts/Roboto-Medium.ttf", 25)
 
     statsFont = love.graphics.newFont("assets/fonts/Roboto-Medium.ttf", 20)
+
+    optionsFont = love.graphics.newFont("assets/fonts/Roboto-Medium.ttf", 25)
 end
 
 -- drawBackground()
@@ -84,13 +88,6 @@ end
 local function drawSettingButton()
     love.graphics.setColor(0.5, 0.5, 0.5)
     love.graphics.rectangle("fill", settingsButton.x * scaling.scaleX, settingsButton.y * scaling.scaleY, settingsButton.width * scaling.scaleX, settingsButton.height * scaling.scaleY)
-end
-]]--
-
---[[
-local function drawResetButton()
-    love.graphics.setColor(1, 0, 0)
-    love.graphics.rectangle("fill", resetButton.x * scaling.scaleX, resetButton.y * scaling.scaleY, resetButton.width * scaling.scaleX, resetButton.height * scaling.scaleY)
 end
 ]]--
 
@@ -156,6 +153,15 @@ local function drawFloatingTexts()
     end
     love.graphics.setColor(1, 1, 1, 1)            -- Reset color to avoid affecting other elements
     love.graphics.setFont(mainFont)               -- restores back to main font
+end
+
+
+local function drawOptionText()
+    love.graphics.setFont(optionsFont)
+    love.graphics.printf(sounds.masterVolume, masterVolumeText.x * scaling.scaleX, masterVolumeText.y * scaling.scaleY, 120, "center") -- master volume
+    love.graphics.printf(sounds.musicVolume, musicVolumeText.x * scaling.scaleX, musicVolumeText.y * scaling.scaleY, 120, "center")   -- music volume
+    love.graphics.printf(sounds.soundVolume, soundVolumeText.x * scaling.scaleX, soundVolumeText.y * scaling.scaleY, 120, "center")  -- sound volume
+    love.graphics.setFont(mainFont)
 end
 
 
@@ -320,7 +326,7 @@ return {
     drawFloatingTexts = drawFloatingTexts,
     drawStatsButton = drawStatsButton,
     drawStatsBar = drawStatsBar,
-    drawResetButton = drawResetButton,
+    drawOptionText = drawOptionText,
     drawBackground = drawBackground,
     drawTrashBin = drawTrashBin,
     drawXButton = drawXButton,
