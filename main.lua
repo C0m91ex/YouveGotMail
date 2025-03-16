@@ -54,6 +54,14 @@ function love.mousepressed( x, y, button)
             saveSystem.resetGame()
             print("reset game")
         end
+
+        if ui.isSaveButtonClicked(x, y) and not gameState.openedEmail and not gameState.optionsOpen then 
+            saveSystem.autoSave()
+            sounds.powerUp:stop()
+            sounds.powerUp:play()
+            ui.addFloatingText(x, y, "Game Saved")
+            print("save game")
+        end
     end
 end
 
@@ -79,6 +87,8 @@ function love.draw()
         --ui.drawXButton()
 
         setting.drawOptionsButton()
+
+        ui.drawSaveButton()
 
         ui.drawStatsButton()
         if gameState.isStatsBarOpened() then
@@ -119,6 +129,8 @@ function love.keypressed(key, scancode, isrepeat)
         saveSystem.autoSave()
         love.event.quit()
     end
+    -- Removed this to prevent the player from using it
+    --[[
     if key == "space" then
         email.receiveEmail(gameState)
     end
@@ -129,4 +141,5 @@ function love.keypressed(key, scancode, isrepeat)
     if key == "r" then
         saveSystem.resetGame()
     end
+    ]]--
  end

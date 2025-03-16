@@ -31,6 +31,9 @@ local shopButtonClicked = love.graphics.newImage('assets/inbox/Shop Button Click
 local statsButtonNormal = love.graphics.newImage('assets/inbox/Stats Button.png')
 local statsButtonHovered = love.graphics.newImage('assets/inbox/Hover Stats Button.png')
 
+local saveButtonNormal = love.graphics.newImage('assets/options/Save Button.png')
+local saveButtonHovered = love.graphics.newImage('assets/options/Hover Save Button.png')
+
 local trashBinNormal = love.graphics.newImage('assets/inbox/Trash Bin.png')
 local trashBinHovered = love.graphics.newImage('assets/inbox/Hover Trash Bin.png')
 
@@ -54,6 +57,7 @@ local muteOn = love.graphics.newImage('assets/options/Mute On.png')
 -- global variables
 shopButtonImage = shopButtonNormal
 statsButtonImage = statsButtonNormal
+saveButtonImage = saveButtonNormal
 trashBinImage = trashBinNormal
 optionsButtonImage = optionsButtonNormal
 optionsBackButtonImage = optionsBackButtonNormal
@@ -143,6 +147,14 @@ end
 
 function gameState.resetTrashBin()
     trashBinImage = trashBinNormal
+end
+
+function gameState.setSaveButtonHovered()
+    saveButtonImage = saveButtonHovered
+end
+
+function gameState.resetSaveButton()
+    saveButtonImage = saveButtonNormal
 end
 
 function gameState.setOptionsButtonHovered()
@@ -264,6 +276,12 @@ function gameState.update(dt)
             gameState.setStatsButtonHovered()
         else
             gameState.resetStatsButton()
+        end
+
+        if ui.isSaveButtonHovered(mouseX, mouseY) and not gameState.openedEmail and not gameState.optionsOpen then
+            gameState.setSaveButtonHovered()
+        else
+            gameState.resetSaveButton()
         end
 
         if setting.isOptionsButtonHovered(mouseX, mouseY) and not gameState.openedEmail and not gameState.optionsOpen then
