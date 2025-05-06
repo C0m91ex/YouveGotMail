@@ -31,13 +31,13 @@ local function loadAssets()
     sounds.musicVolume = 10
     sounds.mute = 1
 
-    sounds.finalMusicVolume = sounds.masterVolume * sounds.musicVolume
-    sounds.finalFXVolume = sounds.masterVolume * sounds.soundVolume
+    sounds.finalMusicVolume = sounds.mute * sounds.masterVolume * sounds.musicVolume
+    sounds.finalFXVolume = sounds.mute * sounds.masterVolume * sounds.soundVolume
     
-    sounds.emailDelete:setVolume(0.8 * sounds.finalFXVolume)
-    sounds.pickChoice:setVolume(0.6 * sounds.finalFXVolume)
-    sounds.powerUp:setVolume(0.8 * sounds.finalFXVolume)
-    sounds.music:setVolume(0.4 * sounds.finalMusicVolume)
+    sounds.emailDelete:setVolume(0.4 * sounds.finalFXVolume)
+    sounds.pickChoice:setVolume(0.3 * sounds.finalFXVolume)
+    sounds.powerUp:setVolume(0.4 * sounds.finalFXVolume)
+    sounds.music:setVolume(0.1 * sounds.finalMusicVolume)
     
     sounds.music:setLooping(true)
     sounds.music:play()
@@ -96,10 +96,10 @@ local function updateVolume()
     sounds.finalMusicVolume = sounds.mute * sounds.masterVolume * sounds.musicVolume
     sounds.finalFXVolume = sounds.mute * sounds.masterVolume * sounds.soundVolume
     
-    sounds.emailDelete:setVolume(0.8 * sounds.finalFXVolume)
-    sounds.pickChoice:setVolume(0.6 * sounds.finalFXVolume)
-    sounds.powerUp:setVolume(0.8 * sounds.finalFXVolume)
-    sounds.music:setVolume(0.4 * sounds.finalMusicVolume)
+    sounds.emailDelete:setVolume(0.4 * sounds.finalFXVolume)
+    sounds.pickChoice:setVolume(0.3 * sounds.finalFXVolume)
+    sounds.powerUp:setVolume(0.4 * sounds.finalFXVolume)
+    sounds.music:setVolume(0.1 * sounds.finalMusicVolume)
 end
 
 local function isOptionsButtonHovered(x, y)

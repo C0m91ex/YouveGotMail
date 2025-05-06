@@ -9,6 +9,7 @@ local desktopWidth, desktopHeight = love.window.getDesktopDimensions()
 local trashBin = { x = (love.graphics.getWidth() / 2 - 370) * scaling.scaleX, y = (love.graphics.getHeight() / 2 - 240) * scaling.scaleY, width = 157, height = 157, color = {1, 0, 0} }
 local xButton = { x = (love.graphics.getWidth() / 2 + 1150), y = (love.graphics.getHeight() / 2 - 302), width = 50, height = 18}
 local statsButton = { x = (love.graphics.getWidth() / 2 + 995), y = (love.graphics.getHeight() / 2 - 120), width = 204, height = 66 }
+local saveButton = { x = (love.graphics.getWidth() / 2 - 345), y = (love.graphics.getHeight() / 2 + 110), width = 110, height = 50 }
 
 local masterVolumeText = {x = (love.graphics.getWidth() / 2 + 392), y = (love.graphics.getHeight() / 2 - 4)}
 local musicVolumeText = {x = (love.graphics.getWidth() / 2 + 392), y = (love.graphics.getHeight() / 2 + 47)}
@@ -84,13 +85,6 @@ local function drawXButton()
 end
 ]]--
 
---[[
-local function drawSettingButton()
-    love.graphics.setColor(0.5, 0.5, 0.5)
-    love.graphics.rectangle("fill", settingsButton.x * scaling.scaleX, settingsButton.y * scaling.scaleY, settingsButton.width * scaling.scaleX, settingsButton.height * scaling.scaleY)
-end
-]]--
-
 -- drawStatsButton()
 -- Draws the stats button to the game
 local function drawStatsButton()
@@ -120,6 +114,11 @@ local function drawStatsBar()
         i = i + 25
     end
     love.graphics.setFont(mainFont)
+end
+
+local function drawSaveButton()
+    love.graphics.setColor(1, 1, 1)
+    love.graphics.draw(saveButtonImage, saveButton.x * scaling.scaleX, saveButton.y * scaling.scaleY, 0, scaling.scaleX, scaling.scaleY)
 end
 
 local function addFloatingText(x, y, text)
@@ -257,6 +256,20 @@ local function isStatsButtonHovered(x, y)
             y > statsButton.y * scaleY and y < statsButton.y * scaleY + statsButton.height * scaleY
 end
 
+local function isSaveButtonClicked(x, y)
+    scaleX = scaling.scaleX
+    scaleY = scaling.scaleY
+    return  x > saveButton.x * scaleX and x < saveButton.x * scaleX + saveButton.width * scaleX and
+            y > saveButton.y * scaleY and y < saveButton.y * scaleY + saveButton.height * scaleY
+end
+
+local function isSaveButtonHovered(x, y)
+    scaleX = scaling.scaleX
+    scaleY = scaling.scaleY
+    return  x > saveButton.x * scaleX and x < saveButton.x * scaleX + saveButton.width * scaleX and
+            y > saveButton.y * scaleY and y < saveButton.y * scaleY + saveButton.height * scaleY
+end
+
 local function isXButtonClicked(x, y)
     return  x > xButton.x * scaling.scaleX and x < xButton.x * scaling.scaleX + xButton.width * scaling.scaleX and
             y > xButton.y * scaling.scaleY and y < xButton.y * scaling.scaleY + xButton.height * scaling.scaleY
@@ -325,6 +338,7 @@ return {
     updateFloatingTexts = updateFloatingTexts,
     drawFloatingTexts = drawFloatingTexts,
     drawStatsButton = drawStatsButton,
+    drawSaveButton = drawSaveButton,
     drawStatsBar = drawStatsBar,
     drawOptionText = drawOptionText,
     drawBackground = drawBackground,
@@ -337,6 +351,8 @@ return {
     isBackButtonClicked = isBackButtonClicked,
     isStatsButtonClicked = isStatsButtonClicked,
     isStatsButtonHovered = isStatsButtonHovered,
+    isSaveButtonClicked = isSaveButtonClicked,
+    isSaveButtonHovered = isSaveButtonHovered,
     isXButtonClicked = isXButtonClicked,
     isOverTrashBin = isOverTrashBin,
     hoverPopup = hoverPopup
