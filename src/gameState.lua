@@ -22,6 +22,7 @@ local gameState = {
     start = start,
     optionsOpen = false,
     muteToggled = false,
+    continueTime = 0,
     lastTime = start
 }
 local shopButtonNormal = love.graphics.newImage('assets/inbox/Shop Button.png')
@@ -449,7 +450,8 @@ function gameState.setGameState(newGameState)
     gameState.offsetY = tonumber(gameState.offsetY)
     gameState.lastClickTime = 0
     gameState.doubleClickDelay = tonumber(gameState.doubleClickDelay)
-    gameState.lastTime = tonumber(gameState.lastTime)
+    gameState.continueTime = tonumber(gameState.lastTime)
+    -- gameState.lastTime = tonumber(gameState.lastTime)
 end
 
 

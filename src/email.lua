@@ -47,7 +47,8 @@ local function setSpawnPeriod(value) spawnPeriod = value end
 -- autospawnEmail()
 -- Handles procedural generation of emails, uses currentTime and spawnPeriod
 local function autospawnEmail(email, gameState)
-    local currentTime = love.timer.getTime()
+    local currentTime = gameState.continueTime + love.timer.getTime()
+    print("currentTime: "..currentTime.." and lastTime: "..gameState.lastTime)
     if currentTime >= gameState.lastTime + email.getSpawnPeriod() then
         email.receiveEmail(gameState)
         gameState.lastTime = currentTime
