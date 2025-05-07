@@ -83,7 +83,7 @@ local function createShopItem(mode, x, y, width, height, color, itemTable)
 end
 
 local function updateItemAmounts(shopItem)
-    if itemAmounts[shopItem.itemTable.id] then itemAmounts[shopItem.itemTable.id] = (itemAmounts[shopItem.itemTable.id] + 1) or 1
+    if itemAmounts[shopItem.itemTable.id] then itemAmounts[shopItem.itemTable.id] = (itemAmounts[shopItem.itemTable.id] + 1)
     else itemAmounts[shopItem.itemTable.id] = 1 end
     print(itemAmounts[shopItem.itemTable.id])
 end
@@ -116,16 +116,6 @@ function setUpShop()
         shop.shopOffsetY = shop.shopOffsetY + 90
     end
     loadShopItems()
-    -- setting the name and price for item 1
-    -- shopItems[1].itemTable.name = items.item1.name
-    -- shopItems[1].itemTable.price = items.item1.price
-
-    -- -- setting the name and price for item 2
-    -- shopItems[2].itemTable.name = items.item2.name
-    -- shopItems[2].itemTable.price = items.item2.price
-    
-    -- shopItems[3].itemTable.name = items.item3.name
-    -- shopItems[3].itemTable.price = items.item3.price
 end
 
 local function isShopButtonClicked(x, y)
@@ -189,19 +179,6 @@ function itemEffects(shopItem)
     print("Item "..tostring(shopItem.itemTable.name).." effect.")
     shopItem.itemTable.effect(shopItem.itemTable.modifier)
     shopItem.itemTable.price = shopItem.itemTable.price + shopItem.itemTable.inflation
-    -- if item == 1 then
-    --     print("Item 1 effect.")
-    --     items.item1.effect()
-    --     updateShopItem(shopItems[1], items.item1)
-    -- elseif item == 2 then
-    --     print("Item 2 effect.")
-    --     items.item2.effect()
-    --     updateShopItem(shopItems[2], items.item2)
-    -- elseif item == 3 then
-    --     print("Item 3 effect.")
-    --     items.item3.effect()
-    --     updateShopItem(shopItems[3], items.item3)
-    -- end
 end
 
 local function isShopItemClicked(x, y, gameState)
@@ -232,26 +209,7 @@ function isShopItemHovered(x, y)
            y > shopItem.y * scaleY and y < shopItem.y * scaleY + shopItem.height * scaleY then
             shop.hoveredItem = shopItem
             shop.hoverPopup.x = (x - 120) * scaleX 
-            shop.hoverPopup.y = (y + 10) * scaleY 
-            -- shop.hoverPopup.text = "Hello world" 
-            -- if index == 1 then
-            --     shop.hoverPopup.text =
-            --         "Item Name: " .. items.item1.name .. "\n\n" ..
-            --         "Price: Starting price: $10, $8 increase for whenever\nthe item is purchased again.\n\n" ..
-            --         "Description: "..items.item1.description
-            -- elseif shop.hoveredItem == shopItem then
-            --     if index == 2 then
-            --         shop.hoverPopup.text =
-            --             "Item Name: " .. items.item2.name .. "\n\n" ..
-            --             "Price: Starting price: $15, $5 increase when the\nitem is purchased again.\n\n" ..
-            --             "Description: "..items.item2.description
-            --     elseif index == 3 then
-            --         shop.hoverPopup.text =
-            --             "Item Name: " .. items.item3.name .. "\n\n" ..
-            --             "Price: Starting price: $30, $15 increase for\nwhenever the item is purchased again.\n\n" ..
-            --             "Description: "..items.item3.description
-            --     end
-            -- end            
+            shop.hoverPopup.y = (y + 10) * scaleY           
             createHoverText(shopItem)
             shop.hoverPopup.visible = true
             return

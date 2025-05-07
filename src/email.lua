@@ -17,12 +17,13 @@ local defaultEmail = {                                                          
     respond = false
 }
 -- local emailBase = {}--file.loadEmailFile('data/EmailBase.csv')                            
--- local emailPool = {}
+local emailPool = {}
 local emails = {} 
 local emailValue = 1
 local choiceButtons = {}
 local spawnPeriod = 5                                                                           -- Email spawning
 local spawnValue = 0
+local realCD = 10
 
 local hoverPopup = { x = 0, y = 0, visible = false }
 
@@ -47,10 +48,9 @@ local function setSpawnPeriod(value) spawnPeriod = value end
 -- autospawnEmail()
 -- Handles procedural generation of emails, uses currentTime and spawnPeriod
 local function autospawnEmail(email, gameState)
-    local currentTime = gameState.continueTime + love.timer.getTime()
-    print("currentTime: "..currentTime.." and lastTime: "..gameState.lastTime)
+    local currentTime = love.timer.getTime()
     if currentTime >= gameState.lastTime + email.getSpawnPeriod() then
-        email.receiveEmail(gameState)
+        email.receiveEmail(gameState, true)
         gameState.lastTime = currentTime
     end
 end
@@ -146,10 +146,21 @@ local function updateSpawnValue(value)
     print("Spawn value has been updated to "..spawnValue..".")
 end
 
--- receiveEmail()
+-- receiveEmail(), spawned from timer and not loading
 -- Spawns an email with the given mode, x & y position, dimensions, and color
-local function receiveEmail(gameState)
-    spawnEmail("fill", emailSpawnPoint.x, emailSpawnPoint.y, emailBox.width, emailBox.height, {1, 1, 1})
+local function receiveEmail(gameState, spamRNG)
+    local temp = love.math.random(realCD)
+    local emailContent = {}
+    if spamRNG then
+        if temp == 1 then
+            emailContent = nil
+            realCD = 10
+        else
+            emailContent = spam.generateRandomSpamEmail()
+            realCD = realCD - 1
+        end
+    end
+    spawnEmail("fill", emailSpawnPoint.x, emailSpawnPoint.y, emailBox.width, emailBox.height, {1, 1, 1}, nil, emailContent)
     spawnEmailEvent(gameState)
 end
 

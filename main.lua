@@ -21,8 +21,8 @@ sounds = {}
 -- load()
 -- Load function, calls gamestate.load()
 function love.load()
-    login.load()    -- Requires login scene to be loaded first
-    login.start() 
+    --login.load()    -- Requires login scene to be loaded first
+    --login.start()
 
     -- tutorial.load()  -- Requires tutorial scene to be loaded first
     -- tutorial.start() -- NOT IMPLEMENTED
@@ -34,6 +34,7 @@ function love.load()
         fullscreen = true
     })
     
+    if not login.completed then login.completed = true end
     saveSystem.load()
     gameState.load()
 end

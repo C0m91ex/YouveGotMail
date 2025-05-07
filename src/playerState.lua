@@ -2,6 +2,7 @@ local file = require("src.file")
 local utils = require("src.utils")
 
 local playerVars = {}
+--local hiddenVars = {}
 playerVars = file.serializeStateTest(playerVars)
 
 local function getPlayerVarList() return playerVars end

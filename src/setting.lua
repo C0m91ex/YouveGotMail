@@ -29,7 +29,7 @@ local function loadAssets()
     sounds.masterVolume = 10
     sounds.soundVolume = 10
     sounds.musicVolume = 10
-    sounds.mute = 1
+    sounds.mute = 0
 
     sounds.finalMusicVolume = sounds.mute * sounds.masterVolume * sounds.musicVolume
     sounds.finalFXVolume = sounds.mute * sounds.masterVolume * sounds.soundVolume
